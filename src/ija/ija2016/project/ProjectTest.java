@@ -1,3 +1,5 @@
+package ija.ija2016.project;
+
 import ija.ija2016.project.model.board.AbstractFactorySolitaire;
 import ija.ija2016.project.model.board.FactoryKlondike;
 import ija.ija2016.project.model.cards.Card;
