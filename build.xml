@@ -12,7 +12,7 @@
     </target>
 
     <target name="run" depends="compile">
-        <java fork="true" classname="org.junit.runner.JUnitCore">
+        <java classname="org.junit.runner.JUnitCore">
             <classpath>
                 <path refid="project.classpath"/>
             </classpath>
