@@ -1,4 +1,4 @@
-package ija.ija2016.project.gui;/**
+package ija.ija2016.project.gui; /**
  * Created by onsmak on 02.05.2017.
  */
 
@@ -16,7 +16,7 @@ public class main extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
         primaryStage.setTitle("Madafaka Solitaire");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 970, 675));
         primaryStage.show();
     }
 
