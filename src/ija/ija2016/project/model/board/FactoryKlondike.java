@@ -1,16 +1,36 @@
 package ija.ija2016.project.model.board;
 
-import ija.ija2016.project.game.cards.Card;
-import ija.ija2016.project.game.cards.CardDeck;
-import ija.ija2016.project.game.cards.CardStack;
-import ija.ija2016.project.game.cards.WorkingCardStack;
-import ija.ija2016.project.game.cards.TargetCardDeck;
+import ija.ija2016.project.model.cards.*;
 
-/**
- * Created by Jakub on 24.03.17.
- */
-public class FactoryKlondike extends AbstractFactorySolitaire{
-    public static int NumberOfCardsInStack = 13;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class FactoryKlondike extends AbstractFactorySolitaire {
+
+    @Override
+    public int getCountOfCardsOfSameColor() {
+        return 13;
+    }
+
+    @Override
+    public int getMaximumNumberOfCardsFacingDownInWorkingStack() {
+        return 6;
+    }
+
+    @Override
+    public int getMaximumNumberOfCardsInWorkingStack() {
+        return getCountOfCardsOfSameColor() + getMaximumNumberOfCardsFacingDownInWorkingStack();
+    }
+
+    @Override
+    public int getCountOfWorkingStacks() {
+        return 7;
+    }
+
+    @Override
+    public int getCountOfTargetDecks() {
+        return 4;
+    }
 
     /**
      * Vytvoří objekt reprezentující kartu.
@@ -21,7 +41,7 @@ public class FactoryKlondike extends AbstractFactorySolitaire{
      */
     @Override
     public Card createCard(Card.Color color, int value) {
-        if (value == 0 || value > NumberOfCardsInStack) {
+        if (value == 0 || value > getCountOfCardsOfSameColor()) {
             return null;
         }
 
@@ -29,21 +49,38 @@ public class FactoryKlondike extends AbstractFactorySolitaire{
     }
 
     /**
-     * Vytváří objekt reprezentující balíček karet.
+     * Vytváří objekt reprezentující balíček karet a zamicha jej.
      *
      * @return
      */
     @Override
     public CardDeck createCardDeck() {
-        CardDeck deck = new CardDeck(52);
-//
-        deck.put(this.generateCards(Card.Color.CLUBS));
-        deck.put(this.generateCards(Card.Color.DIAMONDS));
-        deck.put(this.generateCards(Card.Color.HEARTS));
-        deck.put(this.generateCards(Card.Color.SPADES));
+        CardDeck deck = new CardDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
+
+        ArrayList<Card> cards = new ArrayList<>(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
+
+        cards.addAll(this.generateCards(Card.Color.CLUBS));
+        cards.addAll(this.generateCards(Card.Color.DIAMONDS));
+        cards.addAll(this.generateCards(Card.Color.HEARTS));
+        cards.addAll(this.generateCards(Card.Color.SPADES));
+
+        Collections.shuffle(cards);
+
+        deck.put(cards.toArray(new CardInterface[0]));
 
         return deck;
     }
+
+    /**
+     * Vytvori prazdny objekt reprezentujici balicek karet
+     *
+     * @return
+     */
+    @Override
+    public CardDeckInterface createEmptyCardDeck() {
+        return new CardDeck(this.getCountOfCardsOfSameColor());
+    }
+
 
     /**
      * Vytváří objekt reprezentující cílový balíček. Cílem hráče je vložit všechny karty zadané barvy do cílového balíčku.
@@ -53,7 +90,7 @@ public class FactoryKlondike extends AbstractFactorySolitaire{
      */
     @Override
     public CardDeck createTargetPack(Card.Color color) {
-        return new TargetCardDeck(NumberOfCardsInStack, color);
+        return new TargetCardDeck(this.getCountOfCardsOfSameColor(), color);
     }
 
     /**
@@ -63,13 +100,13 @@ public class FactoryKlondike extends AbstractFactorySolitaire{
      */
     @Override
     public CardStack createWorkingPack() {
-        return new WorkingCardStack(NumberOfCardsInStack);
+        return new WorkingCardStack(this.getMaximumNumberOfCardsInWorkingStack());
     }
 
-    private Card[] generateCards(Card.Color color) {
-        Card[] cards = new Card[NumberOfCardsInStack];
-        for (int i = 1; i <= NumberOfCardsInStack; i++) {
-            cards[i-1] = new Card(color, i, false);
+    private ArrayList<Card> generateCards(Card.Color color) {
+        ArrayList<Card> cards = new ArrayList<>(this.getCountOfCardsOfSameColor());
+        for (int i = 1; i <= this.getCountOfCardsOfSameColor(); i++) {
+            cards.add(new Card(color, i, false));
         }
 
         return cards;

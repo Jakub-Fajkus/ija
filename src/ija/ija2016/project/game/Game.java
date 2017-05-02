@@ -1,0 +1,226 @@
+package ija.ija2016.project.game;
+
+import ija.ija2016.project.game.command.MoveCommandInterface;
+import ija.ija2016.project.game.command.MoveGameCommand;
+import ija.ija2016.project.game.persistence.LoadStateException;
+import ija.ija2016.project.game.persistence.PersistStateException;
+import ija.ija2016.project.model.board.AbstractFactorySolitaire;
+import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
+
+import java.util.Stack;
+
+/*
+todo: add observer(or so) to notify the GUI about the change of the game state.
+when the state is unserialized, the old CardDeck objects are discarded and the new ones must be passed to the GUI,
+which should rerender all the objects
+ */
+
+final public class Game implements GameInterface {
+
+    public CardDeckInterface[] targetPacks;
+    public CardDeckInterface drawingDeck;
+    public CardDeckInterface wastingDeck;
+    public CardStackInterface[] workingCardStacks;
+    public Stack<MoveCommandInterface> history;
+
+    public Game(AbstractFactorySolitaire factorySolitaire) {
+        CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
+        for (CardInterface.Color color : CardInterface.Color.values()) {
+            targetPacks[this.getTargetPackIndexForColor(color)] = factorySolitaire.createTargetPack(color);
+        }
+
+        CardStackInterface[] workingCardStacks = new CardStackInterface[factorySolitaire.getCountOfWorkingStacks()];
+        for (int i = 0; i < factorySolitaire.getCountOfWorkingStacks(); i++) {
+            workingCardStacks[i] = factorySolitaire.createWorkingPack();
+        }
+
+
+        this.init(targetPacks, factorySolitaire.createCardDeck(), factorySolitaire.createEmptyCardDeck(), workingCardStacks, new Stack<>());
+    }
+
+    /**
+     * Initialize the inner state of the game with the given objects.
+     *
+     * @param targetPacks
+     * @param drawingDeck
+     * @param wastingDeck
+     * @param workingCardStacks
+     */
+    public void init(CardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<MoveCommandInterface> history) {
+        this.targetPacks = targetPacks;
+        this.drawingDeck = drawingDeck;
+        this.wastingDeck = wastingDeck;
+        this.workingCardStacks = workingCardStacks;
+        this.history = history;
+    }
+
+    /**
+     * Initialize the inner state of the game from the given game.
+     *
+     * @param game Game object which data should be copied into the current game
+     */
+    public void init(GameInterface game) {
+        this.init(game.getTargetPacks(), game.getDrawingDeck(), game.getWastingDeck(), game.getWorkingCardStacks(), game.getHistory());
+    }
+
+    /**
+     * Perform a move on the board.
+     * <p>
+     * This should perform a safe try to change the game's state.
+     * If the resulting state would not be valid, it should not allow to get to the state.
+     * This call must maintain the consistency of the game(not fully performing the move).
+     * <p>
+     * This call creates a history point which can be reverted by the undo operation.
+     *
+     * @param source      Source card deck
+     * @param destination Destination card deck
+     * @param object      Object to be moved
+     * @return true on success, false otherwise
+     */
+    @Override
+    public boolean move(CardDeckInterface source, CardDeckInterface destination, CardDeckInterface object) {
+        MoveGameCommand command = new MoveGameCommand(source, destination, object, this);
+
+        return this.move(command);
+    }
+
+    /**
+     * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, CardDeckInterface object)}
+     *
+     * @param command MoveCommandInterface instance
+     */
+    @Override
+    public boolean move(MoveCommandInterface command) {
+        //todo: create a defensive copy of the command? :D
+
+        //add the command into a history
+        history.add(command);
+
+        //perform the command
+        //on success, return true
+        if (command.execute()) {
+            return true;
+        } else {
+            //on failure, revert the state
+            try {
+                command.undo();
+            } catch (UndoException exception) {
+                //error occurred, cannot undo.. the world is over
+                exception.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Undo the last move.
+     * <p>
+     * Move the current game state more to the past.
+     * <p>
+     * This should revert the game state to state before the last move was done.
+     * This method can be called many times, each time reverting a single move.
+     *
+     * @throws UndoException When the undo cannot be done.
+     */
+    @Override
+    public MoveCommandInterface undo() throws UndoException {
+        MoveCommandInterface command = this.history.pop();
+        try {
+            command.undo();
+        } catch (UndoException exception) {
+            //error occurred, cannot undo.. the world is over
+            exception.printStackTrace();
+            return null;
+        }
+
+        return command;
+    }
+
+    /**
+     * Go back from the undo.
+     * <p>
+     * Move the current game state more to the present.
+     * <p>
+     * This should return the game state to state before the last undo was done.
+     * This method can be called many times, each time reverting the last undo.
+     *
+     * @throws RedoException When the redo cannot be done.
+     */
+    @Override
+    public MoveCommandInterface redo() throws RedoException {
+        return null;
+    }
+
+    /**
+     * Get hints for the next move.
+     *
+     * @throws TipException When there is no move to be performed. There is no way of finishing the game.
+     */
+    @Override
+    public MoveCommandInterface[] tip() throws TipException {
+        return new MoveCommandInterface[0];
+    }
+
+    /**
+     * Save the current game state to a file with the given path
+     *
+     * @param path Path to the file. The file will be created or overwritten
+     * @throws PersistStateException When the state could not be saved.
+     */
+    @Override
+    public void persistState(String path) throws PersistStateException {
+
+    }
+
+    /**
+     * Load the game state from the file.
+     *
+     * @param path Path to the file. The file must exist and have the appropriate format.
+     * @throws LoadStateException When the state could not be loaded.
+     */
+    @Override
+    public void loadState(String path) throws LoadStateException {
+
+    }
+
+    @Override
+    public CardDeckInterface[] getTargetPacks() {
+        return targetPacks;
+    }
+
+    @Override
+    public CardDeckInterface getDrawingDeck() {
+        return drawingDeck;
+    }
+
+    @Override
+    public CardDeckInterface getWastingDeck() {
+        return wastingDeck;
+    }
+
+    @Override
+    public CardStackInterface[] getWorkingCardStacks() {
+        return workingCardStacks;
+    }
+
+    @Override
+    public Stack<MoveCommandInterface> getHistory() {
+        return history;
+    }
+
+    /**
+     * Get index to an array of target packs. Color.ordinal should be enough.
+     *
+     * @param color
+     * @return
+     */
+    private int getTargetPackIndexForColor(CardInterface.Color color) {
+        return color.ordinal();
+    }
+
+
+}

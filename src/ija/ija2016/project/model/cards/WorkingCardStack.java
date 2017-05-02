@@ -1,6 +1,4 @@
-package ija.ija2016.project.game.cards;
-
-import ija.ija2016.project.model.cards.Card;
+package ija.ija2016.project.model.cards;
 
 public class WorkingCardStack extends CardStack {
 
@@ -9,7 +7,7 @@ public class WorkingCardStack extends CardStack {
     }
 
     @Override
-    public boolean put(Card card) {
+    public boolean put(CardInterface card) {
         if (this.isEmpty()) {
             //kral
             return card.value() == 13 && super.put(card);

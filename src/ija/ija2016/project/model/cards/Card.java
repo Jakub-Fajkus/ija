@@ -1,73 +1,106 @@
 package ija.ija2016.project.model.cards;
 
-public interface Card {
-    enum Color {
-        SPADES('S'), DIAMONDS('D'), HEARTS('H'), CLUBS('C');
+//bez problemu s overovnanim
 
-        private final char character;
+public class Card implements CardInterface {
+    private CardInterface.Color color;
+    private int value;
+    private boolean facingUp;
 
-        Color(char character) {
-            this.character = character;
-        }
-
-        public boolean similarColorTo(Card.Color c) {
-            return (c.isBlack() && this.isBlack()) || (!c.isBlack() && !this.isBlack());
-        }
-
-        public boolean isBlack() {
-            return this.character == SPADES.character || this.character == CLUBS.character;
-        }
-
-
-        @Override
-        public String toString() {
-            return String.valueOf(this.character);
-        }
+    public Card(CardInterface.Color c, int value, boolean facingUp) {
+        this.color = c;
+        this.value = value;
+        this.facingUp = facingUp;
     }
 
-    /**
-     * Barva karty.
-     *
-     * @return Color
-     */
-    Color color();
+    public static Card.Color[] values() {
+        return Color.values();
+    }
 
-    /**
-     * Hodnota karty.
-     *
-     * @return int
-     */
-    int value();
+    public static Card.Color valueOf(String name) {
+        if (name == null) {
+            throw new NullPointerException("the argument name is null");
+        }
+        //ija.ija2016.project.game.cards.CardInterface.Color.values()[0].name()
+        return Card.Color.valueOf(name);
+    }
 
-    /**
-     * Testuje, zda je karta otočená lícem nahoru.
-     *
-     * @return boolean Výsledek testu: true = karta je otočená lícem nahoru.
-     */
-    boolean isTurnedFaceUp();
+    public static String beginningChar(Card.Color color) {
+        return color.name().substring(0, 1);
+    }
 
-    /**
-     * Otočí kartu lícem nahoru. Pokud tak už je, nedělá nic.
-     *
-     * @return boolean Informace, zda došlo k otočení karty (=true) nebo ne.
-     */
-    boolean turnFaceUp();
+    @Override
+    public Card.Color color() {
+        return this.color;
+    }
 
-    /**
-     * Testuje, zda má karta podobnou barvu jako karta zadaná.
-     * Podobnou barvou se myslí černá (piky, kříže) a červená (káry a srdce).
-     *
-     * @param c ija.ija2016.project.game.cards.Card
-     * @return boolean Informace o shodě barev karet.
-     */
-    boolean similarColorTo(Card c);
+    @Override
+    public int value() {
+        return this.value;
+    }
 
-    /**
-     * Porovná hodnotu karty se zadanou kartou c. Pokud jsou stejné, vrací 0.
-     * Pokud je karta větší než zadaná c, vrací kladný rozdíl hodnot.
-     *
-     * @param c ija.ija2016.project.game.cards.Card
-     * @return int
-     */
-    int compareValue(Card c);
+    @Override
+    public boolean isTurnedFaceUp() {
+        return this.facingUp;
+    }
+
+    @Override
+    public boolean turnFaceUp() {
+        if (this.facingUp) {
+            return false;
+        }
+
+        this.facingUp = true;
+
+        return true;
+    }
+
+    @Override
+    public boolean similarColorTo(CardInterface c) {
+        return this.color.similarColorTo(c.color());
+    }
+
+    @Override
+    public int compareValue(CardInterface c) {
+        return this.value - c.value();
+    }
+
+    @Override
+    public String toString() {
+        String value;
+
+        if (this.value == 1) {
+            value = "A";
+        } else if (this.value < 11) {
+            value = String.valueOf(this.value);
+        } else if (this.value == 11) {
+            value = "J";
+        } else if (this.value == 12) {
+            value = "Q";
+        } else if (this.value == 13) {
+            value = "K";
+        } else {
+            value = "";
+        }
+
+        return value + "(" + this.color + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Card card = (Card) o;
+
+        if (value != card.value) return false;
+        return color == card.color;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = color != null ? color.hashCode() : 0;
+        result = 31 * result + value;
+        return result;
+    }
 }

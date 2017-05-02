@@ -1,4 +1,4 @@
-package ija.ija2016.project.game.cards;
+package ija.ija2016.project.model.cards;
 
 /**
  * Created by Jakub on 25.03.17.
@@ -12,7 +12,7 @@ public class TargetCardDeck extends CardDeck {
     }
 
     @Override
-    public boolean put(ija.ija2016.project.model.cards.Card card) {
+    public boolean put(CardInterface card) {
         if (card.color() != this.deckColor) {
             return false;
         }
