@@ -10,6 +10,7 @@ import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 /*
@@ -26,8 +27,11 @@ public class Game implements GameInterface {
     private CardDeckInterface wastingDeck;
     private CardStackInterface[] workingCardStacks;
     private Stack<MoveCommandInterface> history;
+    private ArrayList<GameObserverInterface> observers;
 
     public Game(AbstractFactorySolitaire factorySolitaire) {
+        this.observers = new ArrayList<>();
+
         CardDeckInterface cardDeck = factorySolitaire.createUnshuffledCardDeck();
         CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
         for (CardInterface.Color color : CardInterface.Color.values()) {
@@ -134,6 +138,7 @@ public class Game implements GameInterface {
         //perform the command
         //on success, return true
         if (command.execute()) {
+            this.notifyObservers();
             return true;
         } else {
             //on failure, revert the state
@@ -146,7 +151,15 @@ public class Game implements GameInterface {
             }
         }
 
+        this.notifyObservers();
+
         return true;
+    }
+
+    private void notifyObservers() {
+        for (GameObserverInterface observer : this.observers) {
+            observer.update();
+        }
     }
 
     /**
@@ -170,6 +183,8 @@ public class Game implements GameInterface {
             return null;
         }
 
+        this.notifyObservers();
+
         return command;
     }
 
@@ -185,6 +200,7 @@ public class Game implements GameInterface {
      */
     @Override
     public MoveCommandInterface redo() throws RedoException {
+        //delete? :D
         return null;
     }
 
@@ -195,6 +211,7 @@ public class Game implements GameInterface {
      */
     @Override
     public MoveCommandInterface[] tip() throws TipException {
+        //todo:!
         return new MoveCommandInterface[0];
     }
 
@@ -220,6 +237,7 @@ public class Game implements GameInterface {
     public void loadState(String path) throws LoadStateException {
         FilesystemFactory factory = new FilesystemFactory();
         this.init(factory.getLoader().loadState(path));
+        this.notifyObservers();
     }
 
     @Override
@@ -248,6 +266,21 @@ public class Game implements GameInterface {
     }
 
     /**
+     * Add a observer which will be called for each change of the game.
+     * <p>
+     * The events notified:
+     * - the success of the move() call
+     * - the success of the undo() call
+     * - the success of the loadState() call
+     *
+     * @param observer
+     */
+    @Override
+    public void addObserver(GameObserverInterface observer) {
+        this.observers.add(observer);
+    }
+
+    /**
      * Get index to an array of target packs. Color.ordinal should be enough.
      *
      * @param color
@@ -256,6 +289,4 @@ public class Game implements GameInterface {
     private int getTargetPackIndexForColor(CardInterface.Color color) {
         return color.ordinal();
     }
-
-
 }

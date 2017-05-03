@@ -116,5 +116,17 @@ public interface GameInterface extends Serializable {
     CardStackInterface[] getWorkingCardStacks();
 
     Stack<MoveCommandInterface> getHistory();
+
+    /**
+     * Add a observer which will be called for each change of the game.
+     * <p>
+     * The events notified:
+     * - the success of the move() call
+     * - the success of the undo() call
+     * - the success of the loadState() call
+     *
+     * @param observer
+     */
+    void addObserver(GameObserverInterface observer);
 }
 
