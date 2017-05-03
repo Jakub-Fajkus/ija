@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="970.0" prefHeight="618.0" prefWidth="957.0" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="970.0" prefHeight="618.0" prefWidth="957.0" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar style="-fx-background-color: white;" stylesheets="@../img/n.css">
         <menus>
@@ -35,7 +35,7 @@
             </ContextMenu>
          </contextMenu>
       </MenuBar>
-      <GridPane hgap="15.0" layoutX="25.0" layoutY="92.0" maxHeight="200.0" maxWidth="900.0" prefHeight="300.0" prefWidth="800.0">
+      <GridPane fx:id="jebat" hgap="15.0" layoutX="25.0" layoutY="92.0" maxHeight="200.0" maxWidth="900.0" prefHeight="300.0" prefWidth="800.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -104,7 +104,7 @@
             <Insets left="35.0" right="35.0" />
          </VBox.margin>
       </GridPane>
-      <GridPane hgap="15.0" maxHeight="800.0" maxWidth="900.0" prefHeight="300.0" prefWidth="800.0">
+      <GridPane fx:id="maindeck" hgap="15.0" maxHeight="800.0" maxWidth="900.0" prefHeight="300.0" prefWidth="800.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -184,32 +184,6 @@
                      </image>
                   </ImageView>
 
-               </children>
-            </GridPane>
-            <GridPane GridPane.columnIndex="2">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" valignment="TOP" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <ImageView fitHeight="200.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="BASELINE">
-                     <image>
-                        <Image url="@../img/faced2.png" />
-                     </image>
-                  </ImageView>
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="3">

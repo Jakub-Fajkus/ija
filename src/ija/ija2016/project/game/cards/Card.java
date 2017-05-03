@@ -1,6 +1,8 @@
 package ija.ija2016.project.game.cards;
 
-public class Card implements ija.ija2016.project.model.cards.Card {
+import javafx.scene.image.ImageView;
+
+public class Card extends ImageView implements ija.ija2016.project.model.cards.Card {
     private ija.ija2016.project.model.cards.Card.Color color;
     private int value;
     private boolean facingUp;
