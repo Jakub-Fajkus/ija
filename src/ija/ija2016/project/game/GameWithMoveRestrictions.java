@@ -12,7 +12,6 @@ public class GameWithMoveRestrictions extends Game {
         this.validator = new GameRuleValidator(this);
     }
 
-
     @Override
     public boolean move(MoveCommandInterface command) {
         return this.validator.validate(command.getSource(), command.getDestination(), command.getCount()) && super.move(command);

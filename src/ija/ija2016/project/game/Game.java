@@ -4,6 +4,7 @@ import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
+import ija.ija2016.project.game.persistence.filesystem.FilesystemFactory;
 import ija.ija2016.project.model.board.AbstractFactorySolitaire;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardInterface;
@@ -15,6 +16,7 @@ import java.util.Stack;
 todo: add observer(or so) to notify the GUI about the change of the game state.
 when the state is unserialized, the old CardDeck objects are discarded and the new ones must be passed to the GUI,
 which should rerender all the objects
+the game object itself is not changed at all while doing the undo
  */
 
 public class Game implements GameInterface {
@@ -204,7 +206,8 @@ public class Game implements GameInterface {
      */
     @Override
     public void persistState(String path) throws PersistStateException {
-
+        FilesystemFactory factory = new FilesystemFactory();
+        factory.getSaver().persistState(this, path);
     }
 
     /**
@@ -215,7 +218,8 @@ public class Game implements GameInterface {
      */
     @Override
     public void loadState(String path) throws LoadStateException {
-
+        FilesystemFactory factory = new FilesystemFactory();
+        this.init(factory.getLoader().loadState(path));
     }
 
     @Override
