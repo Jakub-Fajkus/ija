@@ -1,8 +1,5 @@
 package ija.ija2016.project.model.cards;
 
-/**
- * Created by Jakub on 25.03.17.
- */
 public class TargetCardDeck extends CardDeck {
     private Card.Color deckColor;
 

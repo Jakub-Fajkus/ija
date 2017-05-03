@@ -3,14 +3,6 @@ package ija.ija2016.project.model.cards;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-//tododoooo:::
-//Zmenit rozhrani tak, aby operace put a tak mely minimum overeni
-//pridat metody, ktere obsahuji omezeni
-//uzivatel vzdy musi zavolat check metodu a pak az akcni metodu!
-//diky tomuto rozdeleni lze "obchazet" pravidla a delat undo!
-
-//bez problemu s overovnanim
-
 public class CardDeck implements CardDeckInterface {
     protected Stack<CardInterface> cards;
     protected int maxDeckSize;
@@ -18,7 +10,7 @@ public class CardDeck implements CardDeckInterface {
     public CardDeck(int size) {
         this.maxDeckSize = size;
 
-        this.cards = new Stack<CardInterface>();
+        this.cards = new Stack<>();
         this.cards.ensureCapacity(size);
     }
 

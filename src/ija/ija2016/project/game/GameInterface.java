@@ -12,7 +12,23 @@ import java.util.Stack;
 public interface GameInterface extends Serializable {
 
     /**
-     * Perform a move on the board.
+     * Move count cards from source to destination.
+     *
+     * This should perform a safe try to change the game's state.
+     * If the resulting state would not be valid, it should not allow to get to the state.
+     * This call must maintain the consistency of the game(not fully performing the move).
+     *
+     * This call creates a history point which can be reverted by the undo operation.
+     *
+     * @param source      Source card deck
+     * @param destination Destination card deck
+     * @param count       Count of cards to be moved. If the count is zero, all cards will be moved.
+     * @return True on success, false otherwise
+     */
+    boolean move(CardDeckInterface source, CardDeckInterface destination, int count);
+
+    /**
+     * Move all cards from source to destination.
      * <p>
      * This should perform a safe try to change the game's state.
      * If the resulting state would not be valid, it should not allow to get to the state.
@@ -22,13 +38,12 @@ public interface GameInterface extends Serializable {
      *
      * @param source      Source card deck
      * @param destination Destination card deck
-     * @param object      Object to be moved
      * @return True on success, false otherwise
      */
-    boolean move(CardDeckInterface source, CardDeckInterface destination, CardDeckInterface object);
+    boolean move(CardDeckInterface source, CardDeckInterface destination);
 
     /**
-     * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, CardDeckInterface object)}
+     * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, int count)}
      *
      * @param command MoveCommandInterface instance
      */

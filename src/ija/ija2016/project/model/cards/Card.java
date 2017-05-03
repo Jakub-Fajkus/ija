@@ -55,6 +55,22 @@ public class Card implements CardInterface {
         return true;
     }
 
+    /**
+     * Otočí kartu lícem dolu. Pokud tak už je, nedělá nic.
+     *
+     * @return boolean Informace, zda došlo k otočení karty (=true) nebo ne.
+     */
+    @Override
+    public boolean turnFaceDown() {
+        if (!this.facingUp) {
+            return false;
+        }
+
+        this.facingUp = false;
+
+        return true;
+    }
+
     @Override
     public boolean similarColorTo(CardInterface c) {
         return this.color.similarColorTo(c.color());
@@ -83,7 +99,7 @@ public class Card implements CardInterface {
             value = "";
         }
 
-        return value + "(" + this.color + ")";
+        return value + "(" + this.color + ")" + (this.facingUp ? "U" : "D");
     }
 
     @Override

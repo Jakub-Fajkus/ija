@@ -19,13 +19,14 @@ which should rerender all the objects
 
 final public class Game implements GameInterface {
 
-    public CardDeckInterface[] targetPacks;
-    public CardDeckInterface drawingDeck;
-    public CardDeckInterface wastingDeck;
-    public CardStackInterface[] workingCardStacks;
-    public Stack<MoveCommandInterface> history;
+    private CardDeckInterface[] targetPacks;
+    private CardDeckInterface drawingDeck;
+    private CardDeckInterface wastingDeck;
+    private CardStackInterface[] workingCardStacks;
+    private Stack<MoveCommandInterface> history;
 
     public Game(AbstractFactorySolitaire factorySolitaire) {
+        CardDeckInterface cardDeck = factorySolitaire.createUnshuffledCardDeck();
         CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
         for (CardInterface.Color color : CardInterface.Color.values()) {
             targetPacks[this.getTargetPackIndexForColor(color)] = factorySolitaire.createTargetPack(color);
@@ -34,10 +35,20 @@ final public class Game implements GameInterface {
         CardStackInterface[] workingCardStacks = new CardStackInterface[factorySolitaire.getCountOfWorkingStacks()];
         for (int i = 0; i < factorySolitaire.getCountOfWorkingStacks(); i++) {
             workingCardStacks[i] = factorySolitaire.createWorkingPack();
+
+            for (int j = 0; j <= i; j++) {
+                CardInterface card = cardDeck.pop();
+                if (!workingCardStacks[i].put(card)) {
+                    System.out.println("Could not add a card " + card);
+                }
+            }
+
+            if (workingCardStacks[i].get() != null) {
+                workingCardStacks[i].get().turnFaceUp();
+            }
         }
 
-
-        this.init(targetPacks, factorySolitaire.createCardDeck(), factorySolitaire.createEmptyCardDeck(), workingCardStacks, new Stack<>());
+        this.init(targetPacks, cardDeck, factorySolitaire.createWastingDeck(), workingCardStacks, new Stack<>());
     }
 
     /**
@@ -66,7 +77,7 @@ final public class Game implements GameInterface {
     }
 
     /**
-     * Perform a move on the board.
+     * Move count cards from source to destination.
      * <p>
      * This should perform a safe try to change the game's state.
      * If the resulting state would not be valid, it should not allow to get to the state.
@@ -76,18 +87,38 @@ final public class Game implements GameInterface {
      *
      * @param source      Source card deck
      * @param destination Destination card deck
-     * @param object      Object to be moved
-     * @return true on success, false otherwise
+     * @param count       Count of cards to be moved. If the count is zero, all cards will be moved.
+     * @return True on success, false otherwise
      */
     @Override
-    public boolean move(CardDeckInterface source, CardDeckInterface destination, CardDeckInterface object) {
-        MoveGameCommand command = new MoveGameCommand(source, destination, object, this);
+    public boolean move(CardDeckInterface source, CardDeckInterface destination, int count) {
+        MoveGameCommand command = new MoveGameCommand(source, destination, count, this);
 
         return this.move(command);
     }
 
     /**
-     * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, CardDeckInterface object)}
+     * Move all cards from source to destination.
+     * <p>
+     * This should perform a safe try to change the game's state.
+     * If the resulting state would not be valid, it should not allow to get to the state.
+     * This call must maintain the consistency of the game(not fully performing the move).
+     * <p>
+     * This call creates a history point which can be reverted by the undo operation.
+     *
+     * @param source      Source card deck
+     * @param destination Destination card deck
+     * @return True on success, false otherwise
+     */
+    @Override
+    public boolean move(CardDeckInterface source, CardDeckInterface destination) {
+        MoveGameCommand command = new MoveGameCommand(source, destination, 0, this);
+
+        return this.move(command);
+    }
+
+    /**
+     * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, int count)}
      *
      * @param command MoveCommandInterface instance
      */

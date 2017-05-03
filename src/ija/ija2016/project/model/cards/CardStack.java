@@ -41,9 +41,11 @@ public class CardStack extends CardDeck implements CardStackInterface {
         CardStack resultStack = new CardStack(this.cards.capacity());
         while (!this.cards.empty() && !this.cards.peek().equals(card)) {
             resultStack.put(this.cards.pop());
+            resultStack.get().turnFaceUp();
         }
 
         resultStack.put(this.cards.pop());
+        resultStack.get().turnFaceUp();
 
         return resultStack;
     }
@@ -72,14 +74,14 @@ public class CardStack extends CardDeck implements CardStackInterface {
      */
     @Override
     public boolean put(CardStackInterface stack) {
-        CardStackInterface backupStack = stack.clone();
+//        CardStackInterface backupStack = stack.clone(); todo: add backup?
 
-        while (!backupStack.isEmpty()) {
+        while (!stack.isEmpty()) {
             if (this.maxDeckSize == this.cards.size()) {
                 return false;
             }
 
-            if (!this.put(backupStack.pop())) {
+            if (!this.put(stack.pop())) {
                 return false;
             }
         }

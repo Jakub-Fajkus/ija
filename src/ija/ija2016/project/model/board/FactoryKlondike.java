@@ -54,8 +54,16 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
      * @return
      */
     @Override
-    public CardDeck createCardDeck() {
-        CardDeck deck = new CardDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
+    public CardDeck createShuffledCardDeck() {
+        return this.createCardDeck(true);
+    }
+
+    public CardDeck createUnshuffledCardDeck() {
+        return this.createCardDeck(false);
+    }
+
+    private CardDeck createCardDeck(boolean shuffle) {
+        CardDeck deck = new DrawingCardDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
 
         ArrayList<Card> cards = new ArrayList<>(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
 
@@ -64,7 +72,9 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
         cards.addAll(this.generateCards(Card.Color.HEARTS));
         cards.addAll(this.generateCards(Card.Color.SPADES));
 
-        Collections.shuffle(cards);
+        if (shuffle) {
+            Collections.shuffle(cards);
+        }
 
         deck.put(cards.toArray(new CardInterface[0]));
 
@@ -78,7 +88,17 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
      */
     @Override
     public CardDeckInterface createEmptyCardDeck() {
-        return new CardDeck(this.getCountOfCardsOfSameColor());
+        return new CardDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
+    }
+
+    /**
+     * Vytvori prazdny odkladaci balicek karet
+     *
+     * @return
+     */
+    @Override
+    public CardDeckInterface createWastingDeck() {
+        return new WastingDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
     }
 
 

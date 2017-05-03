@@ -4,28 +4,66 @@ import ija.ija2016.project.game.Game;
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.UndoException;
 import ija.ija2016.project.game.persistence.LoadStateException;
+import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.game.persistence.bytearray.ByteArrayFactory;
 import ija.ija2016.project.game.persistence.bytearray.ByteArrayStateLoaderInterface;
+import ija.ija2016.project.game.persistence.bytearray.ByteArrayStateSaverInterface;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 
 public class MoveGameCommand extends GameCommand implements MoveCommandInterface {
     private CardDeckInterface source;
     private CardDeckInterface destination;
-    private CardDeckInterface object;
+    private int count;
     private Game game;
     private transient byte[] gameData;
 
-    public MoveGameCommand(CardDeckInterface source, CardDeckInterface destination, CardDeckInterface object, Game game) {
+    public MoveGameCommand(CardDeckInterface source, CardDeckInterface destination, int count, Game game) {
         this.source = source;
         this.destination = destination;
-        this.object = object;
+        this.count = count;
         this.game = game;
     }
 
-
     @Override
     public boolean execute() {
-        //do stuff with the game
+        ByteArrayStateSaverInterface saver = (new ByteArrayFactory()).getSaver();
+
+        try {
+            this.gameData = saver.persistState(game);
+        } catch (PersistStateException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (count == 0) {
+            while (!source.isEmpty()) {
+                if (!destination.put(source.pop())) {
+                    try {
+                        this.undo();
+                    } catch (UndoException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            }
+        } else {
+            if (count > source.size()) {
+                System.out.println("Can not take more that the source has");
+                return false;
+            }
+
+            for (int i = 0; i < count; i++) {
+                if (!destination.put(source.pop())) {
+                    try {
+                        this.undo();
+                    } catch (UndoException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
@@ -69,13 +107,15 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
     }
 
     /**
-     * Get a object to be moved
+     * Get a count of objects to be moved.
+     * <p>
+     * If the count is equal to zero, all objects will be moved
      *
-     * @return CardDeckInterface Card deck which is the moving object.
+     * @return int Count of the objects
      */
     @Override
-    public CardDeckInterface getObject() {
-        return this.object;
+    public int getCount() {
+        return this.count;
     }
 
     /**

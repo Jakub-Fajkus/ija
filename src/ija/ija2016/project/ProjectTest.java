@@ -51,7 +51,7 @@ public class ProjectTest {
 
     @Test
     public void testCardDeck() {
-        CardDeckInterface deck = factory.createCardDeck();
+        CardDeckInterface deck = factory.createShuffledCardDeck();
 
         Assert.assertEquals("Pocet karet je 52", 52, deck.size());
 
@@ -158,14 +158,15 @@ public class ProjectTest {
         pack1.put(factory.createCard(CardInterface.Color.HEARTS, 11));
 
         CardStackInterface s = pack1.pop(factory.createCard(CardInterface.Color.CLUBS, 12));
+        s.get().turnFaceDown();
 
-        Assert.assertFalse("Nelze vlozit odebranou mnozinu (pracovni balicek je prazdny)", pack2.put(s));
+        Assert.assertTrue("Lze vlozit odebranou mnozinu (pracovni balicek je prazdny a vkladame kartu licem nahoru)", pack2.put(s));
 
         Assert.assertTrue("Vkladame cerveneho krale na prazdny balicek.",
                 pack2.put(factory.createCard(CardInterface.Color.HEARTS, 13)));
 
         Assert.assertTrue("Vkladame odebranou mnozinu.", pack2.put(s));
 
-        Assert.assertEquals("Pracovni balicek c. 2 obsahuje 3 karty.", 3, pack2.size());
+        Assert.assertEquals("Pracovni balicek c. 2 obsahuje 3 karty.", 5, pack2.size());
     }
 }

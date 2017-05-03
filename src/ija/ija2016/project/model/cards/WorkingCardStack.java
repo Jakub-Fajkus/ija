@@ -9,8 +9,18 @@ public class WorkingCardStack extends CardStack {
     @Override
     public boolean put(CardInterface card) {
         if (this.isEmpty()) {
-            //kral
-            return card.value() == 13 && super.put(card);
+            if (card.isTurnedFaceUp()) {
+                //kral
+                return card.value() == 13 && super.put(card);
+            }
+
+            return super.put(card);
+        }
+
+        //pokud posledni karta neni obrazkem nahoru, tak nekontrolujeme pravidla(probiha inicializace)
+        if (!this.cards.peek().isTurnedFaceUp()) {
+            return super.put(card);
+
         }
 
         //zajistit stridani barev
@@ -22,6 +32,12 @@ public class WorkingCardStack extends CardStack {
             return false;
         }
 
-        return super.put(card);
+        if (super.put(card)) {
+            card.turnFaceUp();
+
+            return true;
+        }
+
+        return false;
     }
 }

@@ -32,6 +32,13 @@ public interface CardInterface extends Serializable {
     boolean turnFaceUp();
 
     /**
+     * Otočí kartu lícem dolu. Pokud tak už je, nedělá nic.
+     *
+     * @return boolean Informace, zda došlo k otočení karty (=true) nebo ne.
+     */
+    boolean turnFaceDown();
+
+    /**
      * Testuje, zda má karta podobnou barvu jako karta zadaná.
      * Podobnou barvou se myslí černá (piky, kříže) a červená (káry a srdce).
      *

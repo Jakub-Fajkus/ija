@@ -52,7 +52,14 @@ public abstract class AbstractFactorySolitaire {
      *
      * @return
      */
-    public abstract CardDeckInterface createCardDeck();
+    public abstract CardDeckInterface createShuffledCardDeck();
+
+    /**
+     * Vytváří objekt reprezentující balíček karet a nezamicha jej.
+     *
+     * @return
+     */
+    public abstract CardDeckInterface createUnshuffledCardDeck();
 
     /**
      * Vytvori prazdny objekt reprezentujici balicek karet
@@ -60,6 +67,13 @@ public abstract class AbstractFactorySolitaire {
      * @return
      */
     public abstract CardDeckInterface createEmptyCardDeck();
+
+    /**
+     * Vytvori prazdny odkladaci balicek karet
+     *
+     * @return
+     */
+    public abstract CardDeckInterface createWastingDeck();
 
     /**
      * Vytváří objekt reprezentující cílový balíček. Cílem hráče je vložit všechny karty zadané barvy do cílového balíčku.
