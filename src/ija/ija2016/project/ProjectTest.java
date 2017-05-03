@@ -2,9 +2,9 @@ package ija.ija2016.project;
 
 import ija.ija2016.project.model.board.AbstractFactorySolitaire;
 import ija.ija2016.project.model.board.FactoryKlondike;
-import ija.ija2016.project.model.cards.Card;
-import ija.ija2016.project.model.cards.CardDeck;
-import ija.ija2016.project.model.cards.CardStack;
+import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,13 +32,13 @@ public class ProjectTest {
 
     @Test
     public void testCard() {
-        Card c1 = factory.createCard(Card.Color.CLUBS, 0);
-        Card c2 = factory.createCard(Card.Color.DIAMONDS, 11);
-        Card c3 = factory.createCard(Card.Color.SPADES, 5);
-        Card c4 = factory.createCard(Card.Color.CLUBS, 6);
-        Card c5 = factory.createCard(Card.Color.CLUBS, 6);
+        CardInterface c1 = factory.createCard(CardInterface.Color.CLUBS, 0);
+        CardInterface c2 = factory.createCard(CardInterface.Color.DIAMONDS, 11);
+        CardInterface c3 = factory.createCard(CardInterface.Color.SPADES, 5);
+        CardInterface c4 = factory.createCard(CardInterface.Color.CLUBS, 6);
+        CardInterface c5 = factory.createCard(CardInterface.Color.CLUBS, 6);
 
-        Assert.assertNull("(ija.ija2016.project.game.cards.Card.Color.CLUBS, 0) nelze", c1);
+        Assert.assertNull("(ija.ija2016.project.game.cards.CardInterface.Color.CLUBS, 0) nelze", c1);
         Assert.assertFalse("Karta c2 nema byt otocena licem nahoru.", c2.isTurnedFaceUp());
         Assert.assertTrue("Otoceni karty c2.", c2.turnFaceUp());
         Assert.assertTrue("Karta c2 ma byt otocena licem nahoru.", c2.isTurnedFaceUp());
@@ -51,18 +51,26 @@ public class ProjectTest {
 
     @Test
     public void testCardDeck() {
-        CardDeck deck = factory.createCardDeck();
+        CardDeckInterface deck = factory.createShuffledCardDeck();
 
         Assert.assertEquals("Pocet karet je 52", 52, deck.size());
 
-        Set<Card> testCards = new HashSet<>();
-        for (int i = 1; i <= 13; i++) { testCards.add(factory.createCard(Card.Color.CLUBS,i)); }
-        for (int i = 1; i <= 13; i++) { testCards.add(factory.createCard(Card.Color.DIAMONDS,i)); }
-        for (int i = 1; i <= 13; i++) { testCards.add(factory.createCard(Card.Color.HEARTS,i)); }
-        for (int i = 1; i <= 13; i++) { testCards.add(factory.createCard(Card.Color.SPADES,i)); }
+        Set<CardInterface> testCards = new HashSet<>();
+        for (int i = 1; i <= 13; i++) {
+            testCards.add(factory.createCard(CardInterface.Color.CLUBS, i));
+        }
+        for (int i = 1; i <= 13; i++) {
+            testCards.add(factory.createCard(CardInterface.Color.DIAMONDS, i));
+        }
+        for (int i = 1; i <= 13; i++) {
+            testCards.add(factory.createCard(CardInterface.Color.HEARTS, i));
+        }
+        for (int i = 1; i <= 13; i++) {
+            testCards.add(factory.createCard(CardInterface.Color.SPADES, i));
+        }
 
         for (int i = 0; i < 52; i++) {
-            Card c = deck.pop();
+            CardInterface c = deck.pop();
             Assert.assertTrue("Spravna karta.", testCards.remove(c));
         }
 
@@ -73,13 +81,13 @@ public class ProjectTest {
     @Test
     public void testTargetPack() {
 
-        CardDeck pack = factory.createTargetPack(Card.Color.CLUBS);
+        CardDeckInterface pack = factory.createTargetPack(CardInterface.Color.CLUBS);
 
-        Card c1 = factory.createCard(Card.Color.DIAMONDS, 11);
-        Card c2 = factory.createCard(Card.Color.DIAMONDS, 1);
-        Card c3 = factory.createCard(Card.Color.CLUBS, 11);
-        Card c4 = factory.createCard(Card.Color.CLUBS, 1);
-        Card c5 = factory.createCard(Card.Color.CLUBS, 2);
+        CardInterface c1 = factory.createCard(CardInterface.Color.DIAMONDS, 11);
+        CardInterface c2 = factory.createCard(CardInterface.Color.DIAMONDS, 1);
+        CardInterface c3 = factory.createCard(CardInterface.Color.CLUBS, 11);
+        CardInterface c4 = factory.createCard(CardInterface.Color.CLUBS, 1);
+        CardInterface c5 = factory.createCard(CardInterface.Color.CLUBS, 2);
 
         Assert.assertFalse("Nelze vlozit kartu", pack.put(c1));
         Assert.assertEquals("Pocet karet v baliku je 0.", 0, pack.size());
@@ -94,8 +102,8 @@ public class ProjectTest {
         Assert.assertTrue("Lze vlozit kartu", pack.put(c5));
         Assert.assertEquals("Pocet karet v baliku je 2.", 2, pack.size());
 
-        Card c55 = factory.createCard(Card.Color.CLUBS, 2);
-        Card c44 = factory.createCard(Card.Color.CLUBS, 1);
+        CardInterface c55 = factory.createCard(CardInterface.Color.CLUBS, 2);
+        CardInterface c44 = factory.createCard(CardInterface.Color.CLUBS, 1);
 
         Assert.assertEquals("Na vrcholu je karta c55", c55, pack.get());
         Assert.assertEquals("Pocet karet v baliku je 2.", 2, pack.size());
@@ -108,14 +116,14 @@ public class ProjectTest {
     @Test
     public void testWorkingPack() {
 
-        CardStack pack = factory.createWorkingPack();
+        CardStackInterface pack = factory.createWorkingPack();
 
-        Card c1 = factory.createCard(Card.Color.DIAMONDS, 11);
-        Card c2 = factory.createCard(Card.Color.DIAMONDS, 13);
-        Card c3 = factory.createCard(Card.Color.HEARTS, 12);
-        Card c4 = factory.createCard(Card.Color.CLUBS, 12);
-        Card c5 = factory.createCard(Card.Color.SPADES, 11);
-        Card c6 = factory.createCard(Card.Color.HEARTS, 11);
+        CardInterface c1 = factory.createCard(CardInterface.Color.DIAMONDS, 11);
+        CardInterface c2 = factory.createCard(CardInterface.Color.DIAMONDS, 13);
+        CardInterface c3 = factory.createCard(CardInterface.Color.HEARTS, 12);
+        CardInterface c4 = factory.createCard(CardInterface.Color.CLUBS, 12);
+        CardInterface c5 = factory.createCard(CardInterface.Color.SPADES, 11);
+        CardInterface c6 = factory.createCard(CardInterface.Color.HEARTS, 11);
 
         Assert.assertEquals("Pracovni balicek je prazdny.", 0, pack.size());
         Assert.assertFalse("Na prazdny pracovni balicek lze vlozit pouze krale.", pack.put(c1));
@@ -130,34 +138,35 @@ public class ProjectTest {
         Assert.assertTrue("Na cernou damu vkladame cerveneho kluka.", pack.put(c6));
         Assert.assertEquals("Pracovni balicek obsahuje 3 karty.", 3, pack.size());
 
-        CardStack s = pack.pop(factory.createCard(Card.Color.CLUBS, 12));
+        CardStackInterface s = pack.pop(factory.createCard(CardInterface.Color.CLUBS, 12));
         Assert.assertEquals("Pracovni balicek obsahuje 1 kartu.", 1, pack.size());
         Assert.assertEquals("Pocet odebranych karet je 2.", 2, s.size());
 
-        Assert.assertEquals("Na vrcholu je H(11).", factory.createCard(Card.Color.HEARTS, 11), s.pop());
-        Assert.assertEquals("Na vrcholu je C(12).", factory.createCard(Card.Color.CLUBS, 12), s.pop());
+        Assert.assertEquals("Na vrcholu je C(12).", factory.createCard(CardInterface.Color.CLUBS, 12), s.pop());
+        Assert.assertEquals("Na vrcholu je H(11).", factory.createCard(CardInterface.Color.HEARTS, 11), s.pop());
         Assert.assertEquals("Odebrany balicek je prazdny.", 0, s.size());
     }
 
     @Test
     public void testWorkingPack2() {
 
-        CardStack pack1 = factory.createWorkingPack();
-        CardStack pack2 = factory.createWorkingPack();
+        CardStackInterface pack1 = factory.createWorkingPack();
+        CardStackInterface pack2 = factory.createWorkingPack();
 
-        pack1.put(factory.createCard(Card.Color.DIAMONDS, 13));
-        pack1.put(factory.createCard(Card.Color.CLUBS, 12));
-        pack1.put(factory.createCard(Card.Color.HEARTS, 11));
+        pack1.put(factory.createCard(CardInterface.Color.DIAMONDS, 13));
+        pack1.put(factory.createCard(CardInterface.Color.CLUBS, 12));
+        pack1.put(factory.createCard(CardInterface.Color.HEARTS, 11));
 
-        CardStack s = pack1.pop(factory.createCard(Card.Color.CLUBS, 12));
+        CardStackInterface s = pack1.pop(factory.createCard(CardInterface.Color.CLUBS, 12));
+        s.get().turnFaceDown();
 
-        Assert.assertFalse("Nelze vlozit odebranou mnozinu (pracovni balicek je prazdny)", pack2.put(s));
+        Assert.assertTrue("Lze vlozit odebranou mnozinu (pracovni balicek je prazdny a vkladame kartu licem nahoru)", pack2.put(s));
 
         Assert.assertTrue("Vkladame cerveneho krale na prazdny balicek.",
-                pack2.put(factory.createCard(Card.Color.HEARTS, 13)));
+                pack2.put(factory.createCard(CardInterface.Color.HEARTS, 13)));
 
         Assert.assertTrue("Vkladame odebranou mnozinu.", pack2.put(s));
 
-        Assert.assertEquals("Pracovni balicek c. 2 obsahuje 3 karty.", 3, pack2.size());
+        Assert.assertEquals("Pracovni balicek c. 2 obsahuje 3 karty.", 5, pack2.size());
     }
 }
