@@ -17,7 +17,7 @@ when the state is unserialized, the old CardDeck objects are discarded and the n
 which should rerender all the objects
  */
 
-final public class Game implements GameInterface {
+public class Game implements GameInterface {
 
     private CardDeckInterface[] targetPacks;
     private CardDeckInterface drawingDeck;

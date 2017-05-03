@@ -38,11 +38,6 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
         if (count == 0) {
             while (!source.isEmpty()) {
                 if (!destination.put(source.pop())) {
-                    try {
-                        this.undo();
-                    } catch (UndoException e) {
-                        e.printStackTrace();
-                    }
                     return false;
                 }
             }
@@ -54,11 +49,6 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
 
             for (int i = 0; i < count; i++) {
                 if (!destination.put(source.pop())) {
-                    try {
-                        this.undo();
-                    } catch (UndoException e) {
-                        e.printStackTrace();
-                    }
                     return false;
                 }
             }

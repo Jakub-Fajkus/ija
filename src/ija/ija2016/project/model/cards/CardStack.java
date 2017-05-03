@@ -20,19 +20,6 @@ public class CardStack extends CardDeck implements CardStackInterface {
         return cloned;
     }
 
-//    @Override
-//    public CardStack flip() {
-//        CardStack cloned = this.clone();
-//
-//        CardStack resultStack = new CardStack(this.size());
-//
-//        while (!cloned.cards.empty()) {
-//            resultStack.put(cloned.cards.pop());
-//        }
-//
-//        return resultStack;
-//    }
-
     public CardStack takeFrom(CardInterface card) {
         if (!this.cards.contains(card)) {
             return null;

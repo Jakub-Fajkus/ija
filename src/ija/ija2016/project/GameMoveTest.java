@@ -1,6 +1,7 @@
 package ija.ija2016.project;
 
-import ija.ija2016.project.game.Game;
+import ija.ija2016.project.game.GameFactory;
+import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.model.board.AbstractFactorySolitaire;
 import ija.ija2016.project.model.board.FactoryKlondike;
 import ija.ija2016.project.model.cards.CardInterface;
@@ -13,12 +14,12 @@ import org.junit.Test;
 public class GameMoveTest {
 
     protected AbstractFactorySolitaire factory;
-    protected Game game;
+    protected GameInterface game;
 
     @Before
     public void setUp() {
         this.factory = new FactoryKlondike();
-        this.game = new Game(this.factory);
+        this.game = (new GameFactory()).createGameWithoutMoveRestrictions();
     }
 
     @After
