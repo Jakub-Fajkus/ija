@@ -32,7 +32,7 @@ public class Game implements GameInterface {
     public Game(AbstractFactorySolitaire factorySolitaire) {
         this.observers = new ArrayList<>();
 
-        CardDeckInterface cardDeck = factorySolitaire.createUnshuffledCardDeck();
+        CardDeckInterface cardDeck = factorySolitaire.createShuffledCardDeck();
         CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
         for (CardInterface.Color color : CardInterface.Color.values()) {
             targetPacks[this.getTargetPackIndexForColor(color)] = factorySolitaire.createTargetPack(color);
