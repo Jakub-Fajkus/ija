@@ -1,5 +1,6 @@
 package ija.ija2016.project.gui;
 
+import ija.ija2016.project.game.*;
 import ija.ija2016.project.model.cards.Card;
 import ija.ija2016.project.model.cards.CardInterface;
 import ija.ija2016.project.model.cards.WorkingCardStack;
@@ -22,21 +23,22 @@ public class GameController implements Initializable {
     public GridPane main_window;
     public GridPane working_pane;
 
-    private CardView cardImg;
+    private WorkingStackView wstack1, wstack2, wstack3, wstack4, wstack5, wstack6, wstack7;
 
-    private WorkingCardStack wstack1, wstack2, wstack3, wstack4, wstack5, wstack6, wstack7;
+    private GameInterface game;
 
     public GameController() {
         main_window = new GridPane();
         working_pane = new GridPane();
 
+
+        this.game =(new GameFactory().createGame());
+        wstack1 = new WorkingStackView(this.game.getWorkingCardStacks()[0]);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
-        this.cardImg = new CardView(new Card(CardInterface.Color.CLUBS,2, true));
         this.createGame();
     }
 
@@ -44,14 +46,7 @@ public class GameController implements Initializable {
     public void createGame(){
 
         try{
-//            ImageView smth = new ImageView();
-//            File file = new File("C:\\Users\\onsmak\\IdeaProjects\\ija_project\\src\\ija\\ija2016\\project\\gui\\king.png");
-//            Image image = new Image(file.toURI().toString());
-//            smth.setImage(image);
-//            smth.setFitHeight(145);
-//            smth.setFitWidth(100);
-
-            working_pane.add(this.cardImg,0,0);
+            working_pane.add(this.wstack1,2,0);
         } catch (Exception e){
             e.printStackTrace();
             System.out.print("fail create stack");

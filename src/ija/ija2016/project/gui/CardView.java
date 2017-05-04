@@ -19,10 +19,10 @@ public class CardView extends ImageView {
         this.card = card;
 
 //        File file = new File();                   gui/pr/2016/ija/src/
-        System.out.print(getClass().getResource("../../../2C.png"));
-//        Image image = new Image(file.toURI().toString());
-//        this.setImage(image);
-//        this.setFitHeight(145);
-//        this.setFitWidth(100);
+//        System.out.print(getClass().getResource("./img/"+this.card.getValueAsString()+this.card.color()+".png").toString());
+        Image image = new Image(getClass().getResource("./img/"+this.card.getValueAsString()+this.card.color()+".png").toString());
+        this.setImage(image);
+        this.setFitHeight(145);
+        this.setFitWidth(100);
     }
 }
