@@ -7,6 +7,7 @@ import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public interface GameInterface extends Serializable {
@@ -78,7 +79,7 @@ public interface GameInterface extends Serializable {
      *
      * @throws TipException When there is no move to be performed. There is no way of finishing the game.
      */
-    MoveCommandInterface[] tip() throws TipException;
+    ArrayList<MoveCommandInterface> tip() throws TipException;
 
 
     /**
