@@ -1,5 +1,5 @@
 package ija.ija2016.project.game;
 
-interface GameObserverInterface {
+public interface GameObserverInterface {
     void update();
 }

@@ -1,19 +1,21 @@
 package ija.ija2016.project.gui;
 
 import ija.ija2016.project.model.cards.CardDeckInterface;
-import ija.ija2016.project.model.cards.WorkingCardStack;
-import javafx.scene.layout.StackPane;
+public class WorkingStackView extends GuiStackPane {
 
-public class WorkingStackView extends StackPane {
-    private CardDeckInterface stack;
-
-    public WorkingStackView (CardDeckInterface stack) {
-        this.stack = stack;
-        this.setHeight(145);
+    public WorkingStackView (CardDeckInterface pack) {
+        super(pack);
+        this.setHeight(367);
         this.setWidth(100);
 
-        for (int i = 0; i < stack.size(); i++) {
-            this.getChildren().add(new CardView(this.stack.pop()));
+
+        for (int i = 0; i < pack.size(); i++) {
+            CardView card = new CardView(this.getPack().get(i), this);
+            card.setTranslateY(20*i);
+            card.setOffset(20*i);
+            this.getChildren().add(card);
         }
     }
+
+
 }
