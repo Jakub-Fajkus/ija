@@ -65,7 +65,18 @@ public class GameMoveTest {
 
     @Test
     public void testMoveFromWastingToTarget() {
-        Assert.assertTrue("Can 13 cards from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 11));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        Assert.assertTrue("Can 1 card from drawing to wasting", this.game.move(game.getDrawingDeck(), game.getWastingDeck(), 1));
+
         Assert.assertEquals("The ace(A(D)U) is in the wasting", "A(D)U", game.getWastingDeck().get().toString());
 
 

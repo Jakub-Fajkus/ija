@@ -90,4 +90,6 @@ public abstract class AbstractFactorySolitaire {
      */
     public abstract CardStackInterface createWorkingPack();
 
+    public abstract CardStackInterface createEmptyCardStack();
+
 }
