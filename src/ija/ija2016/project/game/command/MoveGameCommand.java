@@ -19,15 +19,14 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
     private Game game;
     private transient byte[] gameData;
 
-    public MoveGameCommand(CardDeckInterface source, CardDeckInterface destination, int count, Game game) {
+    public MoveGameCommand(CardDeckInterface source, CardDeckInterface destination, int count) {
         this.source = source;
         this.destination = destination;
         this.count = count;
-        this.game = game;
     }
 
     @Override
-    public boolean execute() {
+    public boolean execute(GameInterface game) {
         ByteArrayStateSaverInterface saver = (new ByteArrayFactory()).getSaver();
 
         try {

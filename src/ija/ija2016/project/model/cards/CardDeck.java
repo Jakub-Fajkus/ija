@@ -99,4 +99,22 @@ public class CardDeck implements CardDeckInterface {
     public boolean isEmpty() {
         return this.cards.empty();
     }
+
+    /**
+     * Get the number of cards facing up.
+     *
+     * @return Returns 0 If the deck is empty
+     */
+    @Override
+    public int getNumberOfCardsFacingUp() {
+        int count = 0;
+
+        for (CardInterface card : this.cards) {
+            if (card.isTurnedFaceUp()) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 }

@@ -55,4 +55,10 @@ public interface CardDeckInterface extends Serializable {
      */
     boolean isEmpty();
 
+    /**
+     * Get the number of cards facing up.
+     *
+     * @return Returns 0 If the deck is empty
+     */
+    int getNumberOfCardsFacingUp();
 }
