@@ -56,6 +56,11 @@ public interface CardInterface extends Serializable {
      */
     int compareValue(CardInterface c);
 
+    /**
+     * @return
+     */
+    String getValueAsString();
+
     enum Color {
         SPADES('S'), DIAMONDS('D'), HEARTS('H'), CLUBS('C');
 

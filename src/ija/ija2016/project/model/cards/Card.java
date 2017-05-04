@@ -81,25 +81,31 @@ public class Card implements CardInterface {
         return this.value - c.value();
     }
 
+    /**
+     * @return
+     */
+    @Override
+    public String getValueAsString() {
+        if (this.value == 1) {
+            return "A";
+        } else if (this.value < 11) {
+            return String.valueOf(this.value);
+        } else if (this.value == 11) {
+            return "J";
+        } else if (this.value == 12) {
+            return "Q";
+        } else if (this.value == 13) {
+            return "K";
+        } else {
+            return "";
+        }
+    }
+
     @Override
     public String toString() {
         String value;
 
-        if (this.value == 1) {
-            value = "A";
-        } else if (this.value < 11) {
-            value = String.valueOf(this.value);
-        } else if (this.value == 11) {
-            value = "J";
-        } else if (this.value == 12) {
-            value = "Q";
-        } else if (this.value == 13) {
-            value = "K";
-        } else {
-            value = "";
-        }
-
-        return value + "(" + this.color + ")" + (this.facingUp ? "U" : "D");
+        return this.getValueAsString() + "(" + this.color + ")" + (this.facingUp ? "U" : "D");
     }
 
     @Override
