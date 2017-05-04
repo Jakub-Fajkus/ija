@@ -48,13 +48,12 @@ public class MainWindow extends Application implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Game.fxml"));
             Parent root = fxmlLoader.load();
-
             GameController controller = fxmlLoader.getController();
 
             main_window.add(root, 0, 0);
 
         }  catch (Exception error){
-            System.out.print("Error in Game fxml or controller");
+            System.out.print(error.toString());
             System.exit(1);
         }
     }

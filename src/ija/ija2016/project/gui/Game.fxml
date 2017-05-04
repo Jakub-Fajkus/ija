@@ -6,7 +6,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane dividerPositions="0.05518394648829431" maxHeight="-Infinity" orientation="VERTICAL" prefHeight="600.0" prefWidth="825.0" style="-fx-border-color: red; -fx-border-style: solid; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ija.ija2016.project.gui.GameController">
+<SplitPane fx:id="neco" dividerPositions="0.05518394648829431" maxHeight="-Infinity" orientation="VERTICAL" prefHeight="600.0" prefWidth="825.0" style="-fx-border-color: red; -fx-border-style: solid; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ija.ija2016.project.gui.GameController">
   <items>
       <MenuBar prefHeight="32.0" prefWidth="825.0">
         <menus>
@@ -37,7 +36,7 @@
       </MenuBar>
       <VBox style="-fx-background-color: linear-gradient(#00e814,#005f09);">
          <children>
-            <GridPane hgap="15.0" prefHeight="145.0" prefWidth="789.0">
+            <GridPane fx:id="working_pane" hgap="15.0" prefHeight="145.0" prefWidth="789.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -54,11 +53,6 @@
                   <Insets />
                </opaqueInsets>
                <children>
-                  <ImageView fitHeight="145.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@king.png" />
-                     </image>
-                  </ImageView>
                   <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="1" />
                   <StackPane prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="3" />
                   <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="4" />
@@ -79,7 +73,7 @@
                   <Insets left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </GridPane>
-            <GridPane fx:id="working_pane" hgap="15.0" prefHeight="382.0" prefWidth="789.0">
+            <GridPane hgap="15.0" prefHeight="382.0" prefWidth="789.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

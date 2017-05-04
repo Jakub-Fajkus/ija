@@ -2,6 +2,9 @@ package ija.ija2016.project.model.cards;
 
 //bez problemu s overovnanim
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Card implements CardInterface {
     private CardInterface.Color color;
     private int value;
