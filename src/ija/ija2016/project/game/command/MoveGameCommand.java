@@ -8,7 +8,9 @@ import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.game.persistence.bytearray.ByteArrayFactory;
 import ija.ija2016.project.game.persistence.bytearray.ByteArrayStateLoaderInterface;
 import ija.ija2016.project.game.persistence.bytearray.ByteArrayStateSaverInterface;
+import ija.ija2016.project.model.board.FactoryKlondike;
 import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 
 public class MoveGameCommand extends GameCommand implements MoveCommandInterface {
     private CardDeckInterface source;
@@ -47,8 +49,16 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
                 return false;
             }
 
+            CardStackInterface newStack = (new FactoryKlondike()).createEmptyCardStack();
+
             for (int i = 0; i < count; i++) {
-                if (!destination.put(source.pop())) {
+                if (!newStack.put(source.pop())) {
+                    return false;
+                }
+            }
+
+            for (int i = count; i > 0; i--) {
+                if (!destination.put(newStack.pop())) {
                     return false;
                 }
             }

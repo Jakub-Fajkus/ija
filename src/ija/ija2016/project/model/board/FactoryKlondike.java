@@ -123,6 +123,11 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
         return new WorkingCardStack(this.getMaximumNumberOfCardsInWorkingStack());
     }
 
+    @Override
+    public CardStackInterface createEmptyCardStack() {
+        return new CardStack(this.getMaximumNumberOfCardsInWorkingStack());
+    }
+
     private ArrayList<Card> generateCards(Card.Color color) {
         ArrayList<Card> cards = new ArrayList<>(this.getCountOfCardsOfSameColor());
         for (int i = 1; i <= this.getCountOfCardsOfSameColor(); i++) {
