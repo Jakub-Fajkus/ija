@@ -20,7 +20,6 @@ public class WorkingCardStack extends CardStack {
         //pokud posledni karta neni obrazkem nahoru, tak nekontrolujeme pravidla(probiha inicializace)
         if (!this.cards.peek().isTurnedFaceUp()) {
             return super.put(card);
-
         }
 
         //zajistit stridani barev
