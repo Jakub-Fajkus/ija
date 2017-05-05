@@ -6,5 +6,5 @@ import ija.ija2016.project.game.UndoException;
 public abstract class GameCommand implements GameCommandInterface {
     public abstract boolean execute(GameInterface game);
 
-    public abstract void undo() throws UndoException;
+    public abstract GameInterface undo() throws UndoException;
 }

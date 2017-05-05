@@ -8,5 +8,5 @@ import java.io.Serializable;
 public interface GameCommandInterface extends Serializable {
     boolean execute(GameInterface game);
 
-    void undo() throws UndoException;
+    GameInterface undo() throws UndoException;
 }

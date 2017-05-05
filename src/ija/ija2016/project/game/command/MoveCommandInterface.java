@@ -26,6 +26,11 @@ public interface MoveCommandInterface extends GameCommandInterface {
     CardDeckInterface getDestination();
 
     /**
+     * Set destination of the move
+     */
+    void setDestination(CardDeckInterface destination);
+
+    /**
      * Get a count of objects to be moved.
      *
      * If the count is equal to zero, all objects will be moved

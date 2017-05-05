@@ -20,10 +20,11 @@ public class Game implements GameInterface {
     private CardDeckInterface drawingDeck;
     private CardDeckInterface wastingDeck;
     private CardStackInterface[] workingCardStacks;
-    private transient Stack<MoveCommandInterface> history;
+    private Stack<MoveCommandInterface> history;
     private transient ArrayList<GameObserverInterface> observers;
 
     public Game(AbstractFactorySolitaire factorySolitaire) {
+        this.history = new Stack<>();
         this.allCards = new ArrayList<>();
         this.observers = new ArrayList<>();
 
@@ -69,7 +70,7 @@ public class Game implements GameInterface {
         this.drawingDeck = drawingDeck;
         this.wastingDeck = wastingDeck;
         this.workingCardStacks = workingCardStacks;
-        this.history = history;
+        this.history = history != null ? history : new Stack<>();
     }
 
     /**
@@ -142,17 +143,18 @@ public class Game implements GameInterface {
         } else {
             //on failure, revert the state
             try {
-                command.undo();
+                this.init(command.undo());
+
+                return false;
             } catch (UndoException exception) {
                 //error occurred, cannot undo.. the world is over
                 exception.printStackTrace();
+
                 return false;
+            } finally {
+                this.notifyObservers();
             }
         }
-
-        this.notifyObservers();
-
-        return true;
     }
 
     private void notifyObservers() {
@@ -175,14 +177,15 @@ public class Game implements GameInterface {
     public MoveCommandInterface undo() throws UndoException {
         MoveCommandInterface command = this.history.pop();
         try {
-            command.undo();
+            this.init(command.undo());
         } catch (UndoException exception) {
             //error occurred, cannot undo.. the world is over
             exception.printStackTrace();
             return null;
+        } finally {
+            this.notifyObservers();
         }
 
-        this.notifyObservers();
 
         return command;
     }

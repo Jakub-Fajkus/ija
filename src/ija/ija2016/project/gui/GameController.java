@@ -3,6 +3,8 @@ package ija.ija2016.project.gui;
 import ija.ija2016.project.game.GameFactory;
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.GameObserverInterface;
+import ija.ija2016.project.game.command.MoveCommandInterface;
+import ija.ija2016.project.game.command.MoveGameCommand;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -34,6 +36,8 @@ public class GameController implements Initializable, GameObserverInterface {
     private WorkingStackView wstack1, wstack2, wstack3, wstack4, wstack5, wstack6, wstack7;
     private GameInterface game;
 
+    private MoveCommandInterface actualMove;
+
     public GameController() {
         main_window = new GridPane();
         working_pane = new GridPane();
@@ -54,11 +58,11 @@ public class GameController implements Initializable, GameObserverInterface {
         target3 = new TargetStackView(this.game.getTargetPacks()[2], this.game, this.cardPool);
         target4 = new TargetStackView(this.game.getTargetPacks()[3], this.game, this.cardPool);
 
-        if (!this.game.move(this.game.getDrawingDeck(), this.game.getWastingDeck(), 1)) {
-            System.out.println("Can not move to waste");
-        } else {
-            System.out.println("Moved to waste");
-        }
+//        if (!this.game.move(this.game.getDrawingDeck(), this.game.getWastingDeck(), 1)) {
+//            System.out.println("Can not move to waste");
+//        } else {
+//            System.out.println("Moved to waste");
+//        }
 
         drawing = new DrawingPackView(this.game.getDrawingDeck(), this.game, this.cardPool);
         wasting = new WastingPackView(this.game.getWastingDeck(), this.game, this.cardPool);
@@ -137,6 +141,9 @@ public class GameController implements Initializable, GameObserverInterface {
      */
     private void getCardFromDrawingPack(MouseEvent e) {
         System.out.println("in da click");
+
+        this.actualMove = null;
+
         if (!this.game.getDrawingDeck().isEmpty()) {
             try {
                 System.out.println("in da move");
@@ -214,6 +221,19 @@ public class GameController implements Initializable, GameObserverInterface {
 
         cardView.setTranslateX(0);
         cardView.setTranslateY(0 + cardView.getOffset());
+
+        if (this.actualMove == null || this.actualMove.getSource() == null || this.actualMove.getDestination() == null) {
+            this.actualMove = new MoveGameCommand(null, null, 1);
+
+            return;
+        }
+
+        if (this.game.move(this.actualMove)) {
+            System.out.println("MOVED");
+        } else {
+            System.out.println("NOT MOVED");
+
+        }
     }
 
     public void dragOver(DragEvent e) {
@@ -221,6 +241,7 @@ public class GameController implements Initializable, GameObserverInterface {
             CardView cardView = (CardView) e.getSource();
             GuiStackPane stack = cardView.getContainingElement();
             System.out.println("Over stack drag: " + stack.toString() + "\n");
+            this.actualMove.setDestination(stack.getPack());
         } else {
             System.out.print("Drag over: " + e.getClass());
         }
@@ -234,11 +255,9 @@ public class GameController implements Initializable, GameObserverInterface {
 //        System.out.print("Count of cards in stack: "+cardView.getContainingElement().getChildren().size()+"\n");
 //        System.out.print("Offset of dragged card: "+this.getOffset()+"\n");
 //        System.out.print("Poradi karty: "+((this.getOffset()/20)+1.0)+"\n");
+        int countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20)));
         System.out.print("Pocet karet: " + (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20))) + "\n");
 
-        // TODO madafaka nejde to...
-        // Java Messsge:ija.ija2016.project.gui.CardView cannot be cast to ija.ija2016.project.gui.GuiStackPane
-        // ne nechapu to
         if (!cardView.isTurnedFaceUp())
             return;
 
@@ -247,6 +266,8 @@ public class GameController implements Initializable, GameObserverInterface {
         content.putString("card");
         dragboard.setContent(content);
         event.consume();
+
+        this.actualMove = new MoveGameCommand(cardView.getContainingElement().getPack(), null, countOfCards);
     }
 
     @Override

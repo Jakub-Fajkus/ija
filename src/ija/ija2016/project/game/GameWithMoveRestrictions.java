@@ -14,6 +14,11 @@ public class GameWithMoveRestrictions extends Game {
 
     @Override
     public boolean move(MoveCommandInterface command) {
-        return this.validator.validate(command.getSource(), command.getDestination(), command.getCount()) && super.move(command);
+        if (this.validator.validate(command.getSource(), command.getDestination(), command.getCount())) {
+            System.out.println("Validation OK!");
+            return super.move(command);
+        }
+        System.out.println("Validation failed!!");
+        return false;
     }
 }
