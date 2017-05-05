@@ -19,6 +19,7 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
         this.game = game;
         this.cardPool = cardPool;
 
+
         this.addEventHandler(DragEvent.DRAG_DROPPED, this::dragDropped);
         this.addEventHandler(DragEvent.DRAG_OVER, this::dragOverWorking);
         this.setOnMouseDragEntered(this::mouseEntered);

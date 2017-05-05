@@ -7,6 +7,7 @@ import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.*;
@@ -141,7 +142,6 @@ public class GameController implements Initializable, GameObserverInterface {
      */
     private void getCardFromDrawingPack(MouseEvent e) {
         System.out.println("in da click");
-
         this.actualMove = null;
 
         if (!this.game.getDrawingDeck().isEmpty()) {

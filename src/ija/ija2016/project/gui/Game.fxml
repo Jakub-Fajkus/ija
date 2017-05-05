@@ -52,11 +52,11 @@
                   <Insets />
                </opaqueInsets>
                <children>
-                  <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="1" />
-                  <StackPane prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="3" />
-                  <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="4" />
-                  <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="5" />
-                  <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;" GridPane.columnIndex="6" />
+                  <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" />
+                  <StackPane prefHeight="150.0" prefWidth="100.0" GridPane.columnIndex="3" />
+                  <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="4" />
+                  <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="5" />
+                  <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="6" />
                   <Button fx:id="btn__undo" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="31.0" prefWidth="101.0" style="-fx-background-color: linear-gradient(#fbfbfb,#959595);" text="UNDO" GridPane.columnIndex="2" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets top="15.0" />

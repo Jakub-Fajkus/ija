@@ -9,6 +9,7 @@ public class TargetStackView extends GuiStackPane {
         super(pack, game, cardPool);
         this.setHeight(145);
         this.setWidth(100);
+        this.setStyle("-fx-background-color: rgba(0,0,0,0.3); -fx-background-radius: 5;");
 
         this.redrawCards();
     }
