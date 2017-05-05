@@ -228,6 +228,12 @@ public class GameController implements Initializable, GameObserverInterface {
             return;
         }
 
+        if (this.actualMove.getSource() == this.actualMove.getDestination()) {
+            this.actualMove = new MoveGameCommand(null, null, 1);
+
+            return;
+        }
+
         if (this.game.move(this.actualMove)) {
             System.out.println("MOVED");
         } else {
