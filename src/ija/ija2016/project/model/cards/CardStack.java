@@ -61,8 +61,6 @@ public class CardStack extends CardDeck implements CardStackInterface {
      */
     @Override
     public boolean put(CardStackInterface stack) {
-//        CardStackInterface backupStack = stack.clone(); todo: add backup?
-
         while (!stack.isEmpty()) {
             if (this.maxDeckSize == this.cards.size()) {
                 return false;

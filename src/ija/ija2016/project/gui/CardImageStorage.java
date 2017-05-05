@@ -14,7 +14,6 @@ public class CardImageStorage {
     private CardImageStorage(ArrayList<CardInterface> cards) {
         this.images = new Hashtable<>(cards.size());
 
-
         //create all card views!
         for (CardInterface card : cards) {
             //add image for the card
