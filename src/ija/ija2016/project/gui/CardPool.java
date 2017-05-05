@@ -1,34 +1,25 @@
 package ija.ija2016.project.gui;
 
 import ija.ija2016.project.model.cards.CardInterface;
-import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
 public class CardPool {
-    public static final String FACING_DOWN_IMAGE = "FD";
     private Hashtable<String, CardView> cards;
-    private Hashtable<String, Image> images;
+    private CardImageStorage imageStorage;
 
 
     public CardPool(ArrayList<CardInterface> cards) {
         this.cards = new Hashtable<>(cards.size());
-        this.images = new Hashtable<>(cards.size());
+        this.imageStorage = CardImageStorage.getInstance(cards);
 
         //create all card views!
         for (CardInterface card : cards) {
             CardView cardView = new CardView(card, null);
             this.cards.put(this.getCardString(card), cardView);
-
-            //add image for the card
-            Image image = new Image(getClass().getResource("./img/" + this.getCardString(card) + ".png").toString());
-            this.images.put(this.getCardString(card), image);
         }
-
-        //add facing down image
-        this.images.put(FACING_DOWN_IMAGE, new Image(getClass().getResource("./img/FD.png").toString()));
     }
 
     public CardView getCardView(CardInterface card) {
@@ -36,15 +27,12 @@ public class CardPool {
 
         if (view != null) {
             if (card.isTurnedFaceUp()) {
-                if (this.images.get(this.getCardString(card)) == null) {
-                    System.out.println("AAAHA, you bitch");
-                }
-                view.init(this.images.get(this.getCardString(card)));
+                view.init(this.imageStorage.get(card));
             } else {
-                view.init(this.images.get(FACING_DOWN_IMAGE));
+                view.init(this.imageStorage.getFacingDownImage());
             }
         } else {
-            System.out.println("Card view is nul!");
+            System.out.println("Card view is null!");
         }
 
         return view;
@@ -56,7 +44,6 @@ public class CardPool {
 
     public void updateCards(ArrayList<CardInterface> cards) {
         for (Map.Entry<String, CardView> entry : this.cards.entrySet()) {
-            String key = entry.getKey();
             CardView value = entry.getValue();
 
             //find a card with the values as the current value has
@@ -64,11 +51,7 @@ public class CardPool {
                 if (card.color() == value.getCard().color() && card.value() == value.getCard().value()) {
                     value.setCard(card);
                 }
-
             }
         }
-
-//        for(CardView view : this.cards.)
-
     }
 }
