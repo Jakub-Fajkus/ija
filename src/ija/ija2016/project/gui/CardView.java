@@ -53,7 +53,15 @@ public class CardView extends ImageView {
         return this.card.isTurnedFaceUp();
     }
 
-//    private void makeDraggable(final Node node) {
+    public CardInterface getCard() {
+        return card;
+    }
+
+    public void setCard(CardInterface card) {
+        this.card = card;
+    }
+
+    //    private void makeDraggable(final Node node) {
 //        node.setOnMousePressed(this::handleOnMousePressed);
 //        node.setOnMouseDragged(this::handleOnMouseDragged);
 //        node.setOnMouseReleased(this::handleOnMouseReleased);

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Game implements GameInterface {
-    private ArrayList<CardInterface> allCards;
     private CardDeckInterface[] targetPacks;
     private CardDeckInterface drawingDeck;
     private CardDeckInterface wastingDeck;
@@ -25,13 +24,9 @@ public class Game implements GameInterface {
 
     public Game(AbstractFactorySolitaire factorySolitaire) {
         this.history = new Stack<>();
-        this.allCards = new ArrayList<>();
         this.observers = new ArrayList<>();
 
         CardDeckInterface cardDeck = factorySolitaire.createShuffledCardDeck();
-        for (int i = 0; i < cardDeck.size(); i++) {
-            this.allCards.add(cardDeck.get(i));
-        }
 
         CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
         for (CardInterface.Color color : CardInterface.Color.values()) {
@@ -71,6 +66,8 @@ public class Game implements GameInterface {
         this.wastingDeck = wastingDeck;
         this.workingCardStacks = workingCardStacks;
         this.history = history != null ? history : new Stack<>();
+
+
     }
 
     /**
@@ -269,7 +266,20 @@ public class Game implements GameInterface {
 
 
     public ArrayList<CardInterface> getAllCards() {
-        return allCards;
+        ArrayList<CardInterface> cards = new ArrayList<>();
+
+        for (CardDeckInterface stack : this.workingCardStacks) {
+            cards.addAll(stack.getAll());
+        }
+
+        for (CardDeckInterface stack : this.targetPacks) {
+            cards.addAll(stack.getAll());
+        }
+
+        cards.addAll(this.getDrawingDeck().getAll());
+        cards.addAll(this.getWastingDeck().getAll());
+
+        return cards;
     }
 
     /**

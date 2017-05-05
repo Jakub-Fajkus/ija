@@ -45,6 +45,8 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
                 continue;
             }
 
+            cardView.setTranslateY(0);
+            cardView.setOffset(0);
             cardView.setContainingElement(this);
 
             this.getChildren().add(cardView);

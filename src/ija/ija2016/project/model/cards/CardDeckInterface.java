@@ -1,6 +1,7 @@
 package ija.ija2016.project.model.cards;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public interface CardDeckInterface extends Serializable {
 
@@ -47,6 +48,13 @@ public interface CardDeckInterface extends Serializable {
      * @return Karta z vrcholu balíčku.
      */
     CardInterface get(int index);
+
+    /**
+     * Get all cards. Do not remove them from the object.
+     *
+     * @return
+     */
+    ArrayList<CardInterface> getAll();
 
     /**
      * Test, zda je balíček karet prázdný.

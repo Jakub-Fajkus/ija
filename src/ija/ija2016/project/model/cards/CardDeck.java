@@ -1,5 +1,6 @@
 package ija.ija2016.project.model.cards;
 
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -91,6 +92,20 @@ public class CardDeck implements CardDeckInterface {
     }
 
     /**
+     * Get all cards. Do not remove them from the object.
+     *
+     * @return
+     */
+    @Override
+    public ArrayList<CardInterface> getAll() {
+        ArrayList<CardInterface> returnCards = new ArrayList<>();
+
+        returnCards.addAll(this.cards);
+
+        return returnCards;
+    }
+
+    /**
      * Test, zda je balíček karet prázdný.
      *
      * @return Vrací true, pokud je balíček prázdný.
@@ -117,4 +132,6 @@ public class CardDeck implements CardDeckInterface {
 
         return count;
     }
+
+
 }
