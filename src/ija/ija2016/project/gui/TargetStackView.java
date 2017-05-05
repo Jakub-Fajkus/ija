@@ -1,18 +1,16 @@
 package ija.ija2016.project.gui;
 
+import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.model.cards.CardDeckInterface;
-import javafx.scene.layout.StackPane;
 
 public class TargetStackView extends GuiStackPane {
 
-    public TargetStackView(CardDeckInterface pack) {
-        super(pack);
+    public TargetStackView(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
+        super(pack, game, cardPool);
         this.setHeight(145);
         this.setWidth(100);
 
-        for (int i = 0; i < pack.size(); i++) {
-            this.getChildren().add(new CardView(this.getPack().get(i), this));
-        }
+        this.redrawCards();
     }
 }
 

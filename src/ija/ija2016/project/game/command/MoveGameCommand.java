@@ -4,10 +4,8 @@ import ija.ija2016.project.game.Game;
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.UndoException;
 import ija.ija2016.project.game.persistence.LoadStateException;
-import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.game.persistence.bytearray.ByteArrayFactory;
 import ija.ija2016.project.game.persistence.bytearray.ByteArrayStateLoaderInterface;
-import ija.ija2016.project.game.persistence.bytearray.ByteArrayStateSaverInterface;
 import ija.ija2016.project.model.board.FactoryKlondike;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
@@ -27,14 +25,14 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
 
     @Override
     public boolean execute(GameInterface game) {
-        ByteArrayStateSaverInterface saver = (new ByteArrayFactory()).getSaver();
-
-        try {
-            this.gameData = saver.persistState(game);
-        } catch (PersistStateException e) {
-            e.printStackTrace();
-            return false;
-        }
+//        ByteArrayStateSaverInterface saver = (new ByteArrayFactory()).getSaver();
+//
+//        try {
+//            this.gameData = saver.persistState(game);
+//        } catch (PersistStateException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
 
         if (count == 0) {
             while (!source.isEmpty()) {

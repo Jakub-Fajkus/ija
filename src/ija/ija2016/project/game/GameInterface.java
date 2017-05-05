@@ -4,6 +4,7 @@ import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
 
 import java.io.Serializable;
@@ -117,6 +118,13 @@ public interface GameInterface extends Serializable {
     CardStackInterface[] getWorkingCardStacks();
 
     Stack<MoveCommandInterface> getHistory();
+
+    /**
+     * Get all cards in the game
+     *
+     * @return
+     */
+    ArrayList<CardInterface> getAllCards();
 
     /**
      * Add a observer which will be called for each change of the game.

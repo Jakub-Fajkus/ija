@@ -15,18 +15,23 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Game implements GameInterface {
-
+    private ArrayList<CardInterface> allCards;
     private CardDeckInterface[] targetPacks;
     private CardDeckInterface drawingDeck;
     private CardDeckInterface wastingDeck;
     private CardStackInterface[] workingCardStacks;
-    private Stack<MoveCommandInterface> history;
-    private ArrayList<GameObserverInterface> observers;
+    private transient Stack<MoveCommandInterface> history;
+    private transient ArrayList<GameObserverInterface> observers;
 
     public Game(AbstractFactorySolitaire factorySolitaire) {
+        this.allCards = new ArrayList<>();
         this.observers = new ArrayList<>();
 
         CardDeckInterface cardDeck = factorySolitaire.createShuffledCardDeck();
+        for (int i = 0; i < cardDeck.size(); i++) {
+            this.allCards.add(cardDeck.get(i));
+        }
+
         CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
         for (CardInterface.Color color : CardInterface.Color.values()) {
             targetPacks[this.getTargetPackIndexForColor(color)] = factorySolitaire.createTargetPack(color);
@@ -152,7 +157,7 @@ public class Game implements GameInterface {
 
     private void notifyObservers() {
         for (GameObserverInterface observer : this.observers) {
-            observer.update();
+            observer.updateOnGameChange();
         }
     }
 
@@ -259,6 +264,11 @@ public class Game implements GameInterface {
         return history;
     }
 
+
+    public ArrayList<CardInterface> getAllCards() {
+        return allCards;
+    }
+
     /**
      * Add a observer which will be called for each change of the game.
      * <p>
@@ -271,7 +281,9 @@ public class Game implements GameInterface {
      */
     @Override
     public void addObserver(GameObserverInterface observer) {
-        this.observers.add(observer);
+        if (observer != null) {
+            this.observers.add(observer);
+        }
     }
 
     /**
