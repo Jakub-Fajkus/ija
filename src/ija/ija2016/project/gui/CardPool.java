@@ -39,10 +39,8 @@ public class CardPool {
                     System.out.println("AAAHA, you bitch");
                 }
                 view.init(this.images.get(card.getValueAsString() + card.color()));
-//                view.init(this.images.get(FACING_DOWN_IMAGE));
             } else {
-                view.init(this.images.get(card.getValueAsString() + card.color()));
-//                view.init(this.images.get(FACING_DOWN_IMAGE)); todo: uncommment
+                view.init(this.images.get(FACING_DOWN_IMAGE));
             }
         } else {
             System.out.println("Card view is nul!");

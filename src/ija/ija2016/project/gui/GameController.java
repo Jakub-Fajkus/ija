@@ -255,7 +255,14 @@ public class GameController implements Initializable, GameObserverInterface {
 //        System.out.print("Count of cards in stack: "+cardView.getContainingElement().getChildren().size()+"\n");
 //        System.out.print("Offset of dragged card: "+this.getOffset()+"\n");
 //        System.out.print("Poradi karty: "+((this.getOffset()/20)+1.0)+"\n");
-        int countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20)));
+
+        int countOfCards;
+        if (cardView.getContainingElement().getPack() == this.game.getWastingDeck()) {
+            countOfCards = 1;
+        } else {
+            countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20)));
+        }
+
         System.out.print("Pocet karet: " + (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20))) + "\n");
 
         if (!cardView.isTurnedFaceUp())

@@ -40,4 +40,20 @@ public class WorkingCardStack extends CardStack {
 
         return false;
     }
+
+    /**
+     * Metoda odebere kartu z vrcholu zasobniku a vrati ji. Vraci null, pokud na zasobniku nic neni.
+     *
+     * @return ija.ija2016.project.game.cards.CardInterface nebo null, pokud je zasobnik prazdny
+     */
+    @Override
+    public CardInterface pop() {
+        CardInterface popped = super.pop();
+
+        if (!this.isEmpty()) {
+            super.get().turnFaceUp();
+        }
+
+        return popped;
+    }
 }
