@@ -3,6 +3,7 @@ package ija.ija2016.project.gui;
 import ija.ija2016.project.game.GameFactory;
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.GameObserverInterface;
+import ija.ija2016.project.game.GameRuleValidator;
 import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import javafx.fxml.FXML;
@@ -111,26 +112,26 @@ public class GameController implements Initializable, GameObserverInterface {
             this.makeNodeDraggable(this.wstack6.getChildren());
             this.makeNodeDraggable(this.wstack7.getChildren());
 
-//            this.wstack1.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-//            this.wstack1.setOnMouseReleased(this::handleOnMouseReleased);
-//
-//            this.wstack2.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-//            this.wstack2.setOnMouseReleased(this::handleOnMouseReleased);
-//
-//            this.wstack3.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-//            this.wstack3.setOnMouseReleased(this::handleOnMouseReleased);
-//
-//            this.wstack4.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-//            this.wstack4.setOnMouseReleased(this::handleOnMouseReleased);
-//
-//            this.wstack5.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-//            this.wstack5.setOnMouseReleased(this::handleOnMouseReleased);
-//
-//            this.wstack6.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-//            this.wstack6.setOnMouseReleased(this::handleOnMouseReleased);
-//
-//            this.wstack7.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-//            this.wstack7.setOnMouseReleased(this::handleOnMouseReleased);
+            this.wstack1.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
+            this.wstack1.setOnMouseReleased(this::handleOnMouseReleased);
+
+            this.wstack2.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
+            this.wstack2.setOnMouseReleased(this::handleOnMouseReleased);
+
+            this.wstack3.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
+            this.wstack3.setOnMouseReleased(this::handleOnMouseReleased);
+
+            this.wstack4.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
+            this.wstack4.setOnMouseReleased(this::handleOnMouseReleased);
+
+            this.wstack5.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
+            this.wstack5.setOnMouseReleased(this::handleOnMouseReleased);
+
+            this.wstack6.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
+            this.wstack6.setOnMouseReleased(this::handleOnMouseReleased);
+
+            this.wstack7.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
+            this.wstack7.setOnMouseReleased(this::handleOnMouseReleased);
 
             top_pane.add(this.drawing, 0, 0);
             top_pane.add(this.wasting, 1, 0);
@@ -246,19 +247,18 @@ public class GameController implements Initializable, GameObserverInterface {
         node.setTranslateY(offsetY);
     }
 
-    //todo!
     public void handleOnMouseReleased(MouseEvent event) {
         System.out.println("handleOnMouseReleased on stack");
 
-        if (!(event.getSource() instanceof CardView)) {
-            System.out.println("handleOnMouseReleased,, not a CardView, leaving");
+        if (event.getSource() instanceof CardView) {
+            CardView cardView = (CardView) event.getSource();
+
+            cardView.setTranslateX(0);
+            cardView.setTranslateY(0 + cardView.getOffset());
+        } else {
+            System.out.println("handleOnMouseReleased,, not a CardView, continuing");
             return;
         }
-
-        CardView cardView = (CardView) event.getSource();
-
-        cardView.setTranslateX(0);
-        cardView.setTranslateY(0 + cardView.getOffset());
 
         if (this.actualMove == null || this.actualMove.getSource() == null || this.actualMove.getDestination() == null) {
             this.actualMove = new MoveGameCommand(null, null, 1);
@@ -292,6 +292,8 @@ public class GameController implements Initializable, GameObserverInterface {
             this.actualMove.setDestination(stack.getPack());
         } else {
             System.out.println("Drag over: " + e.getClass() + " on object " + e.getSource());
+            GuiStackPane stack = (GuiStackPane) e.getSource();
+            this.actualMove.setDestination(stack.getPack());
         }
     }
 
@@ -323,7 +325,9 @@ public class GameController implements Initializable, GameObserverInterface {
 //        System.out.println("Poradi karty: "+((this.getOffset()/20)+1.0)+"\n");
 
         int countOfCards;
-        if (cardView.getContainingElement().getPack() == this.game.getWastingDeck()) {
+
+        GameRuleValidator validator = new GameRuleValidator(this.game);
+        if (cardView.getContainingElement().getPack() == this.game.getWastingDeck() || validator.isTargetStack(cardView.getContainingElement().getPack())) {
             countOfCards = 1;
         } else {
             countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20)));

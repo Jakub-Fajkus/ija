@@ -55,7 +55,7 @@ public class GameRuleValidator {
         return false;
     }
 
-    private boolean isTargetStack(CardDeckInterface deck) {
+    public boolean isTargetStack(CardDeckInterface deck) {
         for (CardDeckInterface target : game.getTargetPacks()) {
             if (target == deck) {
                 return true;
