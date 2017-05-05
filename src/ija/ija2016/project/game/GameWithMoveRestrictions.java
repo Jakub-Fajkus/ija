@@ -21,4 +21,15 @@ public class GameWithMoveRestrictions extends Game {
         System.out.println("Validation failed!!");
         return false;
     }
+
+    /**
+     * Initialize the inner state of the game from the given game.
+     *
+     * @param game Game object which data should be copied into the current game
+     */
+    @Override
+    public void init(GameInterface game) {
+        this.validator = new GameRuleValidator(this);
+        super.init(game);
+    }
 }

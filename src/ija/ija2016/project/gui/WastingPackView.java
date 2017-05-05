@@ -12,4 +12,12 @@ public class WastingPackView extends GuiStackPane {
 
         this.redrawCards();
     }
+
+
+    @Override
+    public void updateOnGameChange() {
+        this.pack = this.game.getWastingDeck();
+
+        super.updateOnGameChange();
+    }
 }

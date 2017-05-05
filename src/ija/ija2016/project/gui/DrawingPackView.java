@@ -12,4 +12,11 @@ public class DrawingPackView extends GuiStackPane {
 
         this.redrawCards();
     }
+
+    @Override
+    public void updateOnGameChange() {
+        this.pack = this.game.getDrawingDeck();
+
+        super.updateOnGameChange();
+    }
 }

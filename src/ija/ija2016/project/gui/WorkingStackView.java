@@ -4,9 +4,11 @@ import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 
 public class WorkingStackView extends GuiStackPane {
+    private int orderNumber;
 
-    public WorkingStackView(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
+    public WorkingStackView(CardDeckInterface pack, GameInterface game, CardPool cardPool, int orderNumber) {
         super(pack, game, cardPool);
+        this.orderNumber = orderNumber;
         this.setHeight(367);
         this.setWidth(100);
 
@@ -30,5 +32,12 @@ public class WorkingStackView extends GuiStackPane {
 
             this.getChildren().add(cardView);
         }
+    }
+
+    @Override
+    public void updateOnGameChange() {
+        this.pack = this.game.getWorkingCardStacks()[this.orderNumber];
+
+        super.updateOnGameChange();
     }
 }

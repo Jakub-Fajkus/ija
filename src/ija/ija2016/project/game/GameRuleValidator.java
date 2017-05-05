@@ -35,6 +35,11 @@ public class GameRuleValidator {
             return true;
         }
 
+        // one from working to target
+        if (this.isWorkingDeck(source) && this.isTargetStack(destination) && count == 1) {
+            return true;
+        }
+
         // one from working to working
         return this.isWorkingDeck(source) && this.isWorkingDeck(destination);
 

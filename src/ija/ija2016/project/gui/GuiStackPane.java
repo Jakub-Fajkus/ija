@@ -11,8 +11,8 @@ import javafx.scene.layout.StackPane;
 
 abstract public class GuiStackPane extends StackPane implements GameObserverInterface {
     protected CardPool cardPool;
-    private CardDeckInterface pack;
-    private GameInterface game;
+    protected CardDeckInterface pack;
+    protected GameInterface game;
 
     public GuiStackPane(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
         this.pack = pack;
@@ -62,7 +62,6 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
     }
 
     private void dragOverWorking(DragEvent event) {
-
         Dragboard dragboard = event.getDragboard();
         if (dragboard.hasString()) {
             event.acceptTransferModes(TransferMode.MOVE);
