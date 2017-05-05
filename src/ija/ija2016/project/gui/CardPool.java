@@ -23,7 +23,7 @@ public class CardPool {
 
             //add image for the card
             Image image = new Image(getClass().getResource("./img/" + card.getValueAsString() + card.color() + ".png").toString());
-            this.images.put(card.toString(), image);
+            this.images.put(card.getValueAsString() + card.color(), image);
         }
 
         //add facing down image
@@ -34,7 +34,11 @@ public class CardPool {
         CardView view = this.cards.get(card);
         if (view != null) {
             if (card.isTurnedFaceUp()) {
-                view.init(this.images.get(card.toString()));
+//                view.init(this.images.get(card.toString()));
+                if (this.images.get(card.getValueAsString() + card.color()) == null) {
+                    System.out.println("AAAHA, you bitch");
+                }
+                view.init(this.images.get(card.getValueAsString() + card.color()));
             } else {
                 view.init(this.images.get(FACING_DOWN_IMAGE));
             }
