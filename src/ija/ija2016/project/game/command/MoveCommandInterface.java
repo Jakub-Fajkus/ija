@@ -49,6 +49,13 @@ public interface MoveCommandInterface extends GameCommandInterface {
     int getCount();
 
     /**
+     * Set the count of cards to move
+     *
+     * @param count
+     */
+    void setCount(int count);
+
+    /**
      * Set the game data used to redo the command.
      *
      * The data should represent the game BEFORE the command was executed.

@@ -136,6 +136,16 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
     }
 
     /**
+     * Set the count of cards to move
+     *
+     * @param count
+     */
+    @Override
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    /**
      * Set the game data used to redo the command.
      * <p>
      * The data should represent the game BEFORE the command was executed.

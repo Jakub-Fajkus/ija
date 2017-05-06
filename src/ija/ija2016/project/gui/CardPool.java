@@ -31,6 +31,8 @@ public class CardPool {
             } else {
                 view.init(this.imageStorage.getFacingDownImage());
             }
+
+//            view.removeShadow();
         } else {
             System.out.println("Card view is null!");
         }
@@ -50,6 +52,7 @@ public class CardPool {
             for (CardInterface card : cards) {
                 if (card.color() == value.getCard().color() && card.value() == value.getCard().value()) {
                     value.setCard(card);
+                    value.removeShadow();
                 }
             }
         }

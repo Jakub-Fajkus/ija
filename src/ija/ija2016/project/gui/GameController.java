@@ -121,6 +121,18 @@ public class GameController implements Initializable, GameObserverInterface {
             this.wstack6.setOnMousePressed(this::onStackMousePressed);
             this.wstack7.setOnMousePressed(this::onStackMousePressed);
 
+            for (Node node : this.wstack1.getChildren()) {
+                node.setOnMousePressed(this::onStackMousePressed);
+            }
+
+            this.wstack1.setOnMousePressed(this::onStackMousePressed);
+            this.wstack2.setOnMousePressed(this::onStackMousePressed);
+            this.wstack3.setOnMousePressed(this::onStackMousePressed);
+            this.wstack4.setOnMousePressed(this::onStackMousePressed);
+            this.wstack5.setOnMousePressed(this::onStackMousePressed);
+            this.wstack6.setOnMousePressed(this::onStackMousePressed);
+            this.wstack7.setOnMousePressed(this::onStackMousePressed);
+
             top_pane.add(this.drawing, 0, 0);
             top_pane.add(this.wasting, 1, 0);
 
@@ -165,36 +177,87 @@ public class GameController implements Initializable, GameObserverInterface {
             });
 
             this.actualMove = new MoveGameCommand(null, null, 1);
-
+            this.setMouseEventsOnAllCardViews();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("fail create stack");
         }
     }
 
-    private void onStackMousePressed(MouseEvent e) {
-        System.out.println("Mouse pressed on " + e.getSource());
+    private void setMouseEventsOnAllCardViews() {
+        this.setMouseEventOnCardViewsStackPane(this.wasting);
+        this.setMouseEventOnCardViewsStackPane(this.drawing);
+
+        this.setMouseEventOnCardViewsStackPane(this.target1);
+        this.setMouseEventOnCardViewsStackPane(this.target2);
+        this.setMouseEventOnCardViewsStackPane(this.target3);
+        this.setMouseEventOnCardViewsStackPane(this.target4);
+
+        this.setMouseEventOnCardViewsStackPane(this.wstack1);
+        this.setMouseEventOnCardViewsStackPane(this.wstack2);
+        this.setMouseEventOnCardViewsStackPane(this.wstack3);
+        this.setMouseEventOnCardViewsStackPane(this.wstack4);
+        this.setMouseEventOnCardViewsStackPane(this.wstack5);
+        this.setMouseEventOnCardViewsStackPane(this.wstack6);
+        this.setMouseEventOnCardViewsStackPane(this.wstack7);
+    }
+
+    private void setMouseEventOnCardViewsStackPane(GuiStackPane node) {
+        for (Node child : node.getChildren()) {
+            child.setOnMousePressed(this::onCardMousePressed);
+        }
+    }
+
+    private void onCardMousePressed(MouseEvent mouseEvent) {
+        System.out.println("onCardMousePressed on card" + mouseEvent.getSource());
+
+        CardView cardView = (CardView) mouseEvent.getSource();
 
         if (this.actualMove.getSource() == null) {
-            if (e.getSource() instanceof GuiStackPane) {
-                GuiStackPane pane = (GuiStackPane) e.getSource();
+            int countOfCards;
 
-                this.actualMove.setSource(pane.getPack());
-            }
-        } else {
+            //when there is no source, there should be no destination
+            this.actualMove.setDestination(null);
 
-            if (e.getSource() instanceof CardView) {
-                CardView cardView = (CardView) e.getSource();
-
-                cardView.setTranslateX(0);
-                cardView.setTranslateY(0 + cardView.getOffset());
-            } else if (e.getSource() instanceof TargetStackView || e.getSource() instanceof WorkingStackView) {
-                GuiStackPane stack = (GuiStackPane) e.getSource();
-                this.actualMove.setDestination(stack.getPack());
+            GameRuleValidator validator = new GameRuleValidator(this.game);
+            if (cardView.getContainingElement().getPack() == this.game.getWastingDeck() || validator.isTargetStack(cardView.getContainingElement().getPack())) {
+                countOfCards = 1;
             } else {
-                System.out.println("onStackMousePressed,, not a CardView, continuing");
+                countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20)));
+            }
+
+            System.out.println("Pocet karet: " + countOfCards + "\n");
+
+            if (!cardView.isTurnedFaceUp()) {
+                System.out.println("The card is not facing up!" + cardView.getCard().toString() + cardView.getCard().hashCode());
                 return;
             }
+
+            cardView.setShadow();
+//            int sizeOfSourceStack = cardView.getContainingElement().getChildren().size();
+//            for (int j = sizeOfSourceStack-1; j < countOfCards; j--) {
+//                CardView view = (CardView)cardView.getContainingElement().getChildren().get(j);
+//                view.setShadow();
+//            }
+
+            this.actualMove.setSource(cardView.getContainingElement().getPack());
+            this.actualMove.setCount(countOfCards);
+            mouseEvent.consume();
+        } else if (cardView.getContainingElement().getPack() == this.actualMove.getSource()) {
+            //the user clicked on the same card again
+            this.actualMove.setSource(null);
+            cardView.removeShadow();
+            mouseEvent.consume();
+        }
+    }
+
+    private void onStackMousePressed(MouseEvent e) {
+        System.out.println("onStackMousePressed on " + e.getSource());
+
+        GuiStackPane pane = (GuiStackPane) e.getSource();
+
+        if (actualMove.getDestination() == null) {
+            actualMove.setDestination(pane.getPack());
 
             if (this.actualMove == null || this.actualMove.getSource() == null || this.actualMove.getDestination() == null) {
 //                this.actualMove = new MoveGameCommand(null, null, 1);
@@ -221,6 +284,21 @@ public class GameController implements Initializable, GameObserverInterface {
                 this.actualMove.setDestination(null);
             }
         }
+
+//            if (e.getSource() instanceof CardView) {
+//                CardView cardView = (CardView) e.getSource();
+//
+//                cardView.setTranslateX(0);
+//                cardView.setTranslateY(0 + cardView.getOffset());
+//            } else if (e.getSource() instanceof TargetStackView || e.getSource() instanceof WorkingStackView) {
+//                GuiStackPane stack = (GuiStackPane) e.getSource();
+//                this.actualMove.setDestination(stack.getPack());
+//            } else {
+//                System.out.println("onStackMousePressed,, not a CardView, continuing");
+//                return;
+//            }
+
+
     }
 
     private void saveButtonClicked() {

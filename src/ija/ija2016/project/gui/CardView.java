@@ -1,6 +1,7 @@
 package ija.ija2016.project.gui;
 
 import ija.ija2016.project.model.cards.CardInterface;
+import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,8 +25,6 @@ public class CardView extends ImageView {
     }
 
     public void init(Image image) {
-//        DropShadow ds = new DropShadow(5, Color.GREEN);
-//        this.setEffect(ds);
         this.setImage(image);
         this.setFitHeight(145);
         this.setFitWidth(100);
@@ -59,5 +58,14 @@ public class CardView extends ImageView {
 
     public void setCard(CardInterface card) {
         this.card = card;
+    }
+
+    public void setShadow() {
+        DropShadow ds = new DropShadow(BlurType.ONE_PASS_BOX, new Color(0.3569, 0.5255, 1, 0.8), 20, 10, 0, 0);
+        this.setEffect(ds);
+    }
+
+    public void removeShadow() {
+        this.setEffect(null);
     }
 }
