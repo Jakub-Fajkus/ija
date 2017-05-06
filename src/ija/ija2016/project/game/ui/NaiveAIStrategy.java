@@ -49,11 +49,14 @@ public class NaiveAIStrategy implements AIStrategyInterface {
 
         //check if any card can be moved between a working and a working
         for (int i = 0; i < game.getWorkingCardStacks().length; i++) {
-            CardDeckInterface source = game.getTargetPacks()[i];
+            CardDeckInterface source = game.getWorkingCardStacks()[i];
             CardInterface card1 = source.get();
+            if (card1 == null) {
+                continue;
+            }
 
             for (int j = 0; i != j && j < game.getWorkingCardStacks().length; j++) {
-                CardDeckInterface target = game.getTargetPacks()[j];
+                CardDeckInterface target = game.getWorkingCardStacks()[j];
 
                 if (target.put(card1)) {
                     this.commands.add(new MoveGameCommand(source, target, 1));
@@ -65,11 +68,11 @@ public class NaiveAIStrategy implements AIStrategyInterface {
         //check if more cards can be moved between a working and a working
         //for each source deck
         for (int sourceIndex = 0; sourceIndex < game.getWorkingCardStacks().length; sourceIndex++) {
-            CardDeckInterface source = game.getTargetPacks()[sourceIndex];
+            CardDeckInterface source = game.getWorkingCardStacks()[sourceIndex];
 
             //for each destination deck, excluding the source
             for (int destinationIndex = 0; sourceIndex != destinationIndex && destinationIndex < game.getWorkingCardStacks().length; destinationIndex++) {
-                CardDeckInterface target = game.getTargetPacks()[destinationIndex];
+                CardDeckInterface target = game.getWorkingCardStacks()[destinationIndex];
 
                 //try to move the biggest possible number of cards
                 for (int numberOfCardsToMove = source.getNumberOfCardsFacingUp() - 1; numberOfCardsToMove >= 0; numberOfCardsToMove--) {
