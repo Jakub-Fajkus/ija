@@ -15,7 +15,7 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
     private CardDeckInterface source;
     private CardDeckInterface destination;
     private int count;
-    private transient byte[] gameData;
+    private byte[] gameData;
 
     public MoveGameCommand(CardDeckInterface source, CardDeckInterface destination, int count) {
         this.source = source;

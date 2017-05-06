@@ -1,9 +1,6 @@
 package ija.ija2016.project.gui;
 
-import ija.ija2016.project.game.GameFactory;
-import ija.ija2016.project.game.GameInterface;
-import ija.ija2016.project.game.GameObserverInterface;
-import ija.ija2016.project.game.GameRuleValidator;
+import ija.ija2016.project.game.*;
 import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import javafx.fxml.FXML;
@@ -23,6 +20,8 @@ public class GameController implements Initializable, GameObserverInterface {
     final DragContext dragContext = new DragContext();
     @FXML
     public GridPane main_window;
+
+    @FXML
     public Button btn__undo, btn__redo;
     // working stacks 1-7
     public GridPane working_pane;
@@ -162,12 +161,23 @@ public class GameController implements Initializable, GameObserverInterface {
             this.target4.setOnMouseReleased(this::handleOnMouseReleased);
 
             this.drawing.setOnMousePressed(this::getCardFromDrawingPack);
+            this.btn__undo.setOnMouseClicked(this::undoButtonClicked);
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("fail create stack");
         }
 
+    }
+
+    private void undoButtonClicked(MouseEvent mouseEvent) {
+        try {
+            this.game.undo();
+            System.out.println("UNDO DONE");
+        } catch (UndoException e) {
+            e.printStackTrace();
+            System.out.println("CANT UNDO!");
+        }
     }
 
     /**

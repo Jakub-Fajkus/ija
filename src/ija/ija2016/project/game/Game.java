@@ -129,20 +129,21 @@ public class Game implements GameInterface {
     public boolean move(MoveCommandInterface command) {
         //todo: create a defensive copy of the command? :D
 
-        //add the command into a history
-        history.add(command);
-
         //perform the command
         //on success, return true
         if (command.execute(this)) {
+            //add the command into a history
+            history.add(command);
+
             this.notifyObservers();
             return true;
         } else {
             //on failure, revert the state
             try {
-                this.init(command.undo());
+//                this.init(command.undo());
+                return this.undo() != null;
 
-                return false;
+//                return false;
             } catch (UndoException exception) {
                 //error occurred, cannot undo.. the world is over
                 exception.printStackTrace();
@@ -172,6 +173,12 @@ public class Game implements GameInterface {
      */
     @Override
     public MoveCommandInterface undo() throws UndoException {
+        if (this.history.empty()) {
+            return null;
+        }
+//        remove the last command
+//        this.history.pop();
+
         MoveCommandInterface command = this.history.pop();
         try {
             this.init(command.undo());
