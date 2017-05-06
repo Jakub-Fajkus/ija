@@ -22,7 +22,7 @@ public class GameController implements Initializable, GameObserverInterface {
     public GridPane main_window;
 
     @FXML
-    public Button btn__undo, btn__redo;
+    public Button btn__undo, btn__restart;
     // working stacks 1-7
     public GridPane working_pane;
     // top panel, target, wasting, drawing stacks
@@ -162,12 +162,17 @@ public class GameController implements Initializable, GameObserverInterface {
 
             this.drawing.setOnMousePressed(this::getCardFromDrawingPack);
             this.btn__undo.setOnMouseClicked(this::undoButtonClicked);
+            this.btn__restart.setOnMouseClicked(this::restartButtonClicked);
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("fail create stack");
         }
 
+    }
+
+    private void restartButtonClicked(MouseEvent mouseEvent) {
+        System.out.println("RESTARTING THE GAME" + this.game.restartGame());
     }
 
     private void undoButtonClicked(MouseEvent mouseEvent) {

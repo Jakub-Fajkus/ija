@@ -19,11 +19,10 @@ public class Game implements GameInterface {
     private CardDeckInterface drawingDeck;
     private CardDeckInterface wastingDeck;
     private CardStackInterface[] workingCardStacks;
-    private Stack<MoveCommandInterface> history;
+    private transient Stack<MoveCommandInterface> history;
     private transient ArrayList<GameObserverInterface> observers;
 
     public Game(AbstractFactorySolitaire factorySolitaire) {
-        this.history = new Stack<>();
         this.observers = new ArrayList<>();
 
         CardDeckInterface cardDeck = factorySolitaire.createShuffledCardDeck();
@@ -65,9 +64,11 @@ public class Game implements GameInterface {
         this.drawingDeck = drawingDeck;
         this.wastingDeck = wastingDeck;
         this.workingCardStacks = workingCardStacks;
-        this.history = history != null ? history : new Stack<>();
-
-
+        //if we have out history, so do not lose it
+        if (this.history != null && history == null) {
+        } else {
+            this.history = history;
+        }
     }
 
     /**
@@ -208,6 +209,28 @@ public class Game implements GameInterface {
     public MoveCommandInterface redo() throws RedoException {
         //delete? :D
         return null;
+    }
+
+    /**
+     * Get the game to the starting state.
+     * <p>
+     * This should restart the game state to state before the player started to play
+     *
+     * @return If the restart was successful, false otherwise
+     */
+    @Override
+    public boolean restartGame() {
+        while (!this.history.empty()) {
+            try {
+                this.undo();
+            } catch (UndoException e) {
+                e.printStackTrace();
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -85,7 +85,9 @@
                         <Insets top="15.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btn__redo" mnemonicParsing="false" prefHeight="31.0" prefWidth="103.0" style="-fx-background-color: linear-gradient(#fbfbfb,#959595);" text="REDO" GridPane.columnIndex="2" GridPane.valignment="TOP">
+                   <Button fx:id="btn__restart" mnemonicParsing="false" prefHeight="31.0" prefWidth="103.0"
+                           style="-fx-background-color: linear-gradient(#fbfbfb,#959595);" text="RESTART"
+                           GridPane.columnIndex="2" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets top="70.0" />
                      </GridPane.margin>

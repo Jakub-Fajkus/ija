@@ -76,6 +76,15 @@ public interface GameInterface extends Serializable {
     MoveCommandInterface redo() throws RedoException;
 
     /**
+     * Get the game to the starting state.
+     * <p>
+     * This should restart the game state to state before the player started to play
+     *
+     * @return If the restart was successful, false otherwise
+     */
+    boolean restartGame();
+
+    /**
      * Get hints for the next move.
      *
      * @throws TipException When there is no move to be performed. There is no way of finishing the game.
