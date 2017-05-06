@@ -24,8 +24,8 @@ public class CardView extends ImageView {
     }
 
     public void init(Image image) {
-        DropShadow ds = new DropShadow(5, Color.GREEN);
-        this.setEffect(ds);
+//        DropShadow ds = new DropShadow(5, Color.GREEN);
+//        this.setEffect(ds);
         this.setImage(image);
         this.setFitHeight(145);
         this.setFitWidth(100);

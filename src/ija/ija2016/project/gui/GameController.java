@@ -5,10 +5,13 @@ import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -24,9 +27,11 @@ public class GameController implements Initializable, GameObserverInterface {
     final DragContext dragContext = new DragContext();
     @FXML
     public GridPane main_window;
+    @FXML
+    public MenuItem saveMenu, loadMenu, restartMenu;
 
     @FXML
-    public Button btn__undo, btn__restart, btn__load, btn__save;
+    public Button btn__undo;
     // working stacks 1-7
     public GridPane working_pane;
     // top panel, target, wasting, drawing stacks
@@ -91,7 +96,6 @@ public class GameController implements Initializable, GameObserverInterface {
     }
 
     public void createGame() {
-
         try {
             working_pane.add(this.wstack1, 0, 0);
             working_pane.add(this.wstack2, 1, 0);
@@ -141,9 +145,24 @@ public class GameController implements Initializable, GameObserverInterface {
 
             this.drawing.setOnMousePressed(this::getCardFromDrawingPack);
             this.btn__undo.setOnMouseClicked(this::undoButtonClicked);
-            this.btn__restart.setOnMouseClicked(this::restartButtonClicked);
-            this.btn__save.setOnMouseClicked(this::saveButtonClicked);
-            this.btn__load.setOnMouseClicked(this::loadButtonClicked);
+
+            saveMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    saveButtonClicked();
+                }
+            });
+
+            loadMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    loadButtonClicked();
+                }
+            });
+
+            restartMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    restartButtonClicked();
+                }
+            });
 
             this.actualMove = new MoveGameCommand(null, null, 1);
 
@@ -204,11 +223,11 @@ public class GameController implements Initializable, GameObserverInterface {
         }
     }
 
-    private void saveButtonClicked(MouseEvent mouseEvent) {
+    private void saveButtonClicked() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save game");
 
-        File file = fileChooser.showSaveDialog(this.btn__save.getScene().getWindow());
+        File file = fileChooser.showSaveDialog(this.working_pane.getScene().getWindow());
         if (file != null) {
             try {
                 this.game.persistState(file.getPath());
@@ -220,11 +239,11 @@ public class GameController implements Initializable, GameObserverInterface {
         }
     }
 
-    private void loadButtonClicked(MouseEvent mouseEvent) {
+    private void loadButtonClicked() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load game");
 
-        File file = fileChooser.showOpenDialog(this.btn__save.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(this.working_pane.getScene().getWindow());
         if (file != null) {
             try {
                 this.game.loadState(file.getPath());
@@ -236,7 +255,7 @@ public class GameController implements Initializable, GameObserverInterface {
         }
     }
 
-    private void restartButtonClicked(MouseEvent mouseEvent) {
+    private void restartButtonClicked() {
         System.out.println("RESTARTING THE GAME" + this.game.restartGame());
     }
 
@@ -322,6 +341,7 @@ public class GameController implements Initializable, GameObserverInterface {
         double offsetX = event.getSceneX() - dragContext.x;
         double offsetY = event.getSceneY() - dragContext.y;
 
+        System.out.print(node.toString());
         node.getParent().toFront();
         node.setTranslateX(offsetX);
         node.setTranslateY(offsetY);
