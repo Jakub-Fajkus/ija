@@ -3,13 +3,17 @@ package ija.ija2016.project.gui;
 import ija.ija2016.project.game.*;
 import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
+import ija.ija2016.project.game.persistence.LoadStateException;
+import ija.ija2016.project.game.persistence.PersistStateException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,7 +26,7 @@ public class GameController implements Initializable, GameObserverInterface {
     public GridPane main_window;
 
     @FXML
-    public Button btn__undo, btn__restart;
+    public Button btn__undo, btn__restart, btn__load, btn__save;
     // working stacks 1-7
     public GridPane working_pane;
     // top panel, target, wasting, drawing stacks
@@ -163,12 +167,45 @@ public class GameController implements Initializable, GameObserverInterface {
             this.drawing.setOnMousePressed(this::getCardFromDrawingPack);
             this.btn__undo.setOnMouseClicked(this::undoButtonClicked);
             this.btn__restart.setOnMouseClicked(this::restartButtonClicked);
+            this.btn__save.setOnMouseClicked(this::saveButtonClicked);
+            this.btn__load.setOnMouseClicked(this::loadButtonClicked);
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("fail create stack");
         }
+    }
 
+    private void saveButtonClicked(MouseEvent mouseEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save game");
+
+        File file = fileChooser.showSaveDialog(this.btn__save.getScene().getWindow());
+        if (file != null) {
+            try {
+                this.game.persistState(file.getPath());
+                System.out.println("SUCCESSfuly saved");
+            } catch (PersistStateException e) {
+                e.printStackTrace();
+                System.out.println("Can not save");
+            }
+        }
+    }
+
+    private void loadButtonClicked(MouseEvent mouseEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load game");
+
+        File file = fileChooser.showOpenDialog(this.btn__save.getScene().getWindow());
+        if (file != null) {
+            try {
+                this.game.loadState(file.getPath());
+                System.out.println("SUCCESSfuly loaded");
+            } catch (LoadStateException e) {
+                e.printStackTrace();
+                System.out.println("Can not load");
+            }
+        }
     }
 
     private void restartButtonClicked(MouseEvent mouseEvent) {
