@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
@@ -28,7 +29,7 @@ public class GameController implements Initializable, GameObserverInterface {
     @FXML
     public GridPane main_window;
     @FXML
-    public MenuItem saveMenu, loadMenu, restartMenu;
+    public MenuItem saveMenu, loadMenu, restartMenu, newGameMenu;
 
     @FXML
     public Button btn__undo;
@@ -176,12 +177,23 @@ public class GameController implements Initializable, GameObserverInterface {
                 }
             });
 
+            newGameMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    newGameButtonClicked();
+                }
+            });
+
             this.actualMove = new MoveGameCommand(null, null, 1);
             this.setMouseEventsOnAllCardViews();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("fail create stack");
         }
+    }
+
+    private void newGameButtonClicked() {
+        this.game.initializeWithCards((new GameFactory()).getNewCardDeck());
     }
 
     private void setMouseEventsOnAllCardViews() {
@@ -277,6 +289,15 @@ public class GameController implements Initializable, GameObserverInterface {
 
             if (this.game.move(this.actualMove)) {
                 System.out.println("MOVED");
+
+                if (this.game.isFinished()) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Konec hry");
+                    alert.setHeaderText("Vyhráli jste, gratulujeme");
+
+                    alert.showAndWait();
+                }
+
                 this.actualMove = new MoveGameCommand(null, null, 1);
 
             } else {

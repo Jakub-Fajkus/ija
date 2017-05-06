@@ -45,6 +45,14 @@ public interface GameInterface extends Serializable {
     boolean move(CardDeckInterface source, CardDeckInterface destination);
 
     /**
+     * Add a deck of cards to the game. The cards will be redistributed to appropriate stacks.
+     * <p>
+     * All observers will be notified about the change
+     */
+    void initializeWithCards(CardDeckInterface deck);
+
+
+    /**
      * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, int count)}
      *
      * @param command MoveCommandInterface instance

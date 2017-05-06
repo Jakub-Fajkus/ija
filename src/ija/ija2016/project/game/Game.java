@@ -21,34 +21,14 @@ public class Game implements GameInterface {
     private CardStackInterface[] workingCardStacks;
     private transient Stack<MoveCommandInterface> history;
     private transient ArrayList<GameObserverInterface> observers;
+    private transient AbstractFactorySolitaire factorySolitaire;
 
     public Game(AbstractFactorySolitaire factorySolitaire) {
         this.observers = new ArrayList<>();
+        this.factorySolitaire = factorySolitaire;
 
         CardDeckInterface cardDeck = factorySolitaire.createShuffledCardDeck();
-
-        CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
-        for (CardInterface.Color color : CardInterface.Color.values()) {
-            targetPacks[this.getTargetPackIndexForColor(color)] = factorySolitaire.createTargetPack(color);
-        }
-
-        CardStackInterface[] workingCardStacks = new CardStackInterface[factorySolitaire.getCountOfWorkingStacks()];
-        for (int i = 0; i < factorySolitaire.getCountOfWorkingStacks(); i++) {
-            workingCardStacks[i] = factorySolitaire.createWorkingPack();
-
-            for (int j = 0; j <= i; j++) {
-                CardInterface card = cardDeck.pop();
-                if (!workingCardStacks[i].put(card)) {
-                    System.out.println("Could not add a card " + card);
-                }
-            }
-
-            if (workingCardStacks[i].get() != null) {
-                workingCardStacks[i].get().turnFaceUp();
-            }
-        }
-
-        this.init(targetPacks, cardDeck, factorySolitaire.createWastingDeck(), workingCardStacks, new Stack<>());
+        this.initializeWithCards(cardDeck);
     }
 
     /**
@@ -69,6 +49,8 @@ public class Game implements GameInterface {
         } else {
             this.history = history;
         }
+
+        this.notifyObservers();
     }
 
     /**
@@ -122,6 +104,37 @@ public class Game implements GameInterface {
     }
 
     /**
+     * Add a deck of cards to the game. The cards will be redistributed to appropriate stacks.
+     *
+     * @param deck
+     */
+    @Override
+    public void initializeWithCards(CardDeckInterface deck) {
+        CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
+        for (CardInterface.Color color : CardInterface.Color.values()) {
+            targetPacks[this.getTargetPackIndexForColor(color)] = factorySolitaire.createTargetPack(color);
+        }
+
+        CardStackInterface[] workingCardStacks = new CardStackInterface[factorySolitaire.getCountOfWorkingStacks()];
+        for (int i = 0; i < factorySolitaire.getCountOfWorkingStacks(); i++) {
+            workingCardStacks[i] = factorySolitaire.createWorkingPack();
+
+            for (int j = 0; j <= i; j++) {
+                CardInterface card = deck.pop();
+                if (!workingCardStacks[i].put(card)) {
+                    System.out.println("Could not add a card " + card);
+                }
+            }
+
+            if (workingCardStacks[i].get() != null) {
+                workingCardStacks[i].get().turnFaceUp();
+            }
+        }
+
+        this.init(targetPacks, deck, factorySolitaire.createWastingDeck(), workingCardStacks, new Stack<>());
+    }
+
+    /**
      * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, int count)}
      *
      * @param command MoveCommandInterface instance
@@ -151,9 +164,8 @@ public class Game implements GameInterface {
                 //error occurred, cannot undo.. the world is over
                 exception.printStackTrace();
 
-                return false;
-            } finally {
                 this.notifyObservers();
+                return false;
             }
         }
     }
@@ -187,11 +199,10 @@ public class Game implements GameInterface {
         } catch (UndoException exception) {
             //error occurred, cannot undo.. the world is over
             exception.printStackTrace();
-            return null;
-        } finally {
             this.notifyObservers();
-        }
 
+            return null;
+        }
 
         return command;
     }
@@ -267,7 +278,7 @@ public class Game implements GameInterface {
     public void loadState(String path) throws LoadStateException {
         FilesystemFactory factory = new FilesystemFactory();
         this.init(factory.getLoader().loadState(path));
-        this.notifyObservers();
+//        this.notifyObservers();
     }
 
     /**
@@ -279,7 +290,13 @@ public class Game implements GameInterface {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        int countOfCardsInTheTargets = 0;
+
+        for (CardDeckInterface deck : this.targetPacks) {
+            countOfCardsInTheTargets += deck.size();
+        }
+
+        return countOfCardsInTheTargets == this.getAllCards().size();
     }
 
     @Override
