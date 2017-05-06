@@ -94,6 +94,16 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
     }
 
     /**
+     * Set source of the move
+     *
+     * @param source
+     */
+    @Override
+    public void setSource(CardDeckInterface source) {
+        this.source = source;
+    }
+
+    /**
      * Get the destination of the move
      *
      * @return CardDeckInterface Card deck which is the destination.

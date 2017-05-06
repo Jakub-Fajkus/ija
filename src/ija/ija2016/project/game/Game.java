@@ -141,8 +141,10 @@ public class Game implements GameInterface {
         } else {
             //on failure, revert the state
             try {
-//                this.init(command.undo());
-                return this.undo() != null;
+                this.init(command.undo());
+
+                return true;
+//                return this.undo() != null;
 
 //                return false;
             } catch (UndoException exception) {
@@ -174,11 +176,10 @@ public class Game implements GameInterface {
      */
     @Override
     public MoveCommandInterface undo() throws UndoException {
+        System.out.println("GAME: undoing");
         if (this.history.empty()) {
             return null;
         }
-//        remove the last command
-//        this.history.pop();
 
         MoveCommandInterface command = this.history.pop();
         try {
@@ -267,6 +268,18 @@ public class Game implements GameInterface {
         FilesystemFactory factory = new FilesystemFactory();
         this.init(factory.getLoader().loadState(path));
         this.notifyObservers();
+    }
+
+    /**
+     * Check if the game is already finished - all cards are on the target stacks
+     * <p>
+     * This method will count all cards in the target stacks and compare it to the overall card count
+     *
+     * @return
+     */
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 
     @Override

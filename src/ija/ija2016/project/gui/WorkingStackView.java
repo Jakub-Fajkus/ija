@@ -40,4 +40,11 @@ public class WorkingStackView extends GuiStackPane {
 
         super.updateOnGameChange();
     }
+
+    @Override
+    public String toString() {
+        return "WorkingStackView{" +
+                "orderNumber=" + orderNumber +
+                '}';
+    }
 }

@@ -23,5 +23,12 @@ public class TargetStackView extends GuiStackPane {
 
         super.updateOnGameChange();
     }
+
+    @Override
+    public String toString() {
+        return "TargetStackView{" +
+                "orderNumber=" + orderNumber +
+                '}';
+    }
 }
 

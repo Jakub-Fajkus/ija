@@ -20,4 +20,9 @@ public class WastingPackView extends GuiStackPane {
 
         super.updateOnGameChange();
     }
+
+    @Override
+    public String toString() {
+        return "WastingPackView{}";
+    }
 }

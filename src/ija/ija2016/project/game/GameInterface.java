@@ -109,6 +109,15 @@ public interface GameInterface extends Serializable {
     void loadState(String path) throws LoadStateException;
 
     /**
+     * Check if the game is already finished - all cards are on the target stacks
+     * <p>
+     * This method will count all cards in the target stacks and compare it to the overall card count
+     *
+     * @return
+     */
+    boolean isFinished();
+
+    /**
      * Initialize the inner state of the game with the given objects.
      *
      * @param targetPacks

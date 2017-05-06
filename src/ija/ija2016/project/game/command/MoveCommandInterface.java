@@ -19,6 +19,13 @@ public interface MoveCommandInterface extends GameCommandInterface {
     CardDeckInterface getSource();
 
     /**
+     * Set source of the move
+     *
+     * @param source
+     */
+    void setSource(CardDeckInterface source);
+
+    /**
      * Get the destination of the move
      *
      * @return CardDeckInterface Card deck which is the destination.
@@ -27,6 +34,8 @@ public interface MoveCommandInterface extends GameCommandInterface {
 
     /**
      * Set destination of the move
+     *
+     * @param destination
      */
     void setDestination(CardDeckInterface destination);
 
