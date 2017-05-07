@@ -166,12 +166,5 @@ public interface GameInterface extends Serializable {
      * @param observer
      */
     void addObserver(GameObserverInterface observer);
-
-    /**
-     * Load the game state from the given object
-     *
-     * @param state
-     */
-    void loadState(GameState state);
 }
 

@@ -229,8 +229,11 @@ public class Game implements GameInterface {
     @Override
     public ArrayList<MoveCommandInterface> tip() throws TipException {
         //save the current state as the strategy may change the game state
-        MoveCommandInterface moveCommand = new MoveGameCommand(null, null, 1);
-        this.move(moveCommand);
+        GameHistory newSnapshot = new GameHistory(null, this.state, this);
+
+        //save the current game state
+        newSnapshot.saveGameState();
+        this.history.add(newSnapshot);
 
         ArrayList<MoveCommandInterface> tips = (new AIFactory()).getAI().getPossibleMoves(this);
 
@@ -336,16 +339,6 @@ public class Game implements GameInterface {
         if (observer != null) {
             this.observers.add(observer);
         }
-    }
-
-    /**
-     * Load the game state from the given object
-     *
-     * @param state
-     */
-    @Override
-    public void loadState(GameState state) {
-        this.state.initFrom(state);
     }
 
     /**

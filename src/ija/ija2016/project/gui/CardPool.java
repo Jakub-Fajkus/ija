@@ -32,7 +32,7 @@ public class CardPool {
                 view.init(this.imageStorage.getFacingDownImage());
             }
 
-//            view.removeShadow();
+            view.removeShadow();
         } else {
             System.out.println("Card view is null!");
         }

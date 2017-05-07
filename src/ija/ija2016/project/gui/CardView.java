@@ -33,7 +33,7 @@ public class CardView extends ImageView {
     }
 
     public double getOffset() {
-        return offset;
+        return this.offset;
     }
 
     public void setOffset(double offset) {
@@ -41,7 +41,7 @@ public class CardView extends ImageView {
     }
 
     public GuiStackPane getContainingElement() {
-        return containingElement;
+        return this.containingElement;
     }
 
     public void setContainingElement(GuiStackPane containingElement) {
@@ -53,19 +53,24 @@ public class CardView extends ImageView {
     }
 
     public CardInterface getCard() {
-        return card;
+        return this.card;
     }
 
     public void setCard(CardInterface card) {
         this.card = card;
     }
 
-    public void setShadow() {
+    public void setSelectedShadow() {
         DropShadow ds = new DropShadow(BlurType.ONE_PASS_BOX, new Color(0.3569, 0.5255, 1, 0.8), 20, 10, 0, 0);
         this.setEffect(ds);
     }
 
     public void removeShadow() {
         this.setEffect(null);
+    }
+
+    public void setTipShadow() {
+        DropShadow ds = new DropShadow(BlurType.ONE_PASS_BOX, new Color(1, 0.9882, 0.149, 0.8), 20, 10, 0, 0);
+        this.setEffect(ds);
     }
 }

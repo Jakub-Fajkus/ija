@@ -49,23 +49,30 @@ public class NaiveAIStrategy implements AIStrategyInterface {
             card = null;
         }
 
-        //check if any card can be moved between a working and a working
-        for (int i = 0; i < game.getWorkingCardStacks().length; i++) {
-            CardDeckInterface source = game.getWorkingCardStacks()[i];
-            CardInterface card1 = source.get();
-            if (card1 == null) {
-                continue;
-            }
-
-            for (int j = 0; i != j && j < game.getWorkingCardStacks().length; j++) {
-                CardDeckInterface target = game.getWorkingCardStacks()[j];
-
-                if (target.put(card1)) {
-                    this.commands.add(new MoveGameCommand(source, target, 1));
-                    target.pop();
-                }
-            }
+        //check if the card from the wasting could be moved to the workings
+        card = game.getWastingDeck().get();
+        if (card != null) {
+            this.tryToMoveToWorkings(game.getWastingDeck(), card);
+            card = null;
         }
+
+//        //check if any card can be moved from wasting to and a working
+//        for (int i = 0; i < game.getWorkingCardStacks().length; i++) {
+//            CardDeckInterface source = game.getWorkingCardStacks()[i];
+//            CardInterface card1 = source.get();
+//            if (card1 == null) {
+//                continue;
+//            }
+//
+//            for (int j = 0; i != j && j < game.getWorkingCardStacks().length; j++) {
+//                CardDeckInterface target = game.getWorkingCardStacks()[j];
+//
+//                if (target.put(card1)) {
+//                    this.commands.add(new MoveGameCommand(source, target, 1));
+//                    target.pop();
+//                }
+//            }
+//        }
 
         //check if more cards can be moved between a working and a working
         //for each source deck
@@ -73,11 +80,20 @@ public class NaiveAIStrategy implements AIStrategyInterface {
             CardDeckInterface source = game.getWorkingCardStacks()[sourceIndex];
 
             //for each destination deck, excluding the source
-            for (int destinationIndex = 0; sourceIndex != destinationIndex && destinationIndex < game.getWorkingCardStacks().length; destinationIndex++) {
+            for (int destinationIndex = 0; destinationIndex < game.getWorkingCardStacks().length; destinationIndex++) {
+                if (sourceIndex == destinationIndex) {
+                    continue;
+                }
+
                 CardDeckInterface target = game.getWorkingCardStacks()[destinationIndex];
 
                 //try to move the biggest possible number of cards
-                for (int numberOfCardsToMove = source.getNumberOfCardsFacingUp() - 1; numberOfCardsToMove >= 0; numberOfCardsToMove--) {
+//                for (int numberOfCardsToMove = source.getNumberOfCardsFacingUp() - 1; numberOfCardsToMove >= 0; numberOfCardsToMove--) {
+                for (int numberOfCardsToMove = source.getNumberOfCardsFacingUp(); numberOfCardsToMove >= 0; numberOfCardsToMove--) {
+                    if (numberOfCardsToMove == 0) {
+                        continue;
+                    }
+
                     CardInterface cards[] = new CardInterface[numberOfCardsToMove];
 
                     for (int i = 0; i < numberOfCardsToMove; i++) {
@@ -106,6 +122,14 @@ public class NaiveAIStrategy implements AIStrategyInterface {
             }
         }
 
+        if (game.getDrawingDeck().isEmpty()) {
+            this.commands.add(new MoveGameCommand(game.getWastingDeck(), game.getDrawingDeck(), 0));
+        } else {
+            this.commands.add(new MoveGameCommand(game.getDrawingDeck(), game.getWastingDeck(), 1));
+        }
+/**/
+
+        //clean the inner state
         ArrayList<MoveCommandInterface> returnCommands = this.commands;
         this.commands = null;
         this.game = null;
@@ -116,6 +140,16 @@ public class NaiveAIStrategy implements AIStrategyInterface {
     private void tryToMoveToTargets(CardDeckInterface source, CardInterface card) {
         for (int j = 0; j < this.game.getTargetPacks().length; j++) {
             CardDeckInterface target = this.game.getTargetPacks()[j];
+            if (target.put(card)) {
+                this.commands.add(new MoveGameCommand(source, target, 1));
+                target.pop();
+            }
+        }
+    }
+
+    private void tryToMoveToWorkings(CardDeckInterface source, CardInterface card) {
+        for (int j = 0; j < this.game.getWorkingCardStacks().length; j++) {
+            CardDeckInterface target = this.game.getWorkingCardStacks()[j];
             if (target.put(card)) {
                 this.commands.add(new MoveGameCommand(source, target, 1));
                 target.pop();

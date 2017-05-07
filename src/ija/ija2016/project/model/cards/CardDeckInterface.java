@@ -73,6 +73,12 @@ public interface CardDeckInterface extends Serializable {
     ArrayList<CardInterface> getAll();
 
     /**
+     * Remove all cards from the deck
+     */
+    void removeAll();
+
+
+    /**
      * Test, zda je balíček karet prázdný.
      *
      * @return Vrací true, pokud je balíček prázdný.

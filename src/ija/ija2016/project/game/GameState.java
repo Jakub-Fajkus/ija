@@ -13,6 +13,16 @@ public class GameState implements Serializable {
     private CardStackInterface[] workingCardStacks;
     private ArrayList<CardInterface> allCards;
 
+    /**
+     * Create a game state from the given stacks
+     * <p>
+     * The decks will be directly stored - no copying is performed
+     *
+     * @param targetPacks
+     * @param drawingDeck
+     * @param wastingDeck
+     * @param workingCardStacks
+     */
     public GameState(TargetCardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks) {
         this.targetPacks = targetPacks;
         this.drawingDeck = drawingDeck;
@@ -22,11 +32,13 @@ public class GameState implements Serializable {
         this.initAllCards();
     }
 
+    /**
+     * Copying constructor - the state given will be copied in this state
+     *
+     *
+     * @param state
+     */
     public GameState(GameState state) {
-        this.initFrom(state);
-    }
-
-    public void initFrom(GameState state) {
         FactoryKlondike factory = new FactoryKlondike();
 
         this.allCards = new ArrayList<>();
@@ -44,6 +56,30 @@ public class GameState implements Serializable {
             this.workingCardStacks[i] = factory.createWorkingPack();
         }
 
+        this.initFrom(state);
+    }
+
+    /**
+     * Initialize the current state from the given state
+     * <p>
+     * The references to the stacks will not be changed. Only their content will be changed.
+     *
+     * @param state
+     */
+    public void initFrom(GameState state) {
+        //remove all cards
+        for (int i = 0; i < this.targetPacks.length; i++) {
+            this.targetPacks[i].removeAll();
+        }
+
+        for (int i = 0; i < this.workingCardStacks.length; i++) {
+            this.workingCardStacks[i].removeAll();
+        }
+
+        this.drawingDeck.removeAll();
+        this.wastingDeck.removeAll();
+
+
         //copy all cards for all working stacks
         this.copyAllCards(state.getWorkingCardStacks(), this.getWorkingCardStacks());
 
@@ -54,9 +90,12 @@ public class GameState implements Serializable {
         this.putAllCardsTo(state.getDrawingDeck().getAll(), this.getDrawingDeck());
         this.putAllCardsTo(state.getWastingDeck().getAll(), this.getWastingDeck());
 
-//        this.initAllCards();
+        this.initAllCards();
     }
 
+    /**
+     * Fill the inner list of cards with the cards from all stacks
+     */
     protected void initAllCards() {
         this.allCards = new ArrayList<>();
 

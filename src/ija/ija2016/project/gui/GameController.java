@@ -14,8 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -211,6 +214,7 @@ public class GameController implements Initializable, GameObserverInterface {
 
     private void tipButtonClicked() {
         if (this.tips == null) {
+            System.out.println("Tips == null, trying to get the tips!");
             try {
                 this.tips = this.game.tip();
                 if (this.tips.isEmpty()) {
@@ -223,9 +227,14 @@ public class GameController implements Initializable, GameObserverInterface {
         }
 
         //get the first tip
+        if (this.tips.isEmpty()) {
+            System.out.println("No tips available");
+
+            return;
+        }
+
         MoveCommandInterface move = this.tips.get(0);
         this.tips.remove(0);
-
 
         try {
             //find the source gui element
@@ -233,6 +242,28 @@ public class GameController implements Initializable, GameObserverInterface {
             GuiStackPane destination = this.findViewContainingDeck(move.getDestination());
 
             System.out.println("Show tip from " + source.toString() + " to " + destination.toString() + " with count " + move.getCount());
+
+            if (source == this.drawing && destination == this.wasting) {
+                source.setEffect(new DropShadow(BlurType.ONE_PASS_BOX, new Color(1, 0.9882, 0.149, 0.8), 20, 10, 0, 0));
+                return;
+            }
+
+            if (destination instanceof TargetStackView || destination instanceof DrawingPackView) {
+                destination.setEffect(new DropShadow(BlurType.ONE_PASS_BOX, new Color(1, 0.9882, 0.149, 0.8), 20, 10, 0, 0));
+
+                if (source instanceof TargetStackView || source instanceof DrawingPackView) {
+                    destination.setEffect(new DropShadow(BlurType.ONE_PASS_BOX, new Color(1, 0.9882, 0.149, 0.8), 20, 10, 0, 0));
+                }
+            } else {
+                if (!source.getChildren().isEmpty() && !destination.getChildren().isEmpty()) {
+                    CardView destinationCardView = (CardView) destination.getChildren().get(destination.getChildren().size() - 1);
+                    destinationCardView.setTipShadow();
+                }
+            }
+
+            CardView sourceCardView = (CardView) source.getChildren().get(source.getChildren().size() - 1);
+            sourceCardView.setTipShadow();
+
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -250,7 +281,6 @@ public class GameController implements Initializable, GameObserverInterface {
 
         throw new Exception("NO pane found for deck " + deck);
     }
-
 
     private void newGameButtonClicked() {
         this.game.initializeWithCards((new GameFactory()).getNewCardDeck());
@@ -295,7 +325,8 @@ public class GameController implements Initializable, GameObserverInterface {
             if (cardView.getContainingElement().getPack() == this.game.getWastingDeck() || validator.isTargetStack(cardView.getContainingElement().getPack())) {
                 countOfCards = 1;
             } else {
-                countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20)));
+                //todo: better formula!? count the position in the inner array?
+                countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 15)));
             }
 
             System.out.println("Pocet karet: " + countOfCards + "\n");
@@ -305,7 +336,7 @@ public class GameController implements Initializable, GameObserverInterface {
                 return;
             }
 
-            cardView.setShadow();
+            cardView.setSelectedShadow();
 
             this.actualMove.setSource(cardView.getContainingElement().getPack());
             this.actualMove.setCount(countOfCards);
@@ -352,13 +383,11 @@ public class GameController implements Initializable, GameObserverInterface {
 
                     alert.showAndWait();
                 }
-
-                this.actualMove = new MoveGameCommand(null, null, 1);
-
             } else {
                 System.out.println("NOT MOVED");
-                this.actualMove = new MoveGameCommand(null, null, 1);
             }
+
+            this.actualMove = new MoveGameCommand(null, null, 1);
         }
     }
 
@@ -432,12 +461,26 @@ public class GameController implements Initializable, GameObserverInterface {
                 System.out.println("did not transfered");
             }
         }
+
+        this.actualMove = new MoveGameCommand(null, null, 1);
     }
 
     @Override
     public void updateOnGameChange() {
-        System.out.println("updating the game state!");
+        System.out.println("GameController:updateOnGameChange updating the game state!");
         this.cardPool.updateCards(this.game.getAllCards());
+        this.actualMove = new MoveGameCommand(null, null, 1);
         this.tips = null;
+
+        for (WorkingStackView working : this.workingStacks) {
+            working.setEffect(null);
+        }
+
+        for (TargetStackView target : this.targetStacks) {
+            target.setEffect(null);
+        }
+
+        this.drawing.setEffect(null);
+        this.wasting.setEffect(null);
     }
 }

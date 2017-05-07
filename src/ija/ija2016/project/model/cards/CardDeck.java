@@ -106,6 +106,14 @@ public class CardDeck implements CardDeckInterface {
     }
 
     /**
+     * Remove all cards from the deck
+     */
+    @Override
+    public void removeAll() {
+        this.cards.clear();
+    }
+
+    /**
      * Test, zda je balíček karet prázdný.
      *
      * @return Vrací true, pokud je balíček prázdný.

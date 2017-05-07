@@ -27,7 +27,7 @@ public class GameHistory {
      * This equals to the undo operation
      */
     public void undoCommand() {
-        this.game.getState().initFrom(this.state); //todo: equivalent? to this.game.loadState(this.state);
+        this.game.getState().initFrom(this.state);
     }
 
     /**
