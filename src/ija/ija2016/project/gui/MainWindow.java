@@ -124,7 +124,7 @@ public class MainWindow extends Application implements Initializable {
         if (this.gameCounter == 4) {
             return;
         } else if (this.gameCounter == 0) {
-            main_window.add(gameRoot, 1, 0);
+            main_window.add(gameRoot, 0, 0);
             game1 = new MenuItem("Hra 1");
             this.closeGameMenu.getItems().addAll(game1);
             this.game1.setOnAction(new EventHandler<ActionEvent>() {
@@ -168,26 +168,60 @@ public class MainWindow extends Application implements Initializable {
     }
 
     public void closeGameHandler(int id) {
-
         if (id == 1) {
             Node res = getNodeByRowColumnIndex(0, 0, this.main_window);
             this.main_window.getChildren().removeAll(res);
-            this.closeGameMenu.getItems().removeAll(game1);
+
+            Node g2 = getNodeByRowColumnIndex(0, 1, this.main_window);
+            Node g3 = getNodeByRowColumnIndex(1, 0, this.main_window);
+            Node g4 = getNodeByRowColumnIndex(1, 1, this.main_window);
+
+            if (g4 != null) {
+                this.main_window.getChildren().removeAll(g4);
+                this.main_window.add(g4, 0, 1);
+            }
+            if (g3 != null) {
+                this.main_window.getChildren().removeAll(g3);
+                this.main_window.add(g3, 1, 0);
+            }
+            if (g2 != null) {
+                this.main_window.getChildren().removeAll(g2);
+                this.main_window.add(g2, 0, 0);
+            }
+
         } else if (id == 2) {
             Node res = getNodeByRowColumnIndex(0, 1, this.main_window);
             this.main_window.getChildren().removeAll(res);
-            this.closeGameMenu.getItems().removeAll(game2);
+
+            Node g3 = getNodeByRowColumnIndex(1, 0, this.main_window);
+            if (g3 != null) {
+                this.main_window.getChildren().removeAll(g3);
+                this.main_window.add(g3, 1, 0);
+            }
+
+            Node g4 = getNodeByRowColumnIndex(1, 1, this.main_window);
+            if (g4 != null) {
+                this.main_window.getChildren().removeAll(g4);
+                this.main_window.add(g4, 0, 1);
+            }
+
         } else if (id == 3) {
             Node res = getNodeByRowColumnIndex(1, 0, this.main_window);
             this.main_window.getChildren().removeAll(res);
-            this.closeGameMenu.getItems().removeAll(game3);
+            Node g4 = getNodeByRowColumnIndex(1, 1, this.main_window);
+            if (g4 != null) {
+                this.main_window.getChildren().removeAll(g4);
+                this.main_window.add(g4, 0, 1);
+            }
         } else if (id == 4) {
             Node res = getNodeByRowColumnIndex(1, 1, this.main_window);
             this.main_window.getChildren().removeAll(res);
-            this.closeGameMenu.getItems().removeAll(game4);
         }
-        System.out.print(this.gameCounter);
         this.gameCounter--;
+        removeMenuGames();
+        if (this.gameCounter == 1) {
+            primaryStageCover.setMaximized(false);
+        }
     }
 
     public Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
@@ -202,6 +236,25 @@ public class MainWindow extends Application implements Initializable {
         }
 
         return result;
+    }
+
+    public void removeMenuGames() {
+        if (this.gameCounter == 0) {
+            this.closeGameMenu.getItems().removeAll(game1);
+            this.closeGameMenu.getItems().removeAll(game2);
+            this.closeGameMenu.getItems().removeAll(game3);
+            this.closeGameMenu.getItems().removeAll(game4);
+        }
+        if (this.gameCounter == 1) {
+            this.closeGameMenu.getItems().removeAll(game2);
+            this.closeGameMenu.getItems().removeAll(game3);
+            this.closeGameMenu.getItems().removeAll(game4);
+        } else if (this.gameCounter == 2) {
+            this.closeGameMenu.getItems().removeAll(game3);
+            this.closeGameMenu.getItems().removeAll(game4);
+        } else if (this.gameCounter == 3) {
+            this.closeGameMenu.getItems().removeAll(game4);
+        }
     }
 
 
