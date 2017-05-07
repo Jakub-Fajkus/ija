@@ -168,7 +168,6 @@ public class MainWindow extends Application implements Initializable {
     }
 
     public void closeGameHandler(int id) {
-        System.out.print(this.main_window.getChildren().size());
         if (id == 1) {
             Node res = getNodeByRowColumnIndex(0, 0, this.main_window);
             this.main_window.getChildren().removeAll(res);
