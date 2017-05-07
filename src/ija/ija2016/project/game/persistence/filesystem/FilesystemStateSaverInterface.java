@@ -4,6 +4,8 @@ import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.persistence.PersistStateException;
 
 public interface FilesystemStateSaverInterface {
+    String FILE_EXTENSION = ".solitaire";
+
     /**
      * Save the current game state to a object with the given name
      *

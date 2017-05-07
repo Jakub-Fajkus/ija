@@ -19,6 +19,10 @@ public class FilesystemStateLoader implements FilesystemStateLoaderInterface {
     public GameInterface loadState(String name) throws LoadStateException {
         Game game;
 
+        if (!name.endsWith(FilesystemStateLoaderInterface.FILE_EXTENSION)) {
+            throw new LoadStateException("The file does not have the extension " + FilesystemStateLoaderInterface.FILE_EXTENSION);
+        }
+
         try {
             FileInputStream fileIn = new FileInputStream(name);
             ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -29,7 +33,7 @@ public class FilesystemStateLoader implements FilesystemStateLoaderInterface {
             return game;
         } catch (IOException | ClassNotFoundException i) {
             i.printStackTrace();
-            throw new LoadStateException();
+            throw new LoadStateException("Could not load the file");
         }
     }
 }

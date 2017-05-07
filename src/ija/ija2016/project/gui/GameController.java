@@ -399,6 +399,7 @@ public class GameController implements Initializable, GameObserverInterface {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Načtení uložené hry");
                 alert.setHeaderText("Hru nelze načíst.");
+                alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
         }

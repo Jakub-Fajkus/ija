@@ -222,7 +222,6 @@ public class Game implements GameInterface {
     public void loadState(String path) throws LoadStateException {
         FilesystemFactory factory = new FilesystemFactory();
         this.init(factory.getLoader().loadState(path));
-//        this.notifyObservers();
     }
 
     /**
