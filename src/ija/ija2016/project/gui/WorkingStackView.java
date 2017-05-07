@@ -9,8 +9,8 @@ public class WorkingStackView extends GuiStackPane {
     public WorkingStackView(CardDeckInterface pack, GameInterface game, CardPool cardPool, int orderNumber) {
         super(pack, game, cardPool);
         this.orderNumber = orderNumber;
-        this.setHeight(367);
-        this.setWidth(100);
+        this.setHeight(356);
+        this.setWidth(82);
 
         this.redrawCards();
     }
@@ -26,8 +26,8 @@ public class WorkingStackView extends GuiStackPane {
                 continue;
             }
 
-            cardView.setTranslateY(20 * i);
-            cardView.setOffset(20 * i);
+            cardView.setTranslateY(15 * i);
+            cardView.setOffset(15 * i);
             cardView.setContainingElement(this);
 
             this.getChildren().add(cardView);

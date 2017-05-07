@@ -7,8 +7,8 @@ public class WastingPackView extends GuiStackPane {
 
     public WastingPackView(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
         super(pack, game, cardPool);
-        this.setHeight(145);
-        this.setWidth(100);
+        this.setHeight(120);
+        this.setWidth(82);
 
         this.redrawCards();
     }
