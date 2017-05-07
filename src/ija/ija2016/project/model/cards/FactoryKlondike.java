@@ -1,6 +1,7 @@
 package ija.ija2016.project.model.cards;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FactoryKlondike extends AbstractFactorySolitaire {
 
@@ -48,6 +49,8 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
         cards.addAll(this.generateCards(Card.Color.DIAMONDS));
         cards.addAll(this.generateCards(Card.Color.HEARTS));
         cards.addAll(this.generateCards(Card.Color.SPADES));
+
+        Collections.shuffle(cards);
 
         deck.put(cards.toArray(new CardInterface[0]));
 
