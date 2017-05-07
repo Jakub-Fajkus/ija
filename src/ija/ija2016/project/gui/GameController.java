@@ -213,6 +213,7 @@ public class GameController implements Initializable, GameObserverInterface {
     }
 
     private void tipButtonClicked() {
+
         if (this.tips == null) {
             System.out.println("Tips == null, trying to get the tips!");
             try {
@@ -231,6 +232,8 @@ public class GameController implements Initializable, GameObserverInterface {
             System.out.println("No tips available");
 
             return;
+        } else {
+            this.clearSelectEffects();
         }
 
         MoveCommandInterface move = this.tips.get(0);
@@ -472,12 +475,22 @@ public class GameController implements Initializable, GameObserverInterface {
         this.actualMove = new MoveGameCommand(null, null, 1);
         this.tips = null;
 
+        this.clearSelectEffects();
+    }
+
+    protected void clearSelectEffects() {
         for (WorkingStackView working : this.workingStacks) {
             working.setEffect(null);
+            for (Node child : working.getChildren()) {
+                child.setEffect(null);
+            }
         }
 
         for (TargetStackView target : this.targetStacks) {
             target.setEffect(null);
+            for (Node child : target.getChildren()) {
+                child.setEffect(null);
+            }
         }
 
         this.drawing.setEffect(null);
