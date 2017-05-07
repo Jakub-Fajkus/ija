@@ -24,7 +24,7 @@
     <!--</java>-->
     <!--</target>-->
 
-    <target name="compile" depends="build, copy-dependencies">
+    <target name="compile" depends="build, copy-dependencies, docs">
         <jar destfile="${main.dist.dir}/ija-client.jar" basedir="${main.build.dir}">
             <manifest>
                 <attribute name="Main-Class"
