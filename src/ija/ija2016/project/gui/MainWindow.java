@@ -1,7 +1,3 @@
-/**
- * Created by onsmak on 02.05.2017.
- */
-
 
 package ija.ija2016.project.gui;
 
@@ -30,7 +26,7 @@ public class MainWindow extends Application implements Initializable {
     public void start(Stage primaryStage) throws IOException {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
+            Parent root = FXMLLoader.load(this.getClass().getResource("MainWindow.fxml"));
             primaryStage.setTitle("Madafaka Solitaire");
             primaryStage.setScene(new Scene(root, 825, 600));
             primaryStage.setMinHeight(600);
@@ -38,6 +34,7 @@ public class MainWindow extends Application implements Initializable {
             primaryStage.setResizable(false);
             primaryStage.show();
         } catch (Exception error){
+            error.printStackTrace();
             System.out.print(error.toString());
             System.exit(1);
         }
@@ -46,11 +43,11 @@ public class MainWindow extends Application implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Game.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Game.fxml"));
             Parent root = fxmlLoader.load();
             GameController controller = fxmlLoader.getController();
 
-            main_window.add(root, 0, 0);
+            this.main_window.add(root, 0, 0);
 
         }  catch (Exception error){
             System.out.print(error.toString());

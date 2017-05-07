@@ -17,12 +17,13 @@ public class CardImageStorage {
         //create all card views!
         for (CardInterface card : cards) {
             //add image for the card
-            Image image = new Image(getClass().getResource("./img/" + this.getCardString(card) + ".png").toString());
+            Image image = new Image(this.getClass().getResourceAsStream("/lib/img/" + this.getCardString(card) + ".png"));
+
             this.images.put(this.getCardString(card), image);
         }
 
         //add facing down image
-        this.images.put(FACING_DOWN_IMAGE, new Image(getClass().getResource("./img/FD.png").toString()));
+        this.images.put(FACING_DOWN_IMAGE, new Image(this.getClass().getResourceAsStream("/lib/img/FD.png")));
     }
 
     public static CardImageStorage getInstance(ArrayList<CardInterface> cards) {

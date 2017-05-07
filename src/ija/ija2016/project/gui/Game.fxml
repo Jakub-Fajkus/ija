@@ -51,7 +51,7 @@
                      <children>
                         <ImageView fitHeight="145.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                               <Image url="@img/TBS.png" />
+                               <Image url="/lib/img/TBS.png"/>
                            </image>
                         </ImageView>
                      </children></StackPane>
@@ -59,7 +59,7 @@
                      <children>
                         <ImageView fitHeight="145.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@img/TBD.png" />
+                               <Image url="/lib/img/TBD.png"/>
                            </image>
                         </ImageView>
                      </children></StackPane>
@@ -67,7 +67,7 @@
                      <children>
                         <ImageView fitHeight="145.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                               <Image url="@img/TBH.png" />
+                               <Image url="/lib/img/TBH.png"/>
                            </image>
                         </ImageView>
                      </children></StackPane>
@@ -75,7 +75,7 @@
                      <children>
                         <ImageView fitHeight="145.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                               <Image url="@img/TBC.png" />
+                               <Image url="/lib/img/TBC.png"/>
                            </image>
                         </ImageView>
                      </children></StackPane>

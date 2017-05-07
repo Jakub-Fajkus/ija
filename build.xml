@@ -1,28 +1,64 @@
-<project>
-    <property name="main.build.dir" value="build/main"/>
+<project basedir=".">
+    <property name="main.build.dir" value="build"/>
+    <property name="main.build.lib.dir" value="build/lib"/>
     <property name="main.src.dir" value="src"/>
+    <property name="main.lib.dir" value="lib"/>
+    <property name="main.dist.dir" value="dest-client"/>
 
     <path id="project.classpath">
-        <pathelement location="lib/junit-4.12.jar"/>
-        <pathelement location="lib/hamcrest-core-1.3.jar"/>
         <pathelement location="${main.src.dir}"/>
+        <pathelement location="${main.lib.dir}"/>
     </path>
     <target name="clean">
         <delete dir="build"/>
+        <delete dir="dest-client"/>
     </target>
 
-    <target name="run" depends="compile">
-        <java classname="org.junit.runner.JUnitCore">
-            <classpath>
-                <path refid="project.classpath"/>
-            </classpath>
-            <arg value="ija.ija2016.project.ProjectTest"/>
-        </java>
+    <!--<target name="compile" depends="build">-->
+    <!--<java classname="org.junit.runner.JUnitCore">-->
+    <!--<classpath>-->
+    <!--<path refid="project.classpath"/>-->
+    <!--</classpath>-->
+    <!--<arg value="ija.ija2016.project.ProjectTest"/>-->
+    <!--</java>-->
+    <!--</target>-->
+
+    <target name="compile" depends="build">
+        <jar destfile="${main.dist.dir}/ija-client.jar" basedir="${main.build.dir}">
+            <manifest>
+                <attribute name="Main-Class"
+                           value="ija.ija2016.project.gui.MainWindow"/>
+            </manifest>
+        </jar>
     </target>
 
-    <target name="compile">
+    <target name="copy-dependencies">
+        <copy todir="${main.build.lib.dir}">
+            <fileset dir="${main.lib.dir}" includes="img/*.png, img/*.css"/>
+        </copy>
+    </target>
+
+    <target name="run" depends="compile, copy-dependencies">
+        <java jar="dest-client/ija-client.jar" fork="true"/>
+    </target>
+
+
+    <target name="build" depends="clean">
         <mkdir dir="${main.build.dir}"/>
-        <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
+        <mkdir dir="${main.build.dir}/lib/img"/>
+
+        <copy todir="${main.build.dir}/lib/img">
+            <fileset dir="${main.lib.dir}/img"/>
+        </copy>
+
+        <copy todir="${main.build.dir}/ija/ija2016/project/gui">
+            <fileset file="${main.src.dir}/ija/ija2016/project/gui/Game.fxml"/>
+            <fileset file="${main.src.dir}/ija/ija2016/project/gui/MainWindow.fxml"/>
+        </copy>
+
+        <echo message="Successfuly copied!"/>
+
+        <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false" debug="on">
             <classpath refid="project.classpath"/>
         </javac>
     </target>

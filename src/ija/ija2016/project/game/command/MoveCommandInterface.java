@@ -54,13 +54,4 @@ public interface MoveCommandInterface extends GameCommandInterface {
      * @param count
      */
     void setCount(int count);
-
-    /**
-     * Set the game data used to redo the command.
-     *
-     * The data should represent the game BEFORE the command was executed.
-     *
-     * @param data Byte array containg the game state
-     */
-    void setGameData(byte[] data);
 }
