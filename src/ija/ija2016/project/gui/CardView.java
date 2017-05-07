@@ -26,8 +26,8 @@ public class CardView extends ImageView {
 
     public void init(Image image) {
         this.setImage(image);
-        this.setFitHeight(145);
-        this.setFitWidth(100);
+        this.setFitHeight(115);
+        this.setFitWidth(82);
         this.setStyle("-fx-cursor: hand;");
         this.offset = 0;
     }

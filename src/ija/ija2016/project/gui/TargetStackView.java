@@ -10,8 +10,8 @@ public class TargetStackView extends GuiStackPane {
         super(pack, game, cardPool);
         this.orderNumber = orderNumber;
 
-        this.setHeight(145);
-        this.setWidth(100);
+        this.setHeight(120);
+        this.setWidth(82);
 
         this.redrawCards();
     }
