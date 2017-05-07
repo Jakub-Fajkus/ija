@@ -15,15 +15,6 @@
         <delete dir="dest-client"/>
     </target>
 
-    <!--<target name="compile" depends="build">-->
-    <!--<java classname="org.junit.runner.JUnitCore">-->
-    <!--<classpath>-->
-    <!--<path refid="project.classpath"/>-->
-    <!--</classpath>-->
-    <!--<arg value="ija.ija2016.project.ProjectTest"/>-->
-    <!--</java>-->
-    <!--</target>-->
-
     <target name="compile" depends="build, copy-dependencies, docs">
         <jar destfile="${main.dist.dir}/ija-client.jar" basedir="${main.build.dir}">
             <manifest>
