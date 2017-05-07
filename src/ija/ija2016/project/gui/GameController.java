@@ -5,6 +5,7 @@ import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
+import ija.ija2016.project.model.cards.CardDeckInterface;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,13 +14,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.URL;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
@@ -29,7 +30,7 @@ public class GameController implements Initializable, GameObserverInterface {
     @FXML
     public GridPane main_window;
     @FXML
-    public MenuItem saveMenu, loadMenu, restartMenu, newGameMenu;
+    public MenuItem saveMenu, loadMenu, restartMenu, newGameMenu, tipMenu;
 
     @FXML
     public Button btn__undo;
@@ -38,56 +39,80 @@ public class GameController implements Initializable, GameObserverInterface {
     // top panel, target, wasting, drawing stacks
     public GridPane top_pane;
     CardPool cardPool;
+    ArrayList<MoveCommandInterface> tips;
     private WastingPackView wasting;
     private DrawingPackView drawing;
     // target stacks
     private TargetStackView target1, target2, target3, target4;
+    private ArrayList<TargetStackView> targetStacks;
     // working stacks
     private WorkingStackView wstack1, wstack2, wstack3, wstack4, wstack5, wstack6, wstack7;
+    private ArrayList<WorkingStackView> workingStacks;
+    private ArrayList<GuiStackPane> allCardPanes;
     private GameInterface game;
-
     private MoveCommandInterface actualMove;
 
     public GameController() {
-        main_window = new GridPane();
-        working_pane = new GridPane();
+        this.main_window = new GridPane();
+        this.working_pane = new GridPane();
 
         this.game = (new GameFactory().createGame());
         this.cardPool = new CardPool(this.game.getAllCards());
 
-        wstack1 = new WorkingStackView(this.game.getWorkingCardStacks()[0], this.game, this.cardPool, 0);
-        wstack2 = new WorkingStackView(this.game.getWorkingCardStacks()[1], this.game, this.cardPool, 1);
-        wstack3 = new WorkingStackView(this.game.getWorkingCardStacks()[2], this.game, this.cardPool, 2);
-        wstack4 = new WorkingStackView(this.game.getWorkingCardStacks()[3], this.game, this.cardPool, 3);
-        wstack5 = new WorkingStackView(this.game.getWorkingCardStacks()[4], this.game, this.cardPool, 4);
-        wstack6 = new WorkingStackView(this.game.getWorkingCardStacks()[5], this.game, this.cardPool, 5);
-        wstack7 = new WorkingStackView(this.game.getWorkingCardStacks()[6], this.game, this.cardPool, 6);
+        this.wstack1 = new WorkingStackView(this.game.getWorkingCardStacks()[0], this.game, this.cardPool, 0);
+        this.wstack2 = new WorkingStackView(this.game.getWorkingCardStacks()[1], this.game, this.cardPool, 1);
+        this.wstack3 = new WorkingStackView(this.game.getWorkingCardStacks()[2], this.game, this.cardPool, 2);
+        this.wstack4 = new WorkingStackView(this.game.getWorkingCardStacks()[3], this.game, this.cardPool, 3);
+        this.wstack5 = new WorkingStackView(this.game.getWorkingCardStacks()[4], this.game, this.cardPool, 4);
+        this.wstack6 = new WorkingStackView(this.game.getWorkingCardStacks()[5], this.game, this.cardPool, 5);
+        this.wstack7 = new WorkingStackView(this.game.getWorkingCardStacks()[6], this.game, this.cardPool, 6);
 
-        target1 = new TargetStackView(this.game.getTargetPacks()[0], this.game, this.cardPool, 0);
-        target2 = new TargetStackView(this.game.getTargetPacks()[1], this.game, this.cardPool, 1);
-        target3 = new TargetStackView(this.game.getTargetPacks()[2], this.game, this.cardPool, 2);
-        target4 = new TargetStackView(this.game.getTargetPacks()[3], this.game, this.cardPool, 3);
+        this.target1 = new TargetStackView(this.game.getTargetPacks()[0], this.game, this.cardPool, 0);
+        this.target2 = new TargetStackView(this.game.getTargetPacks()[1], this.game, this.cardPool, 1);
+        this.target3 = new TargetStackView(this.game.getTargetPacks()[2], this.game, this.cardPool, 2);
+        this.target4 = new TargetStackView(this.game.getTargetPacks()[3], this.game, this.cardPool, 3);
 
-        drawing = new DrawingPackView(this.game.getDrawingDeck(), this.game, this.cardPool);
-        wasting = new WastingPackView(this.game.getWastingDeck(), this.game, this.cardPool);
+        this.drawing = new DrawingPackView(this.game.getDrawingDeck(), this.game, this.cardPool);
+        this.wasting = new WastingPackView(this.game.getWastingDeck(), this.game, this.cardPool);
 
-        game.addObserver(this);
+        this.workingStacks = new ArrayList<>();
+        this.workingStacks.add(this.wstack1);
+        this.workingStacks.add(this.wstack2);
+        this.workingStacks.add(this.wstack3);
+        this.workingStacks.add(this.wstack4);
+        this.workingStacks.add(this.wstack5);
+        this.workingStacks.add(this.wstack6);
+        this.workingStacks.add(this.wstack7);
 
-        game.addObserver(wstack1);
-        game.addObserver(wstack2);
-        game.addObserver(wstack3);
-        game.addObserver(wstack4);
-        game.addObserver(wstack5);
-        game.addObserver(wstack6);
-        game.addObserver(wstack7);
+        this.targetStacks = new ArrayList<>();
+        this.targetStacks.add(this.target1);
+        this.targetStacks.add(this.target2);
+        this.targetStacks.add(this.target3);
+        this.targetStacks.add(this.target4);
 
-        game.addObserver(target1);
-        game.addObserver(target2);
-        game.addObserver(target3);
-        game.addObserver(target4);
+        this.allCardPanes = new ArrayList<>();
+        this.allCardPanes.addAll(this.workingStacks);
+        this.allCardPanes.addAll(this.targetStacks);
+        this.allCardPanes.add(this.drawing);
+        this.allCardPanes.add(this.wasting);
 
-        game.addObserver(drawing);
-        game.addObserver(wasting);
+        this.game.addObserver(this);
+
+        this.game.addObserver(this.wstack1);
+        this.game.addObserver(this.wstack2);
+        this.game.addObserver(this.wstack3);
+        this.game.addObserver(this.wstack4);
+        this.game.addObserver(this.wstack5);
+        this.game.addObserver(this.wstack6);
+        this.game.addObserver(this.wstack7);
+
+        this.game.addObserver(this.target1);
+        this.game.addObserver(this.target2);
+        this.game.addObserver(this.target3);
+        this.game.addObserver(this.target4);
+
+        this.game.addObserver(this.drawing);
+        this.game.addObserver(this.wasting);
     }
 
     @Override
@@ -98,21 +123,13 @@ public class GameController implements Initializable, GameObserverInterface {
 
     public void createGame() {
         try {
-            working_pane.add(this.wstack1, 0, 0);
-            working_pane.add(this.wstack2, 1, 0);
-            working_pane.add(this.wstack3, 2, 0);
-            working_pane.add(this.wstack4, 3, 0);
-            working_pane.add(this.wstack5, 4, 0);
-            working_pane.add(this.wstack6, 5, 0);
-            working_pane.add(this.wstack7, 6, 0);
-
-//            this.makeNodeDraggable(this.wstack1.getChildren());
-//            this.makeNodeDraggable(this.wstack2.getChildren());
-//            this.makeNodeDraggable(this.wstack3.getChildren());
-//            this.makeNodeDraggable(this.wstack4.getChildren());
-//            this.makeNodeDraggable(this.wstack5.getChildren());
-//            this.makeNodeDraggable(this.wstack6.getChildren());
-//            this.makeNodeDraggable(this.wstack7.getChildren());
+            this.working_pane.add(this.wstack1, 0, 0);
+            this.working_pane.add(this.wstack2, 1, 0);
+            this.working_pane.add(this.wstack3, 2, 0);
+            this.working_pane.add(this.wstack4, 3, 0);
+            this.working_pane.add(this.wstack5, 4, 0);
+            this.working_pane.add(this.wstack6, 5, 0);
+            this.working_pane.add(this.wstack7, 6, 0);
 
             this.wstack1.setOnMousePressed(this::onStackMousePressed);
             this.wstack2.setOnMousePressed(this::onStackMousePressed);
@@ -134,23 +151,16 @@ public class GameController implements Initializable, GameObserverInterface {
             this.wstack6.setOnMousePressed(this::onStackMousePressed);
             this.wstack7.setOnMousePressed(this::onStackMousePressed);
 
-            top_pane.add(this.drawing, 0, 0);
-            top_pane.add(this.wasting, 1, 0);
+            this.top_pane.add(this.drawing, 0, 0);
+            this.top_pane.add(this.wasting, 1, 0);
 
             this.wasting.setOnMousePressed(this::onStackMousePressed);
-//            this.makeNodeDraggable(this.drawing.getChildren());
-//            this.makeNodeDraggable(this.wasting.getChildren());
 
-            top_pane.add(this.target1, 3, 0);
-            top_pane.add(this.target2, 4, 0);
-            top_pane.add(this.target3, 5, 0);
-            top_pane.add(this.target4, 6, 0);
+            this.top_pane.add(this.target1, 3, 0);
+            this.top_pane.add(this.target2, 4, 0);
+            this.top_pane.add(this.target3, 5, 0);
+            this.top_pane.add(this.target4, 6, 0);
 
-//            this.makeNodeDraggable(this.target1.getChildren());
-//            this.makeNodeDraggable(this.target2.getChildren());
-//            this.makeNodeDraggable(this.target3.getChildren());
-//            this.makeNodeDraggable(this.target4.getChildren());
-//
             this.target1.setOnMousePressed(this::onStackMousePressed);
             this.target2.setOnMousePressed(this::onStackMousePressed);
             this.target3.setOnMousePressed(this::onStackMousePressed);
@@ -159,28 +169,35 @@ public class GameController implements Initializable, GameObserverInterface {
             this.drawing.setOnMousePressed(this::getCardFromDrawingPack);
             this.btn__undo.setOnMouseClicked(this::undoButtonClicked);
 
-            saveMenu.setOnAction(new EventHandler<ActionEvent>() {
+            this.saveMenu.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
-                    saveButtonClicked();
+                    GameController.this.saveButtonClicked();
                 }
             });
 
-            loadMenu.setOnAction(new EventHandler<ActionEvent>() {
+            this.loadMenu.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
-                    loadButtonClicked();
+                    GameController.this.loadButtonClicked();
                 }
             });
 
-            restartMenu.setOnAction(new EventHandler<ActionEvent>() {
+            this.restartMenu.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
-                    restartButtonClicked();
+                    GameController.this.restartButtonClicked();
                 }
             });
 
-            newGameMenu.setOnAction(new EventHandler<ActionEvent>() {
+            this.newGameMenu.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    newGameButtonClicked();
+                    GameController.this.newGameButtonClicked();
+                }
+            });
+
+            this.tipMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    GameController.this.tipButtonClicked();
                 }
             });
 
@@ -191,6 +208,49 @@ public class GameController implements Initializable, GameObserverInterface {
             System.out.println("fail create stack");
         }
     }
+
+    private void tipButtonClicked() {
+        if (this.tips == null) {
+            try {
+                this.tips = this.game.tip();
+                if (this.tips.isEmpty()) {
+                    System.out.println("No tips found empty!");
+                }
+            } catch (TipException e) {
+                System.out.println("No tips found exc!");
+                return;
+            }
+        }
+
+        //get the first tip
+        MoveCommandInterface move = this.tips.get(0);
+        this.tips.remove(0);
+
+
+        try {
+            //find the source gui element
+            GuiStackPane source = this.findViewContainingDeck(move.getSource());
+            GuiStackPane destination = this.findViewContainingDeck(move.getDestination());
+
+            System.out.println("Show tip from " + source.toString() + " to " + destination.toString() + " with count " + move.getCount());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+
+    }
+
+    private GuiStackPane findViewContainingDeck(CardDeckInterface deck) throws Exception {
+        for (GuiStackPane pane : this.allCardPanes) {
+            if (pane.getPack() == deck) {
+                return pane;
+            }
+        }
+
+        throw new Exception("NO pane found for deck " + deck);
+    }
+
 
     private void newGameButtonClicked() {
         this.game.initializeWithCards((new GameFactory()).getNewCardDeck());
@@ -246,11 +306,6 @@ public class GameController implements Initializable, GameObserverInterface {
             }
 
             cardView.setShadow();
-//            int sizeOfSourceStack = cardView.getContainingElement().getChildren().size();
-//            for (int j = sizeOfSourceStack-1; j < countOfCards; j--) {
-//                CardView view = (CardView)cardView.getContainingElement().getChildren().get(j);
-//                view.setShadow();
-//            }
 
             this.actualMove.setSource(cardView.getContainingElement().getPack());
             this.actualMove.setCount(countOfCards);
@@ -268,8 +323,8 @@ public class GameController implements Initializable, GameObserverInterface {
 
         GuiStackPane pane = (GuiStackPane) e.getSource();
 
-        if (actualMove.getDestination() == null) {
-            actualMove.setDestination(pane.getPack());
+        if (this.actualMove.getDestination() == null) {
+            this.actualMove.setDestination(pane.getPack());
 
             if (this.actualMove == null || this.actualMove.getSource() == null || this.actualMove.getDestination() == null) {
 //                this.actualMove = new MoveGameCommand(null, null, 1);
@@ -302,24 +357,9 @@ public class GameController implements Initializable, GameObserverInterface {
 
             } else {
                 System.out.println("NOT MOVED");
-                this.actualMove.setDestination(null);
+                this.actualMove = new MoveGameCommand(null, null, 1);
             }
         }
-
-//            if (e.getSource() instanceof CardView) {
-//                CardView cardView = (CardView) e.getSource();
-//
-//                cardView.setTranslateX(0);
-//                cardView.setTranslateY(0 + cardView.getOffset());
-//            } else if (e.getSource() instanceof TargetStackView || e.getSource() instanceof WorkingStackView) {
-//                GuiStackPane stack = (GuiStackPane) e.getSource();
-//                this.actualMove.setDestination(stack.getPack());
-//            } else {
-//                System.out.println("onStackMousePressed,, not a CardView, continuing");
-//                return;
-//            }
-
-
     }
 
     private void saveButtonClicked() {
@@ -373,7 +413,6 @@ public class GameController implements Initializable, GameObserverInterface {
      */
     private void getCardFromDrawingPack(MouseEvent e) {
         System.out.println("in da click");
-//        this.actualMove = null;
 
         if (!this.game.getDrawingDeck().isEmpty()) {
             try {
@@ -395,162 +434,10 @@ public class GameController implements Initializable, GameObserverInterface {
         }
     }
 
-
-    private void makeNodeDraggable(List<Node> cardView) {
-        for (Node node : cardView) {
-            this.makeNodeDraggable(node);
-        }
-
-    }
-
-    private void makeNodeDraggable(Node node) {
-        node.addEventHandler(MouseEvent.DRAG_DETECTED, this::dragDetected);
-        node.addEventHandler(DragEvent.DRAG_OVER, this::dragOver);
-
-        node.setOnMousePressed(this::handleOnMousePressed);
-        node.setOnMouseDragged(this::handleOnMouseDragged);
-//        node.setOnMouseReleased(this::handleOnMouseReleased);
-        node.setOnDragDone(this::handleOnDragDone);
-    }
-
-
-    public void handleOnMousePressed(MouseEvent event) {
-        System.out.println("handleOnMousePressed");
-        CardView clickedCard = (CardView) event.getSource();
-        dragContext.x = event.getSceneX();
-        dragContext.y = event.getSceneY() - clickedCard.getOffset();
-    }
-
-    public void handleOnMouseDragged(MouseEvent event) {
-        System.out.println("handleOnMouseDragged");
-        Node node = (Node) event.getSource();
-
-        double offsetX = event.getSceneX() - dragContext.x;
-        double offsetY = event.getSceneY() - dragContext.y;
-
-        node.getParent().toFront();
-        node.setTranslateX(offsetX);
-        node.setTranslateY(offsetY);
-    }
-
-    public void handleOnDragDone(DragEvent event) {
-
-        Node node = (Node) event.getSource();
-
-        double offsetX = event.getSceneX() - dragContext.x;
-        double offsetY = event.getSceneY() - dragContext.y;
-
-        System.out.print(node.toString());
-        node.getParent().toFront();
-        node.setTranslateX(offsetX);
-        node.setTranslateY(offsetY);
-    }
-
-//    public void handleOnMouseReleased(MouseEvent event) {
-//        System.out.println("handleOnMouseReleased on stack");
-//
-//        if (event.getSource() instanceof CardView) {
-//            CardView cardView = (CardView) event.getSource();
-//
-//            cardView.setTranslateX(0);
-//            cardView.setTranslateY(0 + cardView.getOffset());
-//        } else {
-//            System.out.println("handleOnMouseReleased,, not a CardView, continuing");
-//            return;
-//        }
-//
-//        if (this.actualMove == null || this.actualMove.getSource() == null || this.actualMove.getDestination() == null) {
-//            this.actualMove = new MoveGameCommand(null, null, 1);
-//            System.out.println("Something is misssing in the command, leaving" + this.actualMove + this.actualMove.getSource() + this.actualMove.getDestination());
-//            return;
-//        }
-//
-//        if (this.actualMove.getSource() == this.actualMove.getDestination()) {
-//            this.actualMove = new MoveGameCommand(null, null, 1);
-//            System.out.println("Do not move source=dest");
-//            return;
-//        }
-//
-//        if (this.game.move(this.actualMove)) {
-//            System.out.println("MOVED");
-//        } else {
-//            System.out.println("NOT MOVED");
-//
-//        }
-//    }
-
-    public void dragOver(DragEvent e) {
-        if (e.getSource() instanceof CardView) {
-            CardView cardView = (CardView) e.getSource();
-            GuiStackPane stack = cardView.getContainingElement();
-            System.out.println("Over stack drag: " + stack.toString() + "\n");
-            this.actualMove.setDestination(stack.getPack());
-        } else if (e.getSource() instanceof TargetStackView) {
-            GuiStackPane stack = (GuiStackPane) e.getSource();
-            System.out.println("Over GuiStackPlane drag: " + stack.toString() + "\n");
-            this.actualMove.setDestination(stack.getPack());
-        } else {
-            System.out.println("Drag over: " + e.getClass() + " on object " + e.getSource());
-            GuiStackPane stack = (GuiStackPane) e.getSource();
-            this.actualMove.setDestination(stack.getPack());
-        }
-    }
-
-//    public void dragOver(DragEvent e) {
-//        GuiStackPane stack;
-//        if (e.getSource() instanceof CardView) {
-//            CardView cardView = (CardView) e.getSource();
-//            stack = cardView.getContainingElement();
-//
-//            System.out.println("Over cardView drag: " + stack.toString() + "\n");
-//        } else if (e.getSource() instanceof TargetStackView || e.getSource() instanceof WorkingStackView) {
-//            stack = (GuiStackPane)e.getSource();
-//            System.out.println("Over GuiStackPlane drag: " + stack.toString() + "\n");
-//        } else {
-//            System.out.println("Drag over: " + e.getClass() + " on object " + e.getSource());
-//            return;
-//        }
-//
-//        this.actualMove.setDestination(stack.getPack());
-//    }
-
-
-    public void dragDetected(MouseEvent event) {
-
-        CardView cardView = (CardView) event.getSource();
-        System.out.println("Draged from stack: " + cardView.getContainingElement().toString() + "\n");
-//        System.out.println("Count of cards in stack: "+cardView.getContainingElement().getChildren().size()+"\n");
-//        System.out.println("Offset of dragged card: "+this.getOffset()+"\n");
-//        System.out.println("Poradi karty: "+((this.getOffset()/20)+1.0)+"\n");
-
-        int countOfCards;
-
-        GameRuleValidator validator = new GameRuleValidator(this.game);
-        if (cardView.getContainingElement().getPack() == this.game.getWastingDeck() || validator.isTargetStack(cardView.getContainingElement().getPack())) {
-            countOfCards = 1;
-        } else {
-            countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 20)));
-        }
-
-        System.out.println("Pocet karet: " + countOfCards + "\n");
-
-        if (!cardView.isTurnedFaceUp()) {
-            System.out.println("The card is not facing up!" + cardView.getCard().toString() + cardView.getCard().hashCode());
-            return;
-        }
-
-        Dragboard dragboard = cardView.startDragAndDrop(TransferMode.MOVE);
-        ClipboardContent content = new ClipboardContent();
-        content.putString("card");
-        dragboard.setContent(content);
-        event.consume();
-
-        this.actualMove = new MoveGameCommand(cardView.getContainingElement().getPack(), null, countOfCards);
-    }
-
     @Override
     public void updateOnGameChange() {
         System.out.println("updating the game state!");
         this.cardPool.updateCards(this.game.getAllCards());
+        this.tips = null;
     }
 }

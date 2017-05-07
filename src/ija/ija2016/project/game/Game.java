@@ -1,25 +1,24 @@
 package ija.ija2016.project.game;
 
+import ija.ija2016.project.game.ai.AIFactory;
 import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.game.persistence.filesystem.FilesystemFactory;
-import ija.ija2016.project.game.ui.AIFactory;
 import ija.ija2016.project.model.board.AbstractFactorySolitaire;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
+import ija.ija2016.project.model.cards.TargetCardDeckInterface;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class Game implements GameInterface {
-    private CardDeckInterface[] targetPacks;
-    private CardDeckInterface drawingDeck;
-    private CardDeckInterface wastingDeck;
-    private CardStackInterface[] workingCardStacks;
-    private transient Stack<MoveCommandInterface> history;
+    private GameState state;
+
+    private transient Stack<GameHistory> history;
     private transient ArrayList<GameObserverInterface> observers;
     private transient AbstractFactorySolitaire factorySolitaire;
 
@@ -39,13 +38,13 @@ public class Game implements GameInterface {
      * @param wastingDeck
      * @param workingCardStacks
      */
-    public void init(CardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<MoveCommandInterface> history) {
-        this.targetPacks = targetPacks;
-        this.drawingDeck = drawingDeck;
-        this.wastingDeck = wastingDeck;
-        this.workingCardStacks = workingCardStacks;
-        //if we have out history, so do not lose it
+    public void init(TargetCardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<GameHistory> history) {
+
+        this.state = new GameState(targetPacks, drawingDeck, wastingDeck, workingCardStacks);
+
+        //if we have our history, do not lose it
         if (this.history != null && history == null) {
+
         } else {
             this.history = history;
         }
@@ -110,14 +109,14 @@ public class Game implements GameInterface {
      */
     @Override
     public void initializeWithCards(CardDeckInterface deck) {
-        CardDeckInterface[] targetPacks = new CardDeckInterface[factorySolitaire.getCountOfTargetDecks()];
+        TargetCardDeckInterface[] targetPacks = new TargetCardDeckInterface[this.factorySolitaire.getCountOfTargetDecks()];
         for (CardInterface.Color color : CardInterface.Color.values()) {
-            targetPacks[this.getTargetPackIndexForColor(color)] = factorySolitaire.createTargetPack(color);
+            targetPacks[this.getTargetPackIndexForColor(color)] = this.factorySolitaire.createTargetPack(color);
         }
 
-        CardStackInterface[] workingCardStacks = new CardStackInterface[factorySolitaire.getCountOfWorkingStacks()];
-        for (int i = 0; i < factorySolitaire.getCountOfWorkingStacks(); i++) {
-            workingCardStacks[i] = factorySolitaire.createWorkingPack();
+        CardStackInterface[] workingCardStacks = new CardStackInterface[this.factorySolitaire.getCountOfWorkingStacks()];
+        for (int i = 0; i < this.factorySolitaire.getCountOfWorkingStacks(); i++) {
+            workingCardStacks[i] = this.factorySolitaire.createWorkingPack();
 
             for (int j = 0; j <= i; j++) {
                 CardInterface card = deck.pop();
@@ -131,7 +130,7 @@ public class Game implements GameInterface {
             }
         }
 
-        this.init(targetPacks, deck, factorySolitaire.createWastingDeck(), workingCardStacks, new Stack<>());
+        this.init(targetPacks, deck, this.factorySolitaire.createWastingDeck(), workingCardStacks, new Stack<>());
     }
 
     /**
@@ -141,32 +140,25 @@ public class Game implements GameInterface {
      */
     @Override
     public boolean move(MoveCommandInterface command) {
-        //todo: create a defensive copy of the command? :D
+        GameHistory newSnapshot = new GameHistory(command, this.state, this);
+
+        //save the current game state
+        newSnapshot.saveGameState();
 
         //perform the command
         //on success, return true
-        if (command.execute(this)) {
+        if (newSnapshot.executeCommand()) {
             //add the command into a history
-            history.add(command);
+            this.history.add(newSnapshot);
 
             this.notifyObservers();
             return true;
         } else {
             //on failure, revert the state
-            try {
-                this.init(command.undo());
+            newSnapshot.undoCommand();
 
-                return true;
-//                return this.undo() != null;
-
-//                return false;
-            } catch (UndoException exception) {
-                //error occurred, cannot undo.. the world is over
-                exception.printStackTrace();
-
-                this.notifyObservers();
-                return false;
-            }
+            this.notifyObservers();
+            return false;
         }
     }
 
@@ -187,24 +179,14 @@ public class Game implements GameInterface {
      * @throws UndoException When the undo cannot be done.
      */
     @Override
-    public MoveCommandInterface undo() throws UndoException {
+    public void undo() {
         System.out.println("GAME: undoing");
-        if (this.history.empty()) {
-            return null;
-        }
 
-        MoveCommandInterface command = this.history.pop();
-        try {
-            this.init(command.undo());
-        } catch (UndoException exception) {
-            //error occurred, cannot undo.. the world is over
-            exception.printStackTrace();
+        if (!this.history.empty()) {
+            GameHistory lastSnapshot = this.history.pop();
+            lastSnapshot.undoCommand();
             this.notifyObservers();
-
-            return null;
         }
-
-        return command;
     }
 
     /**
@@ -233,13 +215,7 @@ public class Game implements GameInterface {
     @Override
     public boolean restartGame() {
         while (!this.history.empty()) {
-            try {
-                this.undo();
-            } catch (UndoException e) {
-                e.printStackTrace();
-
-                return false;
-            }
+            this.undo();
         }
 
         return true;
@@ -252,8 +228,15 @@ public class Game implements GameInterface {
      */
     @Override
     public ArrayList<MoveCommandInterface> tip() throws TipException {
+        //save the current state as the strategy may change the game state
+        MoveCommandInterface moveCommand = new MoveGameCommand(null, null, 1);
+        this.move(moveCommand);
 
-        return (new AIFactory()).getAI().getPossibleMoves(this);
+        ArrayList<MoveCommandInterface> tips = (new AIFactory()).getAI().getPossibleMoves(this);
+
+        this.undo();
+
+        return tips;
     }
 
     /**
@@ -292,7 +275,7 @@ public class Game implements GameInterface {
     public boolean isFinished() {
         int countOfCardsInTheTargets = 0;
 
-        for (CardDeckInterface deck : this.targetPacks) {
+        for (CardDeckInterface deck : this.state.getTargetPacks()) {
             countOfCardsInTheTargets += deck.size();
         }
 
@@ -300,46 +283,42 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public CardDeckInterface[] getTargetPacks() {
-        return targetPacks;
+    public TargetCardDeckInterface[] getTargetPacks() {
+        return this.state.getTargetPacks();
     }
 
     @Override
     public CardDeckInterface getDrawingDeck() {
-        return drawingDeck;
+        return this.state.getDrawingDeck();
     }
 
     @Override
     public CardDeckInterface getWastingDeck() {
-        return wastingDeck;
+        return this.state.getWastingDeck();
     }
 
     @Override
     public CardStackInterface[] getWorkingCardStacks() {
-        return workingCardStacks;
+        return this.state.getWorkingCardStacks();
     }
 
     @Override
-    public Stack<MoveCommandInterface> getHistory() {
-        return history;
+    public Stack<GameHistory> getHistory() {
+        return this.history;
     }
 
+    public GameState getState() {
+        return this.state;
+    }
 
+    /**
+     * Get all cards in the game
+     *
+     * @return
+     */
+    @Override
     public ArrayList<CardInterface> getAllCards() {
-        ArrayList<CardInterface> cards = new ArrayList<>();
-
-        for (CardDeckInterface stack : this.workingCardStacks) {
-            cards.addAll(stack.getAll());
-        }
-
-        for (CardDeckInterface stack : this.targetPacks) {
-            cards.addAll(stack.getAll());
-        }
-
-        cards.addAll(this.getDrawingDeck().getAll());
-        cards.addAll(this.getWastingDeck().getAll());
-
-        return cards;
+        return this.state.getAllCards();
     }
 
     /**
@@ -357,6 +336,16 @@ public class Game implements GameInterface {
         if (observer != null) {
             this.observers.add(observer);
         }
+    }
+
+    /**
+     * Load the game state from the given object
+     *
+     * @param state
+     */
+    @Override
+    public void loadState(GameState state) {
+        this.state.initFrom(state);
     }
 
     /**

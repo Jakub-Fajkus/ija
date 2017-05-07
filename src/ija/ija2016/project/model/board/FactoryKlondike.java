@@ -19,7 +19,7 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
 
     @Override
     public int getMaximumNumberOfCardsInWorkingStack() {
-        return getCountOfCardsOfSameColor() + getMaximumNumberOfCardsFacingDownInWorkingStack();
+        return this.getCountOfCardsOfSameColor() + this.getMaximumNumberOfCardsFacingDownInWorkingStack();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
      */
     @Override
     public Card createCard(Card.Color color, int value) {
-        if (value == 0 || value > getCountOfCardsOfSameColor()) {
+        if (value == 0 || value > this.getCountOfCardsOfSameColor()) {
             return null;
         }
 
@@ -92,6 +92,15 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
     }
 
     /**
+     * Create an empty drawing deck
+     *
+     * @return
+     */
+    public DrawingCardDeck createEmptyDrawindDeck() {
+        return new DrawingCardDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
+    }
+
+    /**
      * Vytvori prazdny odkladaci balicek karet
      *
      * @return
@@ -109,7 +118,7 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
      * @return
      */
     @Override
-    public CardDeck createTargetPack(Card.Color color) {
+    public TargetCardDeckInterface createTargetPack(Card.Color color) {
         return new TargetCardDeck(this.getCountOfCardsOfSameColor(), color);
     }
 

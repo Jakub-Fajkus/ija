@@ -28,5 +28,4 @@ public interface CardStackInterface extends CardDeckInterface {
      * @return
      */
     CardStack clone();
-//    CardStackInterface flip();
 }

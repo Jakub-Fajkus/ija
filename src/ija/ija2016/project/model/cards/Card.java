@@ -1,9 +1,5 @@
 package ija.ija2016.project.model.cards;
 
-//bez problemu s overovnanim
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Card implements CardInterface {
     private CardInterface.Color color;
@@ -14,6 +10,12 @@ public class Card implements CardInterface {
         this.color = c;
         this.value = value;
         this.facingUp = facingUp;
+    }
+
+    public Card(CardInterface card) {
+        this.color = card.color();
+        this.value = card.value();
+        this.facingUp = card.isTurnedFaceUp();
     }
 
     public static Card.Color[] values() {
@@ -106,26 +108,24 @@ public class Card implements CardInterface {
 
     @Override
     public String toString() {
-        String value;
-
-        return this.getValueAsString() + "(" + this.color + ")" + (this.facingUp ? "U" : "D");
+        return this.getValueAsString() + "(" + this.color + ")";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
 
         Card card = (Card) o;
 
-        if (value != card.value) return false;
-        return color == card.color;
+        if (this.value != card.value) return false;
+        return this.color == card.color;
     }
 
     @Override
     public int hashCode() {
-        int result = color != null ? color.hashCode() : 0;
-        result = 31 * result + value;
+        int result = this.color != null ? this.color.hashCode() : 0;
+        result = 31 * result + this.value;
         return result;
     }
 }

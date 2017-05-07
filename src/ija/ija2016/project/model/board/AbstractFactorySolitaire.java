@@ -3,6 +3,7 @@ package ija.ija2016.project.model.board;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
+import ija.ija2016.project.model.cards.TargetCardDeckInterface;
 
 public abstract class AbstractFactorySolitaire {
     /**
@@ -81,7 +82,7 @@ public abstract class AbstractFactorySolitaire {
      * @param color
      * @return
      */
-    public abstract CardDeckInterface createTargetPack(CardInterface.Color color);
+    public abstract TargetCardDeckInterface createTargetPack(CardInterface.Color color);
 
     /**
      * Vytváří objekt reprezentující pracovní pole pro karty.

@@ -1,6 +1,6 @@
 package ija.ija2016.project.model.cards;
 
-public class TargetCardDeck extends CardDeck {
+public class TargetCardDeck extends CardDeck implements TargetCardDeckInterface {
     private Card.Color deckColor;
 
     public TargetCardDeck(int size, Card.Color deckColor) {
@@ -25,4 +25,13 @@ public class TargetCardDeck extends CardDeck {
         return super.put(card);
     }
 
+    /**
+     * Get the color of the deck.
+     *
+     * @return
+     */
+    @Override
+    public CardInterface.Color getColorOfDeck() {
+        return this.deckColor;
+    }
 }

@@ -6,6 +6,7 @@ import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
+import ija.ija2016.project.model.cards.TargetCardDeckInterface;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public interface GameInterface extends Serializable {
      *
      * @throws UndoException When the undo cannot be done.
      */
-    MoveCommandInterface undo() throws UndoException;
+    void undo() throws UndoException;
 
     /**
      * Go back from the undo.
@@ -133,9 +134,9 @@ public interface GameInterface extends Serializable {
      * @param wastingDeck
      * @param workingCardStacks
      */
-    void init(CardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<MoveCommandInterface> history);
+    void init(TargetCardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<GameHistory> history);
 
-    CardDeckInterface[] getTargetPacks();
+    TargetCardDeckInterface[] getTargetPacks();
 
     CardDeckInterface getDrawingDeck();
 
@@ -143,7 +144,9 @@ public interface GameInterface extends Serializable {
 
     CardStackInterface[] getWorkingCardStacks();
 
-    Stack<MoveCommandInterface> getHistory();
+    Stack<GameHistory> getHistory();
+
+    GameState getState();
 
     /**
      * Get all cards in the game
@@ -163,5 +166,12 @@ public interface GameInterface extends Serializable {
      * @param observer
      */
     void addObserver(GameObserverInterface observer);
+
+    /**
+     * Load the game state from the given object
+     *
+     * @param state
+     */
+    void loadState(GameState state);
 }
 

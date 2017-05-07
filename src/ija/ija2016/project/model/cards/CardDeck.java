@@ -25,7 +25,7 @@ public class CardDeck implements CardDeckInterface {
     }
 
     public boolean put(CardInterface card) {
-        if (this.cards.size() == maxDeckSize) {
+        if (this.cards.size() == this.maxDeckSize) {
             return false;
         }
 
@@ -131,6 +131,40 @@ public class CardDeck implements CardDeckInterface {
         }
 
         return count;
+    }
+
+    /**
+     * Add card to the deck and skip all semantic checks
+     *
+     * @param card
+     * @return
+     */
+    @Override
+    final public boolean forcePut(CardInterface card) {
+        if (this.cards.size() == this.maxDeckSize) {
+            return false;
+        }
+
+        this.cards.push(card);
+
+        return true;
+    }
+
+    /**
+     * Add cards to the deck and skip all semantic checks
+     *
+     * @param cards
+     * @return
+     */
+    @Override
+    final public boolean forcePut(CardInterface[] cards) {
+        for (CardInterface card : cards) {
+            if (!this.forcePut(card)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
