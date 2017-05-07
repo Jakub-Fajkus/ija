@@ -23,7 +23,7 @@
     <!--</java>-->
     <!--</target>-->
 
-    <target name="compile" depends="build">
+    <target name="compile" depends="build, copy-dependencies">
         <jar destfile="${main.dist.dir}/ija-client.jar" basedir="${main.build.dir}">
             <manifest>
                 <attribute name="Main-Class"
@@ -38,7 +38,7 @@
         </copy>
     </target>
 
-    <target name="run" depends="compile, copy-dependencies">
+    <target name="run" depends="compile">
         <java jar="dest-client/ija-client.jar" fork="true"/>
     </target>
 
