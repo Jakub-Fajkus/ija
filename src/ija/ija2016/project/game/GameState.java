@@ -1,6 +1,5 @@
 package ija.ija2016.project.game;
 
-import ija.ija2016.project.model.board.FactoryKlondike;
 import ija.ija2016.project.model.cards.*;
 
 import java.io.Serializable;
@@ -35,7 +34,6 @@ public class GameState implements Serializable {
     /**
      * Copying constructor - the state given will be copied in this state
      *
-     *
      * @param state
      */
     public GameState(GameState state) {
@@ -68,12 +66,12 @@ public class GameState implements Serializable {
      */
     public void initFrom(GameState state) {
         //remove all cards
-        for (int i = 0; i < this.targetPacks.length; i++) {
-            this.targetPacks[i].removeAll();
+        for (TargetCardDeckInterface targetPack : this.targetPacks) {
+            targetPack.removeAll();
         }
 
-        for (int i = 0; i < this.workingCardStacks.length; i++) {
-            this.workingCardStacks[i].removeAll();
+        for (CardStackInterface workingCardStack : this.workingCardStacks) {
+            workingCardStack.removeAll();
         }
 
         this.drawingDeck.removeAll();
@@ -96,7 +94,7 @@ public class GameState implements Serializable {
     /**
      * Fill the inner list of cards with the cards from all stacks
      */
-    protected void initAllCards() {
+    private void initAllCards() {
         this.allCards = new ArrayList<>();
 
         for (CardDeckInterface stack : this.workingCardStacks) {
@@ -159,7 +157,6 @@ public class GameState implements Serializable {
         for (CardInterface card : cards) {
             CardInterface newCard = new Card(card);
             this.saveCardToHistory(newCard);
-            //todo: the cards must be flipped on the right side! - so, create a set of new cards which corresponds with the old cards
 
             dest.forcePut(newCard);
         }

@@ -1,13 +1,14 @@
 package ija.ija2016.project.gui;
 
-import ija.ija2016.project.game.*;
+import ija.ija2016.project.game.GameFactory;
+import ija.ija2016.project.game.GameInterface;
+import ija.ija2016.project.game.GameObserverInterface;
+import ija.ija2016.project.game.GameRuleValidator;
 import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.model.cards.CardDeckInterface;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -29,20 +30,18 @@ import java.util.ResourceBundle;
 
 public class GameController implements Initializable, GameObserverInterface {
 
-    final DragContext dragContext = new DragContext();
-    @FXML
-    public GridPane main_window;
+    //    @FXML
+//    public GridPane main_window;
     @FXML
     public MenuItem saveMenu, loadMenu, restartMenu, newGameMenu, tipMenu;
-
     @FXML
     public Button btn__undo;
     // working stacks 1-7
     public GridPane working_pane;
     // top panel, target, wasting, drawing stacks
     public GridPane top_pane;
-    CardPool cardPool;
-    ArrayList<MoveCommandInterface> tips;
+    private CardPool cardPool;
+    private ArrayList<MoveCommandInterface> tips;
     private WastingPackView wasting;
     private DrawingPackView drawing;
     // target stacks
@@ -56,7 +55,7 @@ public class GameController implements Initializable, GameObserverInterface {
     private MoveCommandInterface actualMove;
 
     public GameController() {
-        this.main_window = new GridPane();
+//        this.main_window = new GridPane();
         this.working_pane = new GridPane();
 
         this.game = (new GameFactory().createGame());
@@ -124,7 +123,7 @@ public class GameController implements Initializable, GameObserverInterface {
         this.createGame();
     }
 
-    public void createGame() {
+    private void createGame() {
         try {
             this.working_pane.add(this.wstack1, 0, 0);
             this.working_pane.add(this.wstack2, 1, 0);
@@ -169,40 +168,18 @@ public class GameController implements Initializable, GameObserverInterface {
             this.target3.setOnMousePressed(this::onStackMousePressed);
             this.target4.setOnMousePressed(this::onStackMousePressed);
 
-            this.drawing.setOnMousePressed(this::getCardFromDrawingPack);
-            this.btn__undo.setOnMouseClicked(this::undoButtonClicked);
+            this.drawing.setOnMousePressed(e1 -> this.getCardFromDrawingPack());
+            this.btn__undo.setOnMouseClicked(mouseEvent -> this.undoButtonClicked());
 
-            this.saveMenu.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                    GameController.this.saveButtonClicked();
-                }
-            });
+            this.saveMenu.setOnAction(e -> GameController.this.saveButtonClicked());
 
-            this.loadMenu.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                    GameController.this.loadButtonClicked();
-                }
-            });
+            this.loadMenu.setOnAction(e -> GameController.this.loadButtonClicked());
 
-            this.restartMenu.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                    GameController.this.restartButtonClicked();
-                }
-            });
+            this.restartMenu.setOnAction(e -> GameController.this.restartButtonClicked());
 
-            this.newGameMenu.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    GameController.this.newGameButtonClicked();
-                }
-            });
+            this.newGameMenu.setOnAction(e -> GameController.this.newGameButtonClicked());
 
-            this.tipMenu.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    GameController.this.tipButtonClicked();
-                }
-            });
+            this.tipMenu.setOnAction(e -> GameController.this.tipButtonClicked());
 
             this.actualMove = new MoveGameCommand(null, null, 1);
             this.setMouseEventsOnAllCardViews();
@@ -216,14 +193,9 @@ public class GameController implements Initializable, GameObserverInterface {
 
         if (this.tips == null) {
             System.out.println("Tips == null, trying to get the tips!");
-            try {
-                this.tips = this.game.tip();
-                if (this.tips.isEmpty()) {
-                    System.out.println("No tips found empty!");
-                }
-            } catch (TipException e) {
-                System.out.println("No tips found exc!");
-                return;
+            this.tips = this.game.tip();
+            if (this.tips.isEmpty()) {
+                System.out.println("No tips found empty!");
             }
         }
 
@@ -269,7 +241,6 @@ public class GameController implements Initializable, GameObserverInterface {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return;
         }
 
 
@@ -430,20 +401,15 @@ public class GameController implements Initializable, GameObserverInterface {
         System.out.println("RESTARTING THE GAME" + this.game.restartGame());
     }
 
-    private void undoButtonClicked(MouseEvent mouseEvent) {
-        try {
-            this.game.undo();
-            System.out.println("UNDO DONE");
-        } catch (UndoException e) {
-            e.printStackTrace();
-            System.out.println("CANT UNDO!");
-        }
+    private void undoButtonClicked() {
+        this.game.undo();
+        System.out.println("UNDO DONE");
     }
 
     /**
      * Get card from wasting deck to drawing on click event
      */
-    private void getCardFromDrawingPack(MouseEvent e) {
+    private void getCardFromDrawingPack() {
         System.out.println("in da click");
 
         if (!this.game.getDrawingDeck().isEmpty()) {
@@ -478,7 +444,7 @@ public class GameController implements Initializable, GameObserverInterface {
         this.clearSelectEffects();
     }
 
-    protected void clearSelectEffects() {
+    private void clearSelectEffects() {
         for (WorkingStackView working : this.workingStacks) {
             working.setEffect(null);
             for (Node child : working.getChildren()) {

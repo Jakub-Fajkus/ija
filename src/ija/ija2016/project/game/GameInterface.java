@@ -16,11 +16,11 @@ public interface GameInterface extends Serializable {
 
     /**
      * Move count cards from source to destination.
-     *
+     * <p>
      * This should perform a safe try to change the game's state.
      * If the resulting state would not be valid, it should not allow to get to the state.
      * This call must maintain the consistency of the game(not fully performing the move).
-     *
+     * <p>
      * This call creates a history point which can be reverted by the undo operation.
      *
      * @param source      Source card deck
@@ -29,21 +29,6 @@ public interface GameInterface extends Serializable {
      * @return True on success, false otherwise
      */
     boolean move(CardDeckInterface source, CardDeckInterface destination, int count);
-
-    /**
-     * Move all cards from source to destination.
-     * <p>
-     * This should perform a safe try to change the game's state.
-     * If the resulting state would not be valid, it should not allow to get to the state.
-     * This call must maintain the consistency of the game(not fully performing the move).
-     * <p>
-     * This call creates a history point which can be reverted by the undo operation.
-     *
-     * @param source      Source card deck
-     * @param destination Destination card deck
-     * @return True on success, false otherwise
-     */
-    boolean move(CardDeckInterface source, CardDeckInterface destination);
 
     /**
      * Add a deck of cards to the game. The cards will be redistributed to appropriate stacks.
@@ -67,22 +52,8 @@ public interface GameInterface extends Serializable {
      * <p>
      * This should return the game state to state before the last move was done.
      * This method can be called many times, each time reverting a single move.
-     *
-     * @throws UndoException When the undo cannot be done.
      */
-    void undo() throws UndoException;
-
-    /**
-     * Go back from the undo.
-     * <p>
-     * Move the current game state more to the present.
-     * <p>
-     * This should return the game state to state before the last undo was done.
-     * This method can be called many times, each time reverting the last undo.
-     *
-     * @throws RedoException When the redo cannot be done.
-     */
-    MoveCommandInterface redo() throws RedoException;
+    void undo();
 
     /**
      * Get the game to the starting state.
@@ -95,10 +66,8 @@ public interface GameInterface extends Serializable {
 
     /**
      * Get hints for the next move.
-     *
-     * @throws TipException When there is no move to be performed. There is no way of finishing the game.
      */
-    ArrayList<MoveCommandInterface> tip() throws TipException;
+    ArrayList<MoveCommandInterface> tip();
 
 
     /**

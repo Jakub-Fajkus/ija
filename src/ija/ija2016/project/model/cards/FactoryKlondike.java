@@ -1,9 +1,6 @@
-package ija.ija2016.project.model.board;
-
-import ija.ija2016.project.model.cards.*;
+package ija.ija2016.project.model.cards;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class FactoryKlondike extends AbstractFactorySolitaire {
 
@@ -33,36 +30,16 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
     }
 
     /**
-     * Vytvoří objekt reprezentující kartu.
-     *
-     * @param color
-     * @param value
-     * @return
-     */
-    @Override
-    public Card createCard(Card.Color color, int value) {
-        if (value == 0 || value > this.getCountOfCardsOfSameColor()) {
-            return null;
-        }
-
-        return new Card(color, value, false);
-    }
-
-    /**
      * Vytváří objekt reprezentující balíček karet a zamicha jej.
      *
      * @return
      */
     @Override
     public CardDeck createShuffledCardDeck() {
-        return this.createCardDeck(true);
+        return this.createCardDeck();
     }
 
-    public CardDeck createUnshuffledCardDeck() {
-        return this.createCardDeck(false);
-    }
-
-    private CardDeck createCardDeck(boolean shuffle) {
+    private CardDeck createCardDeck() {
         CardDeck deck = new DrawingCardDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
 
         ArrayList<Card> cards = new ArrayList<>(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
@@ -72,24 +49,11 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
         cards.addAll(this.generateCards(Card.Color.HEARTS));
         cards.addAll(this.generateCards(Card.Color.SPADES));
 
-        if (shuffle) {
-            Collections.shuffle(cards);
-        }
-
         deck.put(cards.toArray(new CardInterface[0]));
 
         return deck;
     }
 
-    /**
-     * Vytvori prazdny objekt reprezentujici balicek karet
-     *
-     * @return
-     */
-    @Override
-    public CardDeckInterface createEmptyCardDeck() {
-        return new CardDeck(this.getCountOfCardsOfSameColor() * this.getCountOfTargetDecks());
-    }
 
     /**
      * Create an empty drawing deck

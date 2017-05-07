@@ -1,9 +1,4 @@
-package ija.ija2016.project.model.board;
-
-import ija.ija2016.project.model.cards.CardDeckInterface;
-import ija.ija2016.project.model.cards.CardInterface;
-import ija.ija2016.project.model.cards.CardStackInterface;
-import ija.ija2016.project.model.cards.TargetCardDeckInterface;
+package ija.ija2016.project.model.cards;
 
 public abstract class AbstractFactorySolitaire {
     /**
@@ -40,34 +35,12 @@ public abstract class AbstractFactorySolitaire {
     public abstract int getCountOfTargetDecks();
 
     /**
-     * Vytvoří objekt reprezentující kartu.
-     *
-     * @param color
-     * @param value
-     * @return
-     */
-    public abstract CardInterface createCard(CardInterface.Color color, int value);
-
-    /**
      * Vytváří objekt reprezentující balíček karet a zamicha jej.
      *
      * @return
      */
     public abstract CardDeckInterface createShuffledCardDeck();
 
-    /**
-     * Vytváří objekt reprezentující balíček karet a nezamicha jej.
-     *
-     * @return
-     */
-    public abstract CardDeckInterface createUnshuffledCardDeck();
-
-    /**
-     * Vytvori prazdny objekt reprezentujici balicek karet
-     *
-     * @return
-     */
-    public abstract CardDeckInterface createEmptyCardDeck();
 
     /**
      * Vytvori prazdny odkladaci balicek karet

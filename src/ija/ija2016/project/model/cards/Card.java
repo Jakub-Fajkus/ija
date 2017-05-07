@@ -18,22 +18,6 @@ public class Card implements CardInterface {
         this.facingUp = card.isTurnedFaceUp();
     }
 
-    public static Card.Color[] values() {
-        return Color.values();
-    }
-
-    public static Card.Color valueOf(String name) {
-        if (name == null) {
-            throw new NullPointerException("the argument name is null");
-        }
-        //ija.ija2016.project.game.cards.CardInterface.Color.values()[0].name()
-        return Card.Color.valueOf(name);
-    }
-
-    public static String beginningChar(Card.Color color) {
-        return color.name().substring(0, 1);
-    }
-
     @Override
     public Card.Color color() {
         return this.color;
@@ -81,10 +65,6 @@ public class Card implements CardInterface {
         return this.color.similarColorTo(c.color());
     }
 
-    @Override
-    public int compareValue(CardInterface c) {
-        return this.value - c.value();
-    }
 
     /**
      * @return

@@ -1,10 +1,10 @@
 package ija.ija2016.project.game;
 
 import ija.ija2016.project.game.command.MoveCommandInterface;
-import ija.ija2016.project.model.board.AbstractFactorySolitaire;
+import ija.ija2016.project.model.cards.AbstractFactorySolitaire;
 
 public class GameWithMoveRestrictions extends Game {
-    protected transient GameRuleValidator validator;
+    private transient GameRuleValidator validator;
 
     public GameWithMoveRestrictions(AbstractFactorySolitaire factorySolitaire) {
         super(factorySolitaire);

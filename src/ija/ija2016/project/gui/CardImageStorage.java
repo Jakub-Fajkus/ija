@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class CardImageStorage {
-    public static final String FACING_DOWN_IMAGE = "FD";
+    private static final String FACING_DOWN_IMAGE = "FD";
     private static CardImageStorage ourInstance;
     private Hashtable<String, Image> images;
 

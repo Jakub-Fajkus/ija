@@ -46,33 +46,13 @@ public class NaiveAIStrategy implements AIStrategyInterface {
         CardInterface card = game.getWastingDeck().get();
         if (card != null) {
             this.tryToMoveToTargets(game.getWastingDeck(), card);
-            card = null;
         }
 
         //check if the card from the wasting could be moved to the workings
         card = game.getWastingDeck().get();
         if (card != null) {
             this.tryToMoveToWorkings(game.getWastingDeck(), card);
-            card = null;
         }
-
-//        //check if any card can be moved from wasting to and a working
-//        for (int i = 0; i < game.getWorkingCardStacks().length; i++) {
-//            CardDeckInterface source = game.getWorkingCardStacks()[i];
-//            CardInterface card1 = source.get();
-//            if (card1 == null) {
-//                continue;
-//            }
-//
-//            for (int j = 0; i != j && j < game.getWorkingCardStacks().length; j++) {
-//                CardDeckInterface target = game.getWorkingCardStacks()[j];
-//
-//                if (target.put(card1)) {
-//                    this.commands.add(new MoveGameCommand(source, target, 1));
-//                    target.pop();
-//                }
-//            }
-//        }
 
         //check if more cards can be moved between a working and a working
         //for each source deck

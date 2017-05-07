@@ -1,10 +1,8 @@
 package ija.ija2016.project.game.command;
 
-import ija.ija2016.project.game.GameInterface;
-import ija.ija2016.project.game.UndoException;
-import ija.ija2016.project.model.board.FactoryKlondike;
 import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
+import ija.ija2016.project.model.cards.FactoryKlondike;
 
 public class MoveGameCommand extends GameCommand implements MoveCommandInterface {
     private CardDeckInterface source;
@@ -18,7 +16,7 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
     }
 
     @Override
-    public boolean execute(GameInterface game) {
+    public boolean execute() {
         if (this.count == 0) {
             while (!this.source.isEmpty()) {
                 if (!this.destination.put(this.source.pop())) {
@@ -47,11 +45,6 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
         }
 
         return true;
-    }
-
-    @Override
-    public GameInterface undo() throws UndoException {
-        return null; //todo: throw an exception?
     }
 
     /**

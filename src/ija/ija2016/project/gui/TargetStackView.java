@@ -27,7 +27,7 @@ public class TargetStackView extends GuiStackPane {
     @Override
     public String toString() {
         return "TargetStackView{" +
-                "orderNumber=" + orderNumber +
+                "orderNumber=" + this.orderNumber +
                 '}';
     }
 }

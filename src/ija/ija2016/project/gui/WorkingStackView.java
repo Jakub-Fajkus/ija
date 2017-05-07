@@ -44,7 +44,7 @@ public class WorkingStackView extends GuiStackPane {
     @Override
     public String toString() {
         return "WorkingStackView{" +
-                "orderNumber=" + orderNumber +
+                "orderNumber=" + this.orderNumber +
                 '}';
     }
 }

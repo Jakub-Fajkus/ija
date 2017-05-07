@@ -23,7 +23,7 @@ public class WorkingCardStack extends CardStack {
         }
 
         //zajistit stridani barev
-        if (this.cards.peek().color().similarColorTo(card.color())) {
+        if (this.cards.peek().similarColorTo(card)) {
             return false;
         }
 

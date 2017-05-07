@@ -45,8 +45,7 @@ public class GameHistory {
      * @return
      */
     public boolean executeCommand() {
-        return this.command.execute(this.game);
-//        todo:
+        return this.command.execute();
     }
 
 }

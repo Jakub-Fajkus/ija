@@ -48,15 +48,6 @@ public interface CardInterface extends Serializable {
     boolean similarColorTo(CardInterface c);
 
     /**
-     * Porovná hodnotu karty se zadanou kartou c. Pokud jsou stejné, vrací 0.
-     * Pokud je karta větší než zadaná c, vrací kladný rozdíl hodnot.
-     *
-     * @param c ija.ija2016.project.game.cards.CardInterface
-     * @return int
-     */
-    int compareValue(CardInterface c);
-
-    /**
      * @return
      */
     String getValueAsString();

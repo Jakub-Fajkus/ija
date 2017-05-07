@@ -41,7 +41,7 @@ public interface MoveCommandInterface extends GameCommandInterface {
 
     /**
      * Get a count of objects to be moved.
-     *
+     * <p>
      * If the count is equal to zero, all objects will be moved
      *
      * @return int Count of the objects

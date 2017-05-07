@@ -10,11 +10,11 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 
 abstract public class GuiStackPane extends StackPane implements GameObserverInterface {
-    protected CardPool cardPool;
-    protected CardDeckInterface pack;
-    protected GameInterface game;
+    CardPool cardPool;
+    CardDeckInterface pack;
+    GameInterface game;
 
-    public GuiStackPane(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
+    GuiStackPane(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
         this.pack = pack;
         this.game = game;
         this.cardPool = cardPool;
@@ -26,7 +26,7 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
     }
 
     public CardDeckInterface getPack() {
-        return pack;
+        return this.pack;
     }
 
     /**
@@ -34,7 +34,7 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
      * <p>
      * This method is calle every time the game state is changed
      */
-    protected void redrawCards() {
+    void redrawCards() {
         this.getChildren().clear();
 
         for (int i = 0; i < this.getPack().size(); i++) {

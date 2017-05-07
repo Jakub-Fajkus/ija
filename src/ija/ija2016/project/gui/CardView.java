@@ -5,13 +5,10 @@ import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DataFormat;
 import javafx.scene.paint.Color;
 
 
 public class CardView extends ImageView {
-    public static final DataFormat CARD = new DataFormat("Card");
-    final DragContext dragContext = new DragContext();
     private CardInterface card;
     private GuiStackPane containingElement;
     private double offset = 0;

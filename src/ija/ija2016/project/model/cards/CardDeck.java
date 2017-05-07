@@ -5,8 +5,8 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class CardDeck implements CardDeckInterface {
-    protected Stack<CardInterface> cards;
-    protected int maxDeckSize;
+    Stack<CardInterface> cards;
+    private int maxDeckSize;
 
     public CardDeck(int size) {
         this.maxDeckSize = size;
@@ -154,23 +154,6 @@ public class CardDeck implements CardDeckInterface {
         }
 
         this.cards.push(card);
-
-        return true;
-    }
-
-    /**
-     * Add cards to the deck and skip all semantic checks
-     *
-     * @param cards
-     * @return
-     */
-    @Override
-    final public boolean forcePut(CardInterface[] cards) {
-        for (CardInterface card : cards) {
-            if (!this.forcePut(card)) {
-                return false;
-            }
-        }
 
         return true;
     }

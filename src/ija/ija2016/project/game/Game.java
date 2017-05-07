@@ -6,11 +6,7 @@ import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.game.persistence.filesystem.FilesystemFactory;
-import ija.ija2016.project.model.board.AbstractFactorySolitaire;
-import ija.ija2016.project.model.cards.CardDeckInterface;
-import ija.ija2016.project.model.cards.CardInterface;
-import ija.ija2016.project.model.cards.CardStackInterface;
-import ija.ija2016.project.model.cards.TargetCardDeckInterface;
+import ija.ija2016.project.model.cards.*;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -43,9 +39,7 @@ public class Game implements GameInterface {
         this.state = new GameState(targetPacks, drawingDeck, wastingDeck, workingCardStacks);
 
         //if we have our history, do not lose it
-        if (this.history != null && history == null) {
-
-        } else {
+        if (this.history == null || history != null) {
             this.history = history;
         }
 
@@ -57,7 +51,7 @@ public class Game implements GameInterface {
      *
      * @param game Game object which data should be copied into the current game
      */
-    public void init(GameInterface game) {
+    void init(GameInterface game) {
         this.init(game.getTargetPacks(), game.getDrawingDeck(), game.getWastingDeck(), game.getWorkingCardStacks(), game.getHistory());
     }
 
@@ -78,26 +72,6 @@ public class Game implements GameInterface {
     @Override
     public boolean move(CardDeckInterface source, CardDeckInterface destination, int count) {
         MoveGameCommand command = new MoveGameCommand(source, destination, count);
-
-        return this.move(command);
-    }
-
-    /**
-     * Move all cards from source to destination.
-     * <p>
-     * This should perform a safe try to change the game's state.
-     * If the resulting state would not be valid, it should not allow to get to the state.
-     * This call must maintain the consistency of the game(not fully performing the move).
-     * <p>
-     * This call creates a history point which can be reverted by the undo operation.
-     *
-     * @param source      Source card deck
-     * @param destination Destination card deck
-     * @return True on success, false otherwise
-     */
-    @Override
-    public boolean move(CardDeckInterface source, CardDeckInterface destination) {
-        MoveGameCommand command = new MoveGameCommand(source, destination, 0);
 
         return this.move(command);
     }
@@ -190,22 +164,6 @@ public class Game implements GameInterface {
     }
 
     /**
-     * Go back from the undo.
-     * <p>
-     * Move the current game state more to the present.
-     * <p>
-     * This should return the game state to state before the last undo was done.
-     * This method can be called many times, each time reverting the last undo.
-     *
-     * @throws RedoException When the redo cannot be done.
-     */
-    @Override
-    public MoveCommandInterface redo() throws RedoException {
-        //delete? :D
-        return null;
-    }
-
-    /**
      * Get the game to the starting state.
      * <p>
      * This should restart the game state to state before the player started to play
@@ -227,7 +185,7 @@ public class Game implements GameInterface {
      * @throws TipException When there is no move to be performed. There is no way of finishing the game.
      */
     @Override
-    public ArrayList<MoveCommandInterface> tip() throws TipException {
+    public ArrayList<MoveCommandInterface> tip() {
         //save the current state as the strategy may change the game state
         GameHistory newSnapshot = new GameHistory(null, this.state, this);
 

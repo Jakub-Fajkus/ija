@@ -37,14 +37,6 @@ public interface CardDeckInterface extends Serializable {
     boolean forcePut(CardInterface card);
 
     /**
-     * Add cards to the deck and skip all semantic checks
-     *
-     * @param cards
-     * @return
-     */
-    boolean forcePut(CardInterface[] cards);
-
-    /**
      * @return Aktuální počet karet v balíčku.
      */
     int size();

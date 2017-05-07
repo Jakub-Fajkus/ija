@@ -4,6 +4,7 @@
     <property name="main.src.dir" value="src"/>
     <property name="main.lib.dir" value="lib"/>
     <property name="main.dist.dir" value="dest-client"/>
+    <property name="main.doc.dir" value="doc"/>
 
     <path id="project.classpath">
         <pathelement location="${main.src.dir}"/>
@@ -61,6 +62,16 @@
         <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false" debug="on">
             <classpath refid="project.classpath"/>
         </javac>
+    </target>
+
+    <target name="docs">
+        <javadoc packagenames="ija.ija2016.project.*" sourcepath="${main.src.dir}" destdir="${main.doc.dir}"
+                 windowtitle="Solitaire">
+            <doctitle>Solitaire</doctitle>
+            <group title="Game" packages="ija.ija2016.project.game, ija.ija2016.project.game.*"/>
+            <group title="GUI" packages="ija.ija2016.project.gui,  ija.ija2016.project.gui.*"/>
+            <group title="Model" packages="ija.ija2016.project.model.*"/>
+        </javadoc>
     </target>
 </project>
 
