@@ -1,4 +1,4 @@
-package ija.ija2016.project.game.ui;
+package ija.ija2016.project.game.ai;
 
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.command.MoveCommandInterface;

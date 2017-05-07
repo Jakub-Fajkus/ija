@@ -1,4 +1,4 @@
-package ija.ija2016.project.game.ui;
+package ija.ija2016.project.game.ai;
 
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.command.MoveCommandInterface;
@@ -37,13 +37,15 @@ public class NaiveAIStrategy implements AIStrategyInterface {
             CardDeckInterface stack = game.getWorkingCardStacks()[i];
             CardInterface card = stack.get();
 
-            this.tryToMoveToTargets(stack, card);
+            if (card != null) {
+                this.tryToMoveToTargets(stack, card);
+            }
         }
 
         //check if the card from the wasting could be moved to the targets
         CardInterface card = game.getWastingDeck().get();
         if (card != null) {
-            tryToMoveToTargets(game.getWastingDeck(), card);
+            this.tryToMoveToTargets(game.getWastingDeck(), card);
             card = null;
         }
 
@@ -112,8 +114,8 @@ public class NaiveAIStrategy implements AIStrategyInterface {
     }
 
     private void tryToMoveToTargets(CardDeckInterface source, CardInterface card) {
-        for (int j = 0; j < game.getTargetPacks().length; j++) {
-            CardDeckInterface target = game.getTargetPacks()[j];
+        for (int j = 0; j < this.game.getTargetPacks().length; j++) {
+            CardDeckInterface target = this.game.getTargetPacks()[j];
             if (target.put(card)) {
                 this.commands.add(new MoveGameCommand(source, target, 1));
                 target.pop();
