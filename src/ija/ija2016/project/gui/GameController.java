@@ -373,10 +373,14 @@ public class GameController implements Initializable, GameObserverInterface {
         if (file != null) {
             try {
                 this.game.persistState(file.getPath());
-                System.out.println("SUCCESSfuly saved");
+                System.out.println("SUCCESSfully saved");
             } catch (PersistStateException e) {
                 e.printStackTrace();
-                System.out.println("Can not save");
+                System.out.println("Can not save\n");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Ukládání hry");
+                alert.setHeaderText("Hru nelze uložit.");
+                alert.showAndWait();
             }
         }
     }
@@ -389,10 +393,13 @@ public class GameController implements Initializable, GameObserverInterface {
         if (file != null) {
             try {
                 this.game.loadState(file.getPath());
-                System.out.println("SUCCESSfuly loaded");
             } catch (LoadStateException e) {
                 e.printStackTrace();
-                System.out.println("Can not load");
+                System.out.println("Can not load game\n");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Načtení uložené hry");
+                alert.setHeaderText("Hru nelze načíst.");
+                alert.showAndWait();
             }
         }
     }
