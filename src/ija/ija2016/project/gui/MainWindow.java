@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.ColumnConstraints;
@@ -52,9 +53,9 @@ public class MainWindow extends Application implements Initializable {
         try {
             Parent root = FXMLLoader.load(this.getClass().getResource("MainWindow.fxml"));
             primaryStage.setTitle("Madafaka Solitaire");
-            primaryStage.setScene(new Scene(root, 960, 520));
-            primaryStage.setMinHeight(520);
-            primaryStage.setMinWidth(960);
+            primaryStage.setScene(new Scene(root, 720, 450));
+            primaryStage.setMinHeight(450);
+            primaryStage.setMinWidth(720);
             primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception error) {
@@ -98,6 +99,15 @@ public class MainWindow extends Application implements Initializable {
     public void gamesGridHandler() {
         primaryStageCover.setMaximized(true);
 
+        if (this.gameCounter == 4) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Hrací plochy jsou plné");
+            alert.setHeaderText("Již nelze vytvořit další hru, lze hrát pouze 4 naráz.");
+
+            alert.showAndWait();
+            return;
+        }
+
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Game.fxml"));
         Parent gameRoot = null;
         try {
@@ -105,8 +115,6 @@ public class MainWindow extends Application implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         GameController controller = fxmlLoader.getController();
 
         RowConstraints row1 = main_window.getRowConstraints().get(0);

@@ -12,9 +12,9 @@
    <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="Nova hra">
+          <Menu mnemonicParsing="false" text="Další hra">
             <items>
-              <MenuItem fx:id="addGameMenu" mnemonicParsing="false" text="Vytvorit" />
+              <MenuItem fx:id="addGameMenu" mnemonicParsing="false" text="Přidat novou" />
             </items>
           </Menu>
             <Menu fx:id="closeGameMenu" mnemonicParsing="false" text="Zavřít hru" />
