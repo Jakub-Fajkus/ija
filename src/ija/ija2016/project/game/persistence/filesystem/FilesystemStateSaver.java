@@ -24,7 +24,11 @@ public class FilesystemStateSaver implements FilesystemStateSaverInterface {
     @Override
     public void persistState(GameInterface game, String name) throws PersistStateException {
         try {
-            FileOutputStream fileOut = new FileOutputStream(name + FilesystemStateSaverInterface.FILE_EXTENSION);
+            if (!name.endsWith(FilesystemStateSaverInterface.FILE_EXTENSION)) {
+                name += FilesystemStateSaverInterface.FILE_EXTENSION;
+            }
+
+            FileOutputStream fileOut = new FileOutputStream(name);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(game);
             out.close();

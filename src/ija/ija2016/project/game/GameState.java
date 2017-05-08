@@ -16,7 +16,7 @@ public class GameState implements Serializable {
     private CardStackInterface wastingDeck;
     private CardStackInterface[] workingCardStacks;
     private ArrayList<CardInterface> allCards;
-    private AbstractFactorySolitaire factorySolitaire;
+    private transient AbstractFactorySolitaire factorySolitaire;
 
     /**
      * Create a game state from the given stacks

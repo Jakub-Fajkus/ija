@@ -5,12 +5,13 @@
 
 package ija.ija2016.project.model.cards;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Represents a single card stack.
  */
-public interface CardStackInterface {
+public interface CardStackInterface extends Serializable {
     /**
      * Removes the card from the top of the stack. The removed card is then returned.
      *
