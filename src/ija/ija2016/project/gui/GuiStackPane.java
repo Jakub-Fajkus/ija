@@ -2,7 +2,7 @@ package ija.ija2016.project.gui;
 
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.GameObserverInterface;
-import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -11,10 +11,10 @@ import javafx.scene.layout.StackPane;
 
 abstract public class GuiStackPane extends StackPane implements GameObserverInterface {
     CardPool cardPool;
-    CardDeckInterface pack;
+    CardStackInterface pack;
     GameInterface game;
 
-    GuiStackPane(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
+    GuiStackPane(CardStackInterface pack, GameInterface game, CardPool cardPool) {
         this.pack = pack;
         this.game = game;
         this.cardPool = cardPool;
@@ -25,7 +25,7 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
         this.setOnMouseDragEntered(this::mouseEntered);
     }
 
-    public CardDeckInterface getPack() {
+    public CardStackInterface getPack() {
         return this.pack;
     }
 

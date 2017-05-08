@@ -43,10 +43,9 @@ public class MainWindow extends Application implements Initializable {
 
         primaryStageCover = primaryStage;
 
-
         try {
             Parent root = FXMLLoader.load(this.getClass().getResource("MainWindow.fxml"));
-            primaryStage.setTitle("Madafaka Solitaire");
+            primaryStage.setTitle("Solitaire");
             primaryStage.setScene(new Scene(root, 720, 450));
             primaryStage.setMinHeight(450);
             primaryStage.setMinWidth(720);

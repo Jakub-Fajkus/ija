@@ -41,7 +41,7 @@ public class CardPool {
     }
 
     private String getCardString(CardInterface card) {
-        return card.getValueAsString() + card.color();
+        return card.getValueAsString() + card.getColor();
     }
 
     public void updateCards(ArrayList<CardInterface> cards) {
@@ -50,7 +50,7 @@ public class CardPool {
 
             //find a card with the values as the current value has
             for (CardInterface card : cards) {
-                if (card.color() == value.getCard().color() && card.value() == value.getCard().value()) {
+                if (card.getColor() == value.getCard().getColor() && card.getValue() == value.getCard().getValue()) {
                     value.setCard(card);
                     value.removeShadow();
                 }

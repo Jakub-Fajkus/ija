@@ -1,6 +1,8 @@
 package ija.ija2016.project.model.cards;
 
-
+/**
+ * Basic implementation of CardInterface.
+ */
 public class Card implements CardInterface {
     private CardInterface.Color color;
     private int value;
@@ -13,18 +15,18 @@ public class Card implements CardInterface {
     }
 
     public Card(CardInterface card) {
-        this.color = card.color();
-        this.value = card.value();
+        this.color = card.getColor();
+        this.value = card.getValue();
         this.facingUp = card.isTurnedFaceUp();
     }
 
     @Override
-    public Card.Color color() {
+    public Card.Color getColor() {
         return this.color;
     }
 
     @Override
-    public int value() {
+    public int getValue() {
         return this.value;
     }
 
@@ -44,11 +46,6 @@ public class Card implements CardInterface {
         return true;
     }
 
-    /**
-     * Otočí kartu lícem dolu. Pokud tak už je, nedělá nic.
-     *
-     * @return boolean Informace, zda došlo k otočení karty (=true) nebo ne.
-     */
     @Override
     public boolean turnFaceDown() {
         if (!this.facingUp) {
@@ -62,13 +59,10 @@ public class Card implements CardInterface {
 
     @Override
     public boolean similarColorTo(CardInterface c) {
-        return this.color.similarColorTo(c.color());
+        return this.color.similarColorTo(c.getColor());
     }
 
 
-    /**
-     * @return
-     */
     @Override
     public String getValueAsString() {
         if (this.value == 1) {

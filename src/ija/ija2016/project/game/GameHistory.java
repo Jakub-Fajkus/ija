@@ -36,7 +36,7 @@ public class GameHistory {
      * This is meant to be used while backing up the game state without performing any move
      */
     public void saveGameState() {
-        this.state = new GameState(this.game.getState());
+        this.state = new GameState(this.game.getState(), this.game.getSolitaireFactory());
     }
 
     /**

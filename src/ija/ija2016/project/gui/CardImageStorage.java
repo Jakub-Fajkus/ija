@@ -35,7 +35,7 @@ public class CardImageStorage {
     }
 
     private String getCardString(CardInterface card) {
-        return card.getValueAsString() + card.color();
+        return card.getValueAsString() + card.getColor();
     }
 
     public Image get(CardInterface card) {

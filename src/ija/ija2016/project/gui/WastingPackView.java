@@ -1,11 +1,11 @@
 package ija.ija2016.project.gui;
 
 import ija.ija2016.project.game.GameInterface;
-import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 
 public class WastingPackView extends GuiStackPane {
 
-    public WastingPackView(CardDeckInterface pack, GameInterface game, CardPool cardPool) {
+    public WastingPackView(CardStackInterface pack, GameInterface game, CardPool cardPool) {
         super(pack, game, cardPool);
         this.setHeight(120);
         this.setWidth(82);

@@ -1,6 +1,6 @@
 package ija.ija2016.project.game;
 
-import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 
 public class GameRuleValidator {
     private GameInterface game;
@@ -9,7 +9,7 @@ public class GameRuleValidator {
         this.game = game;
     }
 
-    public boolean validate(CardDeckInterface source, CardDeckInterface destination, int count) {
+    public boolean validate(CardStackInterface source, CardStackInterface destination, int count) {
         // one from drawing to wasting
         if (source == this.game.getDrawingDeck() && destination == this.game.getWastingDeck() && count == 1) {
             return true;
@@ -45,8 +45,8 @@ public class GameRuleValidator {
 
     }
 
-    private boolean isWorkingDeck(CardDeckInterface deck) {
-        for (CardDeckInterface working : this.game.getWorkingCardStacks()) {
+    private boolean isWorkingDeck(CardStackInterface deck) {
+        for (CardStackInterface working : this.game.getWorkingCardStacks()) {
             if (working == deck) {
                 return true;
             }
@@ -55,8 +55,8 @@ public class GameRuleValidator {
         return false;
     }
 
-    public boolean isTargetStack(CardDeckInterface deck) {
-        for (CardDeckInterface target : this.game.getTargetPacks()) {
+    public boolean isTargetStack(CardStackInterface deck) {
+        for (CardStackInterface target : this.game.getTargetPacks()) {
             if (target == deck) {
                 return true;
             }

@@ -1,69 +1,102 @@
 package ija.ija2016.project.model.cards;
 
+/**
+ * Base class for all card factory classes.
+ */
 public abstract class AbstractFactorySolitaire {
     /**
      * How many cards of the same color are there in the current card pack.
-     * e.g. 13 for standard 52 card deck without jokers
+     * <p>
+     * Example: 13 cards for standard 52 card deck without jokers.
+     *
+     * @return count of cards
      */
     public abstract int getCountOfCardsOfSameColor();
 
     /**
      * How many facing down cards can be on the working stack.
+     *
+     * @return count of cards
      */
     public abstract int getMaximumNumberOfCardsFacingDownInWorkingStack();
 
     /**
      * How many cards may fit into one working stack.
-     * e.g. For klondike solitaire this equals 6 + 13.
      * <p>
-     * Should be equal to getCountOfCardsOfSameColor() + getMaximumNumberOfCardsFacingDownInWorkingStack()
+     * Example: For klondike solitaire this equals 13 + 6.
+     * <p>
+     * Same as {@link #getCountOfCardsOfSameColor()} + {@link #getMaximumNumberOfCardsFacingDownInWorkingStack()}
+     *
+     * @return count of cards
      */
     public abstract int getMaximumNumberOfCardsInWorkingStack();
 
     /**
      * How many working stack are there.
-     * e.g. For klondike it is 7.
+     * <p>
+     * Example: For klondike it is 7.
+     *
+     * @return count of cards
      */
     public abstract int getCountOfWorkingStacks();
 
     /**
-     * How many target decks are there.
+     * How many target stacks are there.
      * <p>
      * This may be the same number a the count of all card colors(symbols).
-     * e.g. 4 for for standard 52 card deck
+     * <p>
+     * Example: 4 for for standard 52 card deck.
+     *
+     * @return count fo cards
      */
-    public abstract int getCountOfTargetDecks();
+    public abstract int getCountOfTargetStacks();
 
     /**
-     * Vytváří objekt reprezentující balíček karet a zamicha jej.
+     * Create an object representing the card deck and shuffles the cards.
      *
-     * @return
+     * @return Shuffled card deck
      */
-    public abstract CardDeckInterface createShuffledCardDeck();
+    public abstract CardStackInterface createShuffledCardStack();
 
 
     /**
-     * Vytvori prazdny odkladaci balicek karet
+     * Create an empty wasting stack.
      *
-     * @return
+     * @return Empty wasting stack
      */
-    public abstract CardDeckInterface createWastingDeck();
+    public abstract CardStackInterface createWastingStack();
 
     /**
-     * Vytváří objekt reprezentující cílový balíček. Cílem hráče je vložit všechny karty zadané barvy do cílového balíčku.
+     * Create an object representing a target stack.
+     * <p>
+     * The player's aim is to move all cards to the target stack.
      *
-     * @param color
-     * @return
+     * @param color Color of the target stack. Cards with any other color will not be accepted.
+     * @return Empty working stack
      */
-    public abstract TargetCardDeckInterface createTargetPack(CardInterface.Color color);
+    public abstract TargetCardStackInterface createTargetStack(CardInterface.Color color);
 
     /**
-     * Vytváří objekt reprezentující pracovní pole pro karty.
+     * Create an object representing a working stack.
      *
-     * @return
+     * @return Empty working stack
      */
-    public abstract CardStackInterface createWorkingPack();
+    public abstract CardStackInterface createWorkingStack();
 
+    /**
+     * Create an empty card stack.
+     * <p>
+     * The stack is not representing any game object(e.g. drawing, wasting, target) but can be used for support.
+     *
+     * @return Empty card stack
+     */
     public abstract CardStackInterface createEmptyCardStack();
+
+    /**
+     * Create an empty drawing stack.
+     *
+     * @return Empty drawing stack
+     */
+    public abstract DrawingCardStack createEmptyDrawingStack();
 
 }

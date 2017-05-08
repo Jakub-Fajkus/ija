@@ -1,10 +1,17 @@
 package ija.ija2016.project.model.cards;
 
-public class DrawingCardDeck extends CardDeck {
-    public DrawingCardDeck(int size) {
+/**
+ * Card stack used as a drawing stack.
+ * The player takes cards from the drawing stack and adds the to the wasting stack.
+ */
+public class DrawingCardStack extends CardStack {
+    public DrawingCardStack(int size) {
         super(size);
     }
 
+    /**
+     * Turns the card facing down if the parent's {@link CardStack#put(CardInterface)} was successful
+     */
     @Override
     public boolean put(CardInterface card) {
         if (super.put(card)) {
@@ -16,10 +23,8 @@ public class DrawingCardDeck extends CardDeck {
     }
 
     /**
-     * Vlozi vsechny karty na zasobnik v poradi, v jakem jsou v poli - 0. index bude na dne zasobniku
-     *
-     * @param cards
-     * @return true on success, false otherwise
+     * Calls parent's {@link CardStack#put(CardInterface)} for all cards.
+     * If the parent's call is successful, turns all cards face down.
      */
     @Override
     public boolean put(CardInterface[] cards) {

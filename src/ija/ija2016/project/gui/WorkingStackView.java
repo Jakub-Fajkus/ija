@@ -1,12 +1,12 @@
 package ija.ija2016.project.gui;
 
 import ija.ija2016.project.game.GameInterface;
-import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 
 public class WorkingStackView extends GuiStackPane {
     private int orderNumber;
 
-    public WorkingStackView(CardDeckInterface pack, GameInterface game, CardPool cardPool, int orderNumber) {
+    public WorkingStackView(CardStackInterface pack, GameInterface game, CardPool cardPool, int orderNumber) {
         super(pack, game, cardPool);
         this.orderNumber = orderNumber;
         this.setHeight(356);

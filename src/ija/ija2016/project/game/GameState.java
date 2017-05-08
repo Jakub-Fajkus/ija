@@ -6,28 +6,30 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GameState implements Serializable {
-    private TargetCardDeckInterface[] targetPacks;
-    private CardDeckInterface drawingDeck;
-    private CardDeckInterface wastingDeck;
+    private TargetCardStackInterface[] targetPacks;
+    private CardStackInterface drawingDeck;
+    private CardStackInterface wastingDeck;
     private CardStackInterface[] workingCardStacks;
     private ArrayList<CardInterface> allCards;
+    private AbstractFactorySolitaire factorySolitaire;
 
     /**
      * Create a game state from the given stacks
      * <p>
      * The decks will be directly stored - no copying is performed
-     *
-     * @param targetPacks
+     *  @param targetPacks
      * @param drawingDeck
      * @param wastingDeck
      * @param workingCardStacks
+     * @param factorySolitaire
      */
-    public GameState(TargetCardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks) {
+    public GameState(TargetCardStackInterface[] targetPacks, CardStackInterface drawingDeck, CardStackInterface wastingDeck, CardStackInterface[] workingCardStacks, AbstractFactorySolitaire factorySolitaire) {
         this.targetPacks = targetPacks;
         this.drawingDeck = drawingDeck;
         this.wastingDeck = wastingDeck;
         this.workingCardStacks = workingCardStacks;
         this.allCards = new ArrayList<>();
+        this.factorySolitaire = factorySolitaire;
         this.initAllCards();
     }
 
@@ -35,23 +37,24 @@ public class GameState implements Serializable {
      * Copying constructor - the state given will be copied in this state
      *
      * @param state
+     * @param factorySolitaire
      */
-    public GameState(GameState state) {
-        FactoryKlondike factory = new FactoryKlondike();
+    public GameState(GameState state, AbstractFactorySolitaire factorySolitaire) {
+        this.factorySolitaire = factorySolitaire;
 
         this.allCards = new ArrayList<>();
-        this.drawingDeck = factory.createEmptyDrawindDeck();
-        this.wastingDeck = factory.createWastingDeck();
+        this.drawingDeck = this.factorySolitaire.createEmptyDrawingStack();
+        this.wastingDeck = this.factorySolitaire.createWastingStack();
 
-        this.targetPacks = new TargetCardDeckInterface[state.getTargetPacks().length];
+        this.targetPacks = new TargetCardStackInterface[state.getTargetPacks().length];
         for (int i = 0; i < this.targetPacks.length; i++) {
-            this.targetPacks[i] = factory.createTargetPack(state.getTargetPacks()[i].getColorOfDeck());
+            this.targetPacks[i] = this.factorySolitaire.createTargetStack(state.getTargetPacks()[i].getColorOfDeck());
         }
 
         this.workingCardStacks = new CardStackInterface[state.getWorkingCardStacks().length];
 
         for (int i = 0; i < this.workingCardStacks.length; i++) {
-            this.workingCardStacks[i] = factory.createWorkingPack();
+            this.workingCardStacks[i] = this.factorySolitaire.createWorkingStack();
         }
 
         this.initFrom(state);
@@ -66,7 +69,7 @@ public class GameState implements Serializable {
      */
     public void initFrom(GameState state) {
         //remove all cards
-        for (TargetCardDeckInterface targetPack : this.targetPacks) {
+        for (TargetCardStackInterface targetPack : this.targetPacks) {
             targetPack.removeAll();
         }
 
@@ -97,11 +100,11 @@ public class GameState implements Serializable {
     private void initAllCards() {
         this.allCards = new ArrayList<>();
 
-        for (CardDeckInterface stack : this.workingCardStacks) {
+        for (CardStackInterface stack : this.workingCardStacks) {
             this.allCards.addAll(stack.getAll());
         }
 
-        for (CardDeckInterface stack : this.targetPacks) {
+        for (CardStackInterface stack : this.targetPacks) {
             this.allCards.addAll(stack.getAll());
         }
 
@@ -110,15 +113,15 @@ public class GameState implements Serializable {
     }
 
 
-    public TargetCardDeckInterface[] getTargetPacks() {
+    public TargetCardStackInterface[] getTargetPacks() {
         return this.targetPacks;
     }
 
-    public CardDeckInterface getDrawingDeck() {
+    public CardStackInterface getDrawingDeck() {
         return this.drawingDeck;
     }
 
-    public CardDeckInterface getWastingDeck() {
+    public CardStackInterface getWastingDeck() {
         return this.wastingDeck;
     }
 
@@ -139,7 +142,7 @@ public class GameState implements Serializable {
      * @param source
      * @param destination
      */
-    private void copyAllCards(CardDeckInterface[] source, CardDeckInterface[] destination) {
+    private void copyAllCards(CardStackInterface[] source, CardStackInterface[] destination) {
         for (int i = 0; i < source.length; i++) {
             this.putAllCardsTo(source[i].getAll(), destination[i]);
         }
@@ -153,7 +156,7 @@ public class GameState implements Serializable {
      * @param cards
      * @param dest
      */
-    private void putAllCardsTo(ArrayList<CardInterface> cards, CardDeckInterface dest) {
+    private void putAllCardsTo(ArrayList<CardInterface> cards, CardStackInterface dest) {
         for (CardInterface card : cards) {
             CardInterface newCard = new Card(card);
             this.saveCardToHistory(newCard);

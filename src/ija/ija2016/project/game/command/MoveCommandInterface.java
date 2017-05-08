@@ -1,6 +1,6 @@
 package ija.ija2016.project.game.command;
 
-import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 
 /**
  * Represents a single card deck movement.
@@ -14,30 +14,30 @@ public interface MoveCommandInterface extends GameCommandInterface {
     /**
      * Get the source of the move
      *
-     * @return CardDeckInterface Card deck which is the source.
+     * @return CardStackInterface Card deck which is the source.
      */
-    CardDeckInterface getSource();
+    CardStackInterface getSource();
 
     /**
      * Set source of the move
      *
      * @param source
      */
-    void setSource(CardDeckInterface source);
+    void setSource(CardStackInterface source);
 
     /**
      * Get the destination of the move
      *
-     * @return CardDeckInterface Card deck which is the destination.
+     * @return CardStackInterface Card deck which is the destination.
      */
-    CardDeckInterface getDestination();
+    CardStackInterface getDestination();
 
     /**
      * Set destination of the move
      *
      * @param destination
      */
-    void setDestination(CardDeckInterface destination);
+    void setDestination(CardStackInterface destination);
 
     /**
      * Get a count of objects to be moved.

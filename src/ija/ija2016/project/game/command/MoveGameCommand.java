@@ -1,15 +1,14 @@
 package ija.ija2016.project.game.command;
 
-import ija.ija2016.project.model.cards.CardDeckInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
 import ija.ija2016.project.model.cards.FactoryKlondike;
 
 public class MoveGameCommand extends GameCommand implements MoveCommandInterface {
-    private CardDeckInterface source;
-    private CardDeckInterface destination;
+    private CardStackInterface source;
+    private CardStackInterface destination;
     private int count;
 
-    public MoveGameCommand(CardDeckInterface source, CardDeckInterface destination, int count) {
+    public MoveGameCommand(CardStackInterface source, CardStackInterface destination, int count) {
         this.source = source;
         this.destination = destination;
         this.count = count;
@@ -50,10 +49,10 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
     /**
      * Get the source of the move
      *
-     * @return CardDeckInterface Card deck which is the source.
+     * @return CardStackInterface Card deck which is the source.
      */
     @Override
-    public CardDeckInterface getSource() {
+    public CardStackInterface getSource() {
         return this.source;
     }
 
@@ -63,17 +62,17 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
      * @param source
      */
     @Override
-    public void setSource(CardDeckInterface source) {
+    public void setSource(CardStackInterface source) {
         this.source = source;
     }
 
     /**
      * Get the destination of the move
      *
-     * @return CardDeckInterface Card deck which is the destination.
+     * @return CardStackInterface Card deck which is the destination.
      */
     @Override
-    public CardDeckInterface getDestination() {
+    public CardStackInterface getDestination() {
         return this.destination;
     }
 
@@ -83,7 +82,7 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
      * @param destination
      */
     @Override
-    public void setDestination(CardDeckInterface destination) {
+    public void setDestination(CardStackInterface destination) {
         this.destination = destination;
     }
 

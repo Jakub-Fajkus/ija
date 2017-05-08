@@ -1,10 +1,17 @@
 package ija.ija2016.project.model.cards;
 
-public class WastingDeck extends CardDeck {
-    public WastingDeck(int size) {
+/**
+ * Card stack used as a wasting stack.
+ * The player takes cards from the drawing stack and adds the to the wasting stack.
+ */
+public class WastingStack extends CardStack {
+    public WastingStack(int size) {
         super(size);
     }
 
+    /**
+     * Turns the card facing up if the parent's {@link CardStack#put(CardInterface)} was successful
+     */
     @Override
     public boolean put(CardInterface card) {
         if (super.put(card)) {
@@ -14,13 +21,12 @@ public class WastingDeck extends CardDeck {
         }
 
         return false;
+
     }
 
     /**
-     * Vlozi vsechny karty na zasobnik v poradi, v jakem jsou v poli - 0. index bude na dne zasobniku
-     *
-     * @param cards
-     * @return true on success, false otherwise
+     * Calls parent's {@link CardStack#put(CardInterface)} for all cards.
+     * If the parent's call is successful, turns all cards face up.
      */
     @Override
     public boolean put(CardInterface[] cards) {

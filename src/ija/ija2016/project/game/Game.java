@@ -6,7 +6,10 @@ import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
 import ija.ija2016.project.game.persistence.filesystem.FilesystemFactory;
-import ija.ija2016.project.model.cards.*;
+import ija.ija2016.project.model.cards.AbstractFactorySolitaire;
+import ija.ija2016.project.model.cards.CardInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
+import ija.ija2016.project.model.cards.TargetCardStackInterface;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -22,7 +25,7 @@ public class Game implements GameInterface {
         this.observers = new ArrayList<>();
         this.factorySolitaire = factorySolitaire;
 
-        CardDeckInterface cardDeck = factorySolitaire.createShuffledCardDeck();
+        CardStackInterface cardDeck = factorySolitaire.createShuffledCardStack();
         this.initializeWithCards(cardDeck);
     }
 
@@ -34,9 +37,9 @@ public class Game implements GameInterface {
      * @param wastingDeck
      * @param workingCardStacks
      */
-    public void init(TargetCardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<GameHistory> history) {
+    public void init(TargetCardStackInterface[] targetPacks, CardStackInterface drawingDeck, CardStackInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<GameHistory> history) {
 
-        this.state = new GameState(targetPacks, drawingDeck, wastingDeck, workingCardStacks);
+        this.state = new GameState(targetPacks, drawingDeck, wastingDeck, workingCardStacks, this.factorySolitaire);
 
         //if we have our history, do not lose it
         if (this.history == null || history != null) {
@@ -70,7 +73,7 @@ public class Game implements GameInterface {
      * @return True on success, false otherwise
      */
     @Override
-    public boolean move(CardDeckInterface source, CardDeckInterface destination, int count) {
+    public boolean move(CardStackInterface source, CardStackInterface destination, int count) {
         MoveGameCommand command = new MoveGameCommand(source, destination, count);
 
         return this.move(command);
@@ -82,19 +85,19 @@ public class Game implements GameInterface {
      * @param deck
      */
     @Override
-    public void initializeWithCards(CardDeckInterface deck) {
-        TargetCardDeckInterface[] targetPacks = new TargetCardDeckInterface[this.factorySolitaire.getCountOfTargetDecks()];
+    public void initializeWithCards(CardStackInterface deck) {
+        TargetCardStackInterface[] targetPacks = new TargetCardStackInterface[this.factorySolitaire.getCountOfTargetStacks()];
         for (CardInterface.Color color : CardInterface.Color.values()) {
-            targetPacks[this.getTargetPackIndexForColor(color)] = this.factorySolitaire.createTargetPack(color);
+            targetPacks[this.getTargetPackIndexForColor(color)] = this.factorySolitaire.createTargetStack(color);
         }
 
         CardStackInterface[] workingCardStacks = new CardStackInterface[this.factorySolitaire.getCountOfWorkingStacks()];
         for (int i = 0; i < this.factorySolitaire.getCountOfWorkingStacks(); i++) {
-            workingCardStacks[i] = this.factorySolitaire.createWorkingPack();
+            workingCardStacks[i] = this.factorySolitaire.createWorkingStack();
 
             for (int j = 0; j <= i; j++) {
                 CardInterface card = deck.pop();
-                if (!workingCardStacks[i].put(card)) {
+                if (!workingCardStacks[i].forcePut(card)) {
                     System.out.println("Could not add a card " + card);
                 }
             }
@@ -104,11 +107,11 @@ public class Game implements GameInterface {
             }
         }
 
-        this.init(targetPacks, deck, this.factorySolitaire.createWastingDeck(), workingCardStacks, new Stack<>());
+        this.init(targetPacks, deck, this.factorySolitaire.createWastingStack(), workingCardStacks, new Stack<>());
     }
 
     /**
-     * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, int count)}
+     * Same as {@link #move(CardStackInterface source, CardStackInterface destination, int count)}
      *
      * @param command MoveCommandInterface instance
      */
@@ -235,7 +238,7 @@ public class Game implements GameInterface {
     public boolean isFinished() {
         int countOfCardsInTheTargets = 0;
 
-        for (CardDeckInterface deck : this.state.getTargetPacks()) {
+        for (CardStackInterface deck : this.state.getTargetPacks()) {
             countOfCardsInTheTargets += deck.size();
         }
 
@@ -243,17 +246,17 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public TargetCardDeckInterface[] getTargetPacks() {
+    public TargetCardStackInterface[] getTargetPacks() {
         return this.state.getTargetPacks();
     }
 
     @Override
-    public CardDeckInterface getDrawingDeck() {
+    public CardStackInterface getDrawingDeck() {
         return this.state.getDrawingDeck();
     }
 
     @Override
-    public CardDeckInterface getWastingDeck() {
+    public CardStackInterface getWastingDeck() {
         return this.state.getWastingDeck();
     }
 
@@ -296,6 +299,16 @@ public class Game implements GameInterface {
         if (observer != null) {
             this.observers.add(observer);
         }
+    }
+
+    /**
+     * Get the solitaire factory.
+     *
+     * @return
+     */
+    @Override
+    public AbstractFactorySolitaire getSolitaireFactory() {
+        return this.factorySolitaire;
     }
 
     /**

@@ -8,7 +8,7 @@ import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.command.MoveGameCommand;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
-import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.CardStackInterface;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -246,7 +246,7 @@ public class GameController implements Initializable, GameObserverInterface {
 
     }
 
-    private GuiStackPane findViewContainingDeck(CardDeckInterface deck) throws Exception {
+    private GuiStackPane findViewContainingDeck(CardStackInterface deck) throws Exception {
         for (GuiStackPane pane : this.allCardPanes) {
             if (pane.getPack() == deck) {
                 return pane;

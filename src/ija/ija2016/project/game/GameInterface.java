@@ -3,10 +3,10 @@ package ija.ija2016.project.game;
 import ija.ija2016.project.game.command.MoveCommandInterface;
 import ija.ija2016.project.game.persistence.LoadStateException;
 import ija.ija2016.project.game.persistence.PersistStateException;
-import ija.ija2016.project.model.cards.CardDeckInterface;
+import ija.ija2016.project.model.cards.AbstractFactorySolitaire;
 import ija.ija2016.project.model.cards.CardInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
-import ija.ija2016.project.model.cards.TargetCardDeckInterface;
+import ija.ija2016.project.model.cards.TargetCardStackInterface;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,18 +28,18 @@ public interface GameInterface extends Serializable {
      * @param count       Count of cards to be moved. If the count is zero, all cards will be moved.
      * @return True on success, false otherwise
      */
-    boolean move(CardDeckInterface source, CardDeckInterface destination, int count);
+    boolean move(CardStackInterface source, CardStackInterface destination, int count);
 
     /**
      * Add a deck of cards to the game. The cards will be redistributed to appropriate stacks.
      * <p>
      * All observers will be notified about the change
      */
-    void initializeWithCards(CardDeckInterface deck);
+    void initializeWithCards(CardStackInterface deck);
 
 
     /**
-     * Same as {@link #move(CardDeckInterface source, CardDeckInterface destination, int count)}
+     * Same as {@link #move(CardStackInterface source, CardStackInterface destination, int count)}
      *
      * @param command MoveCommandInterface instance
      */
@@ -103,13 +103,13 @@ public interface GameInterface extends Serializable {
      * @param wastingDeck
      * @param workingCardStacks
      */
-    void init(TargetCardDeckInterface[] targetPacks, CardDeckInterface drawingDeck, CardDeckInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<GameHistory> history);
+    void init(TargetCardStackInterface[] targetPacks, CardStackInterface drawingDeck, CardStackInterface wastingDeck, CardStackInterface[] workingCardStacks, Stack<GameHistory> history);
 
-    TargetCardDeckInterface[] getTargetPacks();
+    TargetCardStackInterface[] getTargetPacks();
 
-    CardDeckInterface getDrawingDeck();
+    CardStackInterface getDrawingDeck();
 
-    CardDeckInterface getWastingDeck();
+    CardStackInterface getWastingDeck();
 
     CardStackInterface[] getWorkingCardStacks();
 
@@ -135,5 +135,12 @@ public interface GameInterface extends Serializable {
      * @param observer
      */
     void addObserver(GameObserverInterface observer);
+
+    /**
+     * Get the solitaire factory.
+     *
+     * @return
+     */
+    AbstractFactorySolitaire getSolitaireFactory();
 }
 
