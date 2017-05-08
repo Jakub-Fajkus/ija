@@ -1,3 +1,8 @@
+/*
+ * IJA2016 Solitaire
+ * Jakub Fajkus & David Czernin
+ */
+
 package ija.ija2016.project.model.cards;
 
 import java.io.Serializable;
