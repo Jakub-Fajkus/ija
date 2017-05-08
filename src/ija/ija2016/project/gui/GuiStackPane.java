@@ -8,10 +8,6 @@ package ija.ija2016.project.gui;
 import ija.ija2016.project.game.GameInterface;
 import ija.ija2016.project.game.GameObserverInterface;
 import ija.ija2016.project.model.cards.CardStackInterface;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 
 abstract public class GuiStackPane extends StackPane implements GameObserverInterface {
@@ -23,11 +19,6 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
         this.pack = pack;
         this.game = game;
         this.cardPool = cardPool;
-
-
-        this.addEventHandler(DragEvent.DRAG_DROPPED, this::dragDropped);
-        this.addEventHandler(DragEvent.DRAG_OVER, this::dragOverWorking);
-        this.setOnMouseDragEntered(this::mouseEntered);
     }
 
     public CardStackInterface getPack() {
@@ -46,7 +37,6 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
             CardView cardView = this.cardPool.getCardView(this.getPack().get(i));
 
             if (cardView == null) {
-                System.out.println("Card view is not in the pool!");
                 continue;
             }
 
@@ -56,24 +46,6 @@ abstract public class GuiStackPane extends StackPane implements GameObserverInte
 
             this.getChildren().add(cardView);
         }
-    }
-
-    private void mouseEntered(MouseEvent e) {
-        GuiStackPane stack = (GuiStackPane) e.getSource();
-        System.out.println("you are in with drag: " + stack.toString() + "\n");
-    }
-
-    private void dragDropped(DragEvent e) {
-        GuiStackPane stack = (GuiStackPane) e.getSource();
-        System.out.println("Over stack drag: " + stack.toString() + "\n");
-    }
-
-    private void dragOverWorking(DragEvent event) {
-        Dragboard dragboard = event.getDragboard();
-        if (dragboard.hasString()) {
-            event.acceptTransferModes(TransferMode.MOVE);
-        }
-        event.consume();
     }
 
     @Override

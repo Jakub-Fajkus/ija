@@ -58,7 +58,6 @@ public class MainWindow extends Application implements Initializable {
             primaryStage.show();
         } catch (Exception error) {
             error.printStackTrace();
-            System.out.print(error.toString());
             System.exit(1);
         }
     }
@@ -79,7 +78,6 @@ public class MainWindow extends Application implements Initializable {
             this.game1.setOnAction(e -> MainWindow.this.closeGameHandler(1));
 
         } catch (Exception error) {
-            System.out.print(error.toString());
             System.exit(1);
         }
     }

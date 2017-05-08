@@ -29,7 +29,6 @@ public class MoveGameCommand extends GameCommand implements MoveCommandInterface
             }
         } else {
             if (this.count > this.source.size()) {
-                System.out.println("Can not take more that the source has");
                 return false;
             }
 

@@ -38,8 +38,6 @@ public class CardPool {
             }
 
             view.removeShadow();
-        } else {
-            System.out.println("Card view is null!");
         }
 
         return view;

@@ -190,24 +190,17 @@ public class GameController implements Initializable, GameObserverInterface {
             this.setMouseEventsOnAllCardViews();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("fail create stack");
         }
     }
 
     private void tipButtonClicked() {
 
         if (this.tips == null) {
-            System.out.println("Tips == null, trying to get the tips!");
             this.tips = this.game.tip();
-            if (this.tips.isEmpty()) {
-                System.out.println("No tips found empty!");
-            }
         }
 
         //get the first tip
         if (this.tips.isEmpty()) {
-            System.out.println("No tips available");
-
             return;
         } else {
             this.clearSelectEffects();
@@ -220,8 +213,6 @@ public class GameController implements Initializable, GameObserverInterface {
             //find the source gui element
             GuiStackPane source = this.findViewContainingDeck(move.getSource());
             GuiStackPane destination = this.findViewContainingDeck(move.getDestination());
-
-            System.out.println("Show tip from " + source.toString() + " to " + destination.toString() + " with count " + move.getCount());
 
             if (source == this.drawing && destination == this.wasting) {
                 source.setEffect(new DropShadow(BlurType.ONE_PASS_BOX, new Color(1, 0.9882, 0.149, 0.8), 20, 10, 0, 0));
@@ -290,8 +281,6 @@ public class GameController implements Initializable, GameObserverInterface {
     }
 
     private void onCardMousePressed(MouseEvent mouseEvent) {
-        System.out.println("onCardMousePressed on card" + mouseEvent.getSource());
-
         CardView cardView = (CardView) mouseEvent.getSource();
 
         if (this.actualMove.getSource() == null) {
@@ -304,14 +293,10 @@ public class GameController implements Initializable, GameObserverInterface {
             if (cardView.getContainingElement().getPack() == this.game.getWastingDeck() || validator.isTargetStack(cardView.getContainingElement().getPack())) {
                 countOfCards = 1;
             } else {
-                //todo: better formula!? count the position in the inner array?
                 countOfCards = (int) (cardView.getContainingElement().getChildren().size() - ((cardView.getOffset() / 15)));
             }
 
-            System.out.println("Pocet karet: " + countOfCards + "\n");
-
             if (!cardView.isTurnedFaceUp()) {
-                System.out.println("The card is not facing up!" + cardView.getCard().toString() + cardView.getCard().hashCode());
                 return;
             }
 
@@ -329,32 +314,21 @@ public class GameController implements Initializable, GameObserverInterface {
     }
 
     private void onStackMousePressed(MouseEvent e) {
-        System.out.println("onStackMousePressed on " + e.getSource());
-
         GuiStackPane pane = (GuiStackPane) e.getSource();
 
         if (this.actualMove.getDestination() == null) {
             this.actualMove.setDestination(pane.getPack());
 
             if (this.actualMove == null || this.actualMove.getSource() == null || this.actualMove.getDestination() == null) {
-//                this.actualMove = new MoveGameCommand(null, null, 1);
-                System.out.println("Something is misssing in the command, leaving" + this.actualMove + this.actualMove.getSource() + this.actualMove.getDestination());
                 return;
             }
 
             if (this.actualMove.getSource() == this.actualMove.getDestination()) {
-//                this.actualMove = new MoveGameCommand(null, null, 1);
                 this.actualMove.setDestination(null);
-                System.out.println("Do not move source=dest");
                 return;
             }
 
-            System.out.println("Moving from: " + this.actualMove.getSource());
-            System.out.println("Moving to: " + e.getSource());
-
             if (this.game.move(this.actualMove)) {
-                System.out.println("MOVED");
-
                 if (this.game.isFinished()) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Konec hry");
@@ -362,8 +336,6 @@ public class GameController implements Initializable, GameObserverInterface {
 
                     alert.showAndWait();
                 }
-            } else {
-                System.out.println("NOT MOVED");
             }
 
             this.actualMove = new MoveGameCommand(null, null, 1);
@@ -378,10 +350,8 @@ public class GameController implements Initializable, GameObserverInterface {
         if (file != null) {
             try {
                 this.game.persistState(file.getPath());
-                System.out.println("SUCCESSfully saved");
             } catch (PersistStateException e) {
                 e.printStackTrace();
-                System.out.println("Can not save\n");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Ukládání hry");
                 alert.setHeaderText("Hru nelze uložit.");
@@ -400,7 +370,6 @@ public class GameController implements Initializable, GameObserverInterface {
                 this.game.loadState(file.getPath());
             } catch (LoadStateException e) {
                 e.printStackTrace();
-                System.out.println("Can not load game\n");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Načtení uložené hry");
                 alert.setHeaderText("Hru nelze načíst.");
@@ -411,37 +380,25 @@ public class GameController implements Initializable, GameObserverInterface {
     }
 
     private void restartButtonClicked() {
-        System.out.println("RESTARTING THE GAME" + this.game.restartGame());
+        this.game.restartGame();
     }
 
     private void undoButtonClicked() {
         this.game.undo();
-        System.out.println("UNDO DONE");
     }
 
     /**
      * Get card from wasting deck to drawing on click event
      */
     private void getCardFromDrawingPack() {
-        System.out.println("in da click");
-
         if (!this.game.getDrawingDeck().isEmpty()) {
             try {
-                System.out.println("in da move");
-                if (this.game.move(this.game.getDrawingDeck(), this.game.getWastingDeck(), 1)) {
-                    System.out.println("moved!");
-                } else {
-                    System.out.println("did not move!");
-                }
+                this.game.move(this.game.getDrawingDeck(), this.game.getWastingDeck(), 1);
             } catch (Exception er) {
                 er.printStackTrace();
             }
         } else {
-            if (this.game.move(this.game.getWastingDeck(), this.game.getDrawingDeck(), 0)) {
-                System.out.println("transfered!");
-            } else {
-                System.out.println("did not transfered");
-            }
+            this.game.move(this.game.getWastingDeck(), this.game.getDrawingDeck(), 0);
         }
 
         this.actualMove = new MoveGameCommand(null, null, 1);
@@ -449,7 +406,6 @@ public class GameController implements Initializable, GameObserverInterface {
 
     @Override
     public void updateOnGameChange() {
-        System.out.println("GameController:updateOnGameChange updating the game state!");
         this.cardPool.updateCards(this.game.getAllCards());
         this.actualMove = new MoveGameCommand(null, null, 1);
         this.tips = null;

@@ -27,7 +27,6 @@ public class WorkingStackView extends GuiStackPane {
         for (int i = 0; i < this.getPack().size(); i++) {
             CardView cardView = this.cardPool.getCardView(this.getPack().get(i));
             if (cardView == null) {
-                System.out.println("Card view is not in the pool!");
                 continue;
             }
 

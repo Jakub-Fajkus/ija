@@ -102,9 +102,7 @@ public class Game implements GameInterface {
 
             for (int j = 0; j <= i; j++) {
                 CardInterface card = deck.pop();
-                if (!workingCardStacks[i].forcePut(card)) {
-                    System.out.println("Could not add a card " + card);
-                }
+                workingCardStacks[i].forcePut(card);
             }
 
             if (workingCardStacks[i].get() != null) {
@@ -162,8 +160,6 @@ public class Game implements GameInterface {
      */
     @Override
     public void undo() {
-        System.out.println("GAME: undoing");
-
         if (!this.history.empty()) {
             GameHistory lastSnapshot = this.history.pop();
             lastSnapshot.undoCommand();
